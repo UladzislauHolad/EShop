@@ -12,8 +12,7 @@ namespace EShop.Services.Infrastructure
     {
         private string connectionString;
         public ServiceModule()
-        {
-        }
+        {}
         public override void Load()
         {
             Bind<IRepository<Product>>().To<ProductRepository>();
