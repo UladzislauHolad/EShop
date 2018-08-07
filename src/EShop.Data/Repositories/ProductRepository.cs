@@ -13,6 +13,11 @@ namespace EShop.Data.Repositories
     {
         private ProductContext db;
 
+        public ProductRepository(string connection)
+        {
+            this.db = new ProductContext();
+        }
+
         public ProductRepository(ProductContext context)
         {
             this.db = context;
