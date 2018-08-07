@@ -3,22 +3,36 @@ using EShop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using EShop.Data.Interfaces
+using EShop.Data.Interfaces;
+using EShop.Data.Entities;
+using EShop.Services.Infrastructure;
+using AutoMapper;
 
 namespace EShop.Services.Services
 {
     class Service : IService
     {
-        ProductRepository Database { get; set; }
+        IRepository<Product> Db { get; set; }
 
         public ProductDTO GetProduct(int? id)
         {
-            throw new NotImplementedException();
+            if(id == null)
+            {
+                throw new ValidationException("Не установлен id продукта", "");
+            }
+            Product p = Db.Get(id.Value);
+            if(p == null)
+            {
+                throw new ValidationException("Продукт не найден", "");
+            }
+
+            return new ProductDTO { ProductId = p.ProductId, Name = p.Name, Price = p.Price, Description = p.Description};
         }
 
         public IEnumerable<ProductDTO> GetProducts()
         {
-            throw new NotImplementedException();
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
         }
     }
 }
