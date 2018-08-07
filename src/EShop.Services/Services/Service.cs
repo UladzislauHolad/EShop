@@ -10,7 +10,7 @@ using AutoMapper;
 
 namespace EShop.Services.Services
 {
-    class Service : IService
+    public class Service : IService
     {
         IRepository<Product> Db { get; set; }
 
