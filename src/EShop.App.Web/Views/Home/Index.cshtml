@@ -9,15 +9,23 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <title>Index</title>
 </head>
 <body>
-    <ul>
-        @foreach (EShop.App.Web.Models.ProductViewModel p in Model)
-        {
-            <li>@p.Name</li>
-        }
-    </ul>
-    
+    <div class="container">
+        <h3>Product List</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr><th>Name</th><th>Price</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                @foreach (EShop.App.Web.Models.ProductViewModel p in Model)
+                {
+                    <tr><td>@p.Name</td><td>@p.Price</td><td>@p.Description</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
