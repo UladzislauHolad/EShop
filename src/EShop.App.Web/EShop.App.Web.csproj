@@ -1,26 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="BundlerMinifier.Core" Version="2.8.391" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
-    <PackageReference Include="Npm" Version="3.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\EShop.Services\EShop.Services.csproj" />
   </ItemGroup>
-
 </Project>
