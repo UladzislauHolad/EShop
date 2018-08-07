@@ -19,13 +19,11 @@ namespace EShop.App.Web
         {
             services.AddTransient<IService, Service>();
             services.AddMvc();
-            //var connection = @"Server=(localdb)\mssqllocaldb;Database=EFGetStarted.AspNetCore.NewDb;Trusted_Connection=True;ConnectRetryCount=0";
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
             app.UseDeveloperExceptionPage();
             app.UseMvcWithDefaultRoute();
         }
