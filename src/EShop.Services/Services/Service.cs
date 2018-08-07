@@ -14,6 +14,11 @@ namespace EShop.Services.Services
     {
         IRepository<Product> Db { get; set; }
 
+        public Service(IRepository<Product> repository)
+        {
+            Db = repository;
+        }
+
         public ProductDTO GetProduct(int? id)
         {
             if(id == null)
