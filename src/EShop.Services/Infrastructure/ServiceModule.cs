@@ -11,13 +11,12 @@ namespace EShop.Services.Infrastructure
     public class ServiceModule : NinjectModule
     {
         private string connectionString;
-        public ServiceModule(string connection)
+        public ServiceModule()
         {
-            connectionString = connection;
         }
         public override void Load()
         {
-            Bind<IRepository<Product>>().To<ProductRepository>().WithConstructorArgument(connectionString);
+            Bind<IRepository<Product>>().To<ProductRepository>();
         }
     }
 }
