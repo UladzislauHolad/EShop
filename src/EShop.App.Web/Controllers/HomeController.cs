@@ -13,7 +13,7 @@ namespace EShop.App.Web.Controllers
     public class HomeController : Controller
     {
         private IService service;
-        protected HomeController(IService service)
+        public HomeController(IService service)
         {
             this.service = service;
         }
