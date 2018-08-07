@@ -7,12 +7,18 @@ using EShop.Data.Interfaces;
 using EShop.Data.Entities;
 using EShop.Services.Infrastructure;
 using AutoMapper;
+using EShop.Data.Repositories;
 
 namespace EShop.Services.Services
 {
     public class Service : IService
     {
         IRepository<Product> Db { get; set; }
+
+        public Service()
+        {
+            Db = new ProductRepository();
+        }
 
         public Service(IRepository<Product> repository)
         {
