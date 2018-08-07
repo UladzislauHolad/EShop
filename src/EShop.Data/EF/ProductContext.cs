@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EShop.Data.EF
 {
-    class ProductContext : DbContext
+    public class ProductContext : DbContext
     {
         public DbSet<Product> Products { get; set; }
 

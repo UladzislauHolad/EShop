@@ -9,7 +9,7 @@ using System.Text;
 
 namespace EShop.Data.Repositories
 {
-    class ProductRepository : IRepository<Product>
+    public class ProductRepository : IRepository<Product>
     {
         private ProductContext db;
 
