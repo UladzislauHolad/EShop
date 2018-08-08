@@ -9,5 +9,6 @@ namespace EShop.Services.Interfaces
     {
         ProductDTO GetProduct(int? id);
         IEnumerable<ProductDTO> GetProducts();
+        void Add(ProductDTO product);
     }
 }

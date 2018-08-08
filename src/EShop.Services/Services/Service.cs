@@ -41,5 +41,10 @@ namespace EShop.Services.Services
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             return mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
         }
+
+        public void Add(ProductDTO product)
+        {
+            Db.Create(new Product { Name = product.Name, Price = product.Price, Description = product.Description });
+        }
     }
 }
