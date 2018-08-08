@@ -12,17 +12,19 @@ namespace EShop.App.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private IService service;
-        public HomeController(IService service)
+        private IService _service;
+        private readonly IMapper _mapper;
+
+        public HomeController(IService service, IMapper mapper)
         {
-            this.service = service;
+            _service = service;
+            _mapper = mapper;
         }
 
         public ViewResult Index()
         {
-            IEnumerable<ProductDTO> productDtos = service.GetProducts();
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<ProductDTO, ProductViewModel>()).CreateMapper();
-            var Products = mapper.Map<IEnumerable<ProductDTO>, List<ProductViewModel>>(productDtos);
+            IEnumerable<ProductDTO> productDtos = _service.GetProducts();
+            var Products = _mapper.Map<IEnumerable<ProductDTO>, IEnumerable<ProductViewModel>>(productDtos);
             return View(Products);
         }
     }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using AutoMapper;
 
 namespace EShop.App.Web
 {
@@ -38,6 +39,7 @@ namespace EShop.App.Web
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IService, Service>();
             services.AddMvc();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
