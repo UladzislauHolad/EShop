@@ -10,14 +10,9 @@ namespace EShop.Data.EF
     {
         public DbSet<Product> Products { get; set; }
 
-        public ProductContext()
+        public ProductContext(DbContextOptions<ProductContext> options) : base(options)
         {
             Database.EnsureCreated();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=productdb;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
