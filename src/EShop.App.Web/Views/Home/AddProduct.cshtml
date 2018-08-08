@@ -1,0 +1,28 @@
+﻿@model EShop.App.Web.Models.ProductViewModel
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Add Product";
+}
+
+<div class="container">
+    <h3>Create Product</h3>
+    <form asp-action="AddProduct" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </form>
+</div>
