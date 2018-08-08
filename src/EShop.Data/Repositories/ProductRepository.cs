@@ -15,12 +15,13 @@ namespace EShop.Data.Repositories
 
         public ProductRepository(ProductContext context)
         {
-            this.db = context;
+            db = context;
         }
 
         public void Create(Product item)
         {
             db.Set<Product>().Add(item);
+            db.SaveChanges();
         }
 
         public void Delete(int id)
