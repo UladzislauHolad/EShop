@@ -12,48 +12,50 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
+using AutoMapper;
+using EShop.App.Web.Models;
+using EShop.Services.DTO;
 
 namespace EShop.App.Web.Tests
 {
     public class HomeControllerTests
     {
-        private IService GetService()
-        {
-            DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=productdb;Trusted_Connection=True;");
-            ProductContext context = new ProductContext(optionsBuilder.Options);
-            ProductRepository repository = new ProductRepository(context);
-            Service service = new Service(repository);
-            return service;
-        }
-
         [Fact]
         public void IndexViewResultIsNotNull()
         {
-            ////HomeController controller = new HomeController(GetService());
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<ProductDTO, ProductViewModel>();
+                cfg.CreateMap<ProductViewModel, ProductDTO>();
+            });
+            var mapper = new Mapper(config);
 
-            //ViewResult result = controller.Index() as ViewResult;
+            HomeController controller = new HomeController(GetService(), mapper);
 
-            //Assert.NotNull(result);
+            ViewResult result = controller.Index() as ViewResult;
+
+            Assert.NotNull(result);
         }
 
-        [Fact]
-        public void IndexModelItemAtIndex()
+        private IService GetService()
         {
             var mock = new Mock<IRepository<Product>>();
-            mock.Setup(repo => repo.GetAll()).Returns(new[] {
+            mock.Setup(repo => repo.GetAll()).Returns(GetProducts());
+            return new Service(mock.Object);
+        }
+
+
+        private IEnumerable<Product> GetProducts()
+        {
+            List<Product> products = new List<Product>
+            {
                 new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 },
-                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22 }
-            });
-            //HomeController controller = new HomeController(new Service(mock.Object));
+                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22 },
+                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23 },
+                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24 },
+                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25 }
+            };
 
-            //ViewResult result = controller.Index() as ViewResult;
-            //var prods = result.Model as IEnumerable<Product>;
-
-            Service service = new Service(mock.Object);
-            var colection = service.GetProducts();
-
-            //Assert.Equal("P21", );
+            return products;
         }
     }
 }
