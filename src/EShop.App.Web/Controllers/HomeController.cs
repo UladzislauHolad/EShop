@@ -27,5 +27,22 @@ namespace EShop.App.Web.Controllers
             var Products = _mapper.Map<IEnumerable<ProductDTO>, IEnumerable<ProductViewModel>>(productDtos);
             return View(Products);
         }
+
+        [HttpGet]
+        public ViewResult AddProduct()
+        {
+            return View(new ProductViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct(ProductViewModel product)
+        {
+            if(ModelState.IsValid)
+            {
+                _service.Add(_mapper.Map<ProductViewModel, ProductDTO>(product));
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
     }
 }
