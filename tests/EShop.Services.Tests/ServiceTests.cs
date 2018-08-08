@@ -17,10 +17,8 @@ namespace EShop.Services.Tests
         [Fact]
         public void CheckMapping()
         {
-            var mock = new Mock<IRepository<Product>>();
             var products = GetProducts();
-            mock.Setup(repo => repo.GetAll()).Returns(products);
-            Service service = new Service(mock.Object);
+            Service service = GetService(products);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             var expected = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
 
@@ -32,14 +30,23 @@ namespace EShop.Services.Tests
         [Fact]
         public void CheckFormat()
         {
-            var mock = new Mock<IRepository<Product>>();
-            var products = GetProducts();
-            mock.Setup(repo => repo.GetAll()).Returns(products);
-            Service service = new Service(mock.Object);
+            Service service = GetService(GetProducts());
 
             var result = service.GetProducts();
 
             Assert.IsAssignableFrom<IEnumerable<ProductDTO>>(result);
+        }
+
+        [Fact]
+        public void CheckCount()
+        {
+            var products = GetProducts();
+            int expected = products.Count();
+            Service service = GetService(products);
+
+            int result = service.GetProducts().Count();
+
+            Assert.Equal(expected, result);
         }
 
         private IEnumerable<Product> GetProducts()
@@ -54,6 +61,13 @@ namespace EShop.Services.Tests
             };
 
             return products;
+        }
+
+        private Service GetService(IEnumerable<Product> products)
+        {
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(repo => repo.GetAll()).Returns(products);
+            return new Service(mock.Object);
         }
 
     }
