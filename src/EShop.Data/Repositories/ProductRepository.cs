@@ -20,7 +20,7 @@ namespace EShop.Data.Repositories
 
         public void Create(Product item)
         {
-            db.Products.Add(item);
+            db.Set<Product>().Add(item);
         }
 
         public void Delete(int id)

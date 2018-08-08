@@ -1,4 +1,5 @@
 ﻿using EShop.Data.Entities;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,9 @@ namespace EShop.Data.EF
 {
     public class ProductContext : DbContext
     {
-        public DbSet<Product> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
 
-        public ProductContext(DbContextOptions<ProductContext> options) : base(options)
+        public ProductContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }
