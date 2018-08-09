@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 
 namespace EShop.App.Web
 {
@@ -38,8 +39,12 @@ namespace EShop.App.Web
                 options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IProductService, ProductService>();
-            services.AddMvc();
             services.AddAutoMapper(typeof(Startup));
+            services.AddMvc()
+                .AddFluentValidation(fvc => 
+                    fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
+            services.AddMvc();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
