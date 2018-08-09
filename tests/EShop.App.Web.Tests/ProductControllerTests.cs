@@ -28,7 +28,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void IndexViewResultIsNotNull()
         {
-            ProductController controller = new ProductController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(GetProducts()), GetMapper());
 
             ViewResult result = controller.Index() as ViewResult;
 
@@ -38,7 +38,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void CanPaginate()
         {
-            ProductController controller = new ProductController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(GetProducts()), GetMapper());
             controller.PageSize = 3;
 
             IEnumerable<ProductViewModel> result = (controller.Index(2).ViewData.Model as ProductListViewModel).Products;
@@ -89,7 +89,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void CanSendPaginationViewModel()
         {
-            ProductController controller = new ProductController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(GetProducts()), GetMapper());
 
             ProductListViewModel result = controller.Index(2).ViewData.Model as ProductListViewModel;
 
@@ -98,6 +98,57 @@ namespace EShop.App.Web.Tests
             Assert.Equal(3, pageInfo.ItemsPerPage);
             Assert.Equal(5, pageInfo.TotalItems);
             Assert.Equal(2, pageInfo.TotalPages);
+        }
+
+        [Fact]
+        public void TestEditReturns()
+        {
+            int testId = 1;
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.Get(testId)).Returns(new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 });
+            var service = new ProductService(mock.Object);
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(service, mapper);
+
+            var result = controller.Edit(testId).ViewData.Model as ProductViewModel;
+
+            Assert.Equal("P21", result.Name);
+        }
+
+        [Fact]
+        public void CanEditViewUpdate()
+        {
+            Product testProduct = new Product
+            {
+                ProductId = 1,
+                Name = "dasda",
+                Price = 321,
+                Description = "dsaafa"
+            };
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.Update(testProduct));
+            var service = new ProductService(mock.Object);
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(service, mapper);
+
+            controller.Edit(mapper.Map<Product, ProductViewModel>(testProduct));
+
+            mock.Verify(m => m.Update(It.Is<Product>(p => p.ProductId == 1)), Times.Once());
+        }
+
+        [Fact]
+        public void CanDelete()
+        {
+            int testId = 1;
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.Delete(testId));
+            var service = new ProductService(mock.Object);
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(service, mapper);
+
+            controller.Delete(testId);
+
+            mock.Verify(m => m.Delete(testId), Times.Once());
         }
 
         private IMapper GetMapper()
@@ -109,10 +160,10 @@ namespace EShop.App.Web.Tests
             return new Mapper(config);
         }
 
-        private IProductService GetService()
+        private IProductService GetService(IEnumerable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
-            mock.Setup(repo => repo.GetAll()).Returns(GetProducts());
+            mock.Setup(repo => repo.GetAll()).Returns(products);
             return new ProductService(mock.Object);
         }
 
