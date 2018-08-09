@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EShop.Services.Interfaces
 {
-    public interface IService
+    public interface IProductService
     {
         ProductDTO GetProduct(int? id);
         IEnumerable<ProductDTO> GetProducts();

@@ -12,11 +12,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Services.Services
 {
-    public class Service : IService
+    public class ProductService : IProductService
     {
         IRepository<Product> Db { get; set; }
 
-        public Service(IRepository<Product> repository)
+        public ProductService(IRepository<Product> repository)
         {
             Db = repository;
         }
