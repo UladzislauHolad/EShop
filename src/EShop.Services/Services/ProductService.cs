@@ -46,5 +46,15 @@ namespace EShop.Services.Services
         {
             Db.Create(new Product { Name = product.Name, Price = product.Price, Description = product.Description });
         }
+
+        public void Update(ProductDTO product)
+        {
+            Db.Update(new Product { ProductId = product.ProductId, Name = product.Name, Price = product.Price, Description = product.Description });
+        }
+
+        public void Delete(int id)
+        {
+            Db.Delete(id);
+        }
     }
 }
