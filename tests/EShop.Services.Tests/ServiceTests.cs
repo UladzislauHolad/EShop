@@ -18,7 +18,7 @@ namespace EShop.Services.Tests
         public void CheckMapping()
         {
             var products = GetProducts();
-            Service service = GetService(products);
+            ProductService service = GetService(products);
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
             var expected = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
 
@@ -30,7 +30,7 @@ namespace EShop.Services.Tests
         [Fact]
         public void CheckFormat()
         {
-            Service service = GetService(GetProducts());
+            ProductService service = GetService(GetProducts());
 
             var result = service.GetProducts();
 
@@ -42,7 +42,7 @@ namespace EShop.Services.Tests
         {
             var products = GetProducts();
             int expected = products.Count();
-            Service service = GetService(products);
+            ProductService service = GetService(products);
 
             int result = service.GetProducts().Count();
 
@@ -63,11 +63,11 @@ namespace EShop.Services.Tests
             return products;
         }
 
-        private Service GetService(IEnumerable<Product> products)
+        private ProductService GetService(IEnumerable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
-            return new Service(mock.Object);
+            return new ProductService(mock.Object);
         }
 
     }

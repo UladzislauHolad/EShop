@@ -12,11 +12,11 @@ namespace EShop.App.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private IService _service;
+        private IProductService _service;
         private readonly IMapper _mapper;
         public int PageSize = 3;
 
-        public HomeController(IService service, IMapper mapper)
+        public HomeController(IProductService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

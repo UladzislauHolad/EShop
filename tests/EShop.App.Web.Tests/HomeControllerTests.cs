@@ -109,11 +109,11 @@ namespace EShop.App.Web.Tests
             return new Mapper(config);
         }
 
-        private IService GetService()
+        private IProductService GetService()
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(GetProducts());
-            return new Service(mock.Object);
+            return new ProductService(mock.Object);
         }
 
 

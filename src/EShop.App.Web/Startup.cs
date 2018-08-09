@@ -37,7 +37,7 @@ namespace EShop.App.Web
             services.AddDbContext<ProductContext>(options =>
                 options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IService, Service>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddMvc();
             services.AddAutoMapper(typeof(Startup));
         }
