@@ -24,7 +24,7 @@ namespace EShop.Services.Tests
 
             var result = service.GetProducts();
 
-            Assert.True(expected.SequenceEqual(result, new ProductDTOComparer()));
+            Assert.True(expected.SequenceEqual(result));
         }
 
         [Fact]
