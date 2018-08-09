@@ -49,6 +49,10 @@ namespace EShop.App.Web
             app.UseDeveloperExceptionPage();
             app.UseMvc(routes => {
                 routes.MapRoute(
+                    name: "pagination",
+                    template: "Products/Page{page}",
+                    defaults: new { controller = "Home", action = "Index"});
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
