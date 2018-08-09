@@ -14,6 +14,7 @@ namespace EShop.App.Web.Controllers
     {
         private IService _service;
         private readonly IMapper _mapper;
+        public int PageSize = 3;
 
         public HomeController(IService service, IMapper mapper)
         {
@@ -21,11 +22,21 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        public ViewResult Index()
+        public ViewResult Index(int page = 1)
         {
             IEnumerable<ProductDTO> productDtos = _service.GetProducts();
             var Products = _mapper.Map<IEnumerable<ProductDTO>, IEnumerable<ProductViewModel>>(productDtos);
-            return View(Products);
+
+            return View(new ProductListViewModel
+            {
+                Products = Products.Skip((page-1)*PageSize).Take(PageSize),
+                PageInfo = new PageInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = PageSize,
+                    TotalItems = Products.Count()
+                }
+            });
         }
 
         [HttpGet]

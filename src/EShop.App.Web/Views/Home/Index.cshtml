@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EShop.App.Web.Models.ProductViewModel>
+﻿@model EShop.App.Web.Models.ProductListViewModel
 
 @{
     ViewBag.Title = "ProductList";
@@ -12,12 +12,13 @@
             <tr><th>Name</th><th>Price</th><th>Description</th></tr>
         </thead>
         <tbody>
-            @foreach (EShop.App.Web.Models.ProductViewModel p in Model)
+            @foreach (EShop.App.Web.Models.ProductViewModel p in Model.Products)
             {
                 <tr><td>@p.Name</td><td>@p.Price</td><td>@p.Description</td></tr>
             }
         </tbody>
     </table>
+    <div page-model="@Model.PageInfo" page-action="Index"></div>
     <div class="text-center">
         <a asp-action="AddProduct" class="btn btn-primary">
             Add New Product
