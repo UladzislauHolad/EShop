@@ -3,18 +3,20 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="~/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" asp-href-include="~/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
     <title>@ViewBag.Title</title>
 </head>
-<body>
+<body class="col-md-10 col-md-offset-1">
     <div class="navbar navbar-inverse" role="navigation">
         <a class="navbar-brand" href="#">E-SHOP</a>
     </div>
-    <div class="row panel">
-        <div id="categories" class="col-xs-3">
+    <div class="navbar-left col-md-2">
+        <div id="categories">
             Place Holder
         </div>
     </div>
-    @RenderBody()
+    <div class="col-md-8">
+        @RenderBody()
+    </div>
 </body>
 </html>
