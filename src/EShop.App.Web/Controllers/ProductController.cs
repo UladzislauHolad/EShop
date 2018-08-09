@@ -55,5 +55,29 @@ namespace EShop.App.Web.Controllers
             }
             return View();
         }
+
+        [HttpGet]
+        public ViewResult Edit(int? id)
+        {
+            var product = _mapper.Map<ProductDTO, ProductViewModel>(_service.GetProduct(id));
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ProductViewModel product)
+        {
+            if(ModelState.IsValid)
+            {
+                _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public IActionResult Delete(int id)
+        {
+            _service.Delete(id);
+            return RedirectToAction("Index");
+        }
     }
 }
