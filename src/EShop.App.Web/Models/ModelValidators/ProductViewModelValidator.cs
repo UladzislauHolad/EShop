@@ -10,9 +10,9 @@ namespace EShop.App.Web.Models.ModelValidators
     {
         public ProductViewModelValidator()
         {
-            RuleFor(prod => prod.Name).NotEmpty();
+            RuleFor(prod => prod.Name).NotEmpty().MaximumLength(50);
             RuleFor(prod => prod.Price).GreaterThan(0);
-            RuleFor(prod => prod.Description).NotEmpty();
+            RuleFor(prod => prod.Description).NotEmpty().MaximumLength(500);
         }
     }
 }
