@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
 {
-    public class HomeController : Controller
+    public class ProductController : Controller
     {
         private IProductService _service;
         private readonly IMapper _mapper;
         public int PageSize = 3;
 
-        public HomeController(IProductService service, IMapper mapper)
+        public ProductController(IProductService service, IMapper mapper)
         {
             _service = service;
             _mapper = mapper;

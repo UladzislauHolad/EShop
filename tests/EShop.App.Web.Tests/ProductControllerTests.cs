@@ -23,12 +23,12 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Tests
 {
-    public class HomeControllerTests
+    public class ProductControllerTests
     {
         [Fact]
         public void IndexViewResultIsNotNull()
         {
-            HomeController controller = new HomeController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(), GetMapper());
 
             ViewResult result = controller.Index() as ViewResult;
 
@@ -38,7 +38,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void CanPaginate()
         {
-            HomeController controller = new HomeController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(), GetMapper());
             controller.PageSize = 3;
 
             IEnumerable<ProductViewModel> result = (controller.Index(2).ViewData.Model as ProductListViewModel).Products;
@@ -89,7 +89,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void CanSendPaginationViewModel()
         {
-            HomeController controller = new HomeController(GetService(), GetMapper());
+            ProductController controller = new ProductController(GetService(), GetMapper());
 
             ProductListViewModel result = controller.Index(2).ViewData.Model as ProductListViewModel;
 
