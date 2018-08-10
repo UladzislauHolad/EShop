@@ -14,7 +14,7 @@ using Xunit;
 
 namespace EShop.Services.Tests
 {
-    public class ServiceTests
+    public class ProductServiceTests
     {
         [Fact]
         public void CheckMapping()
