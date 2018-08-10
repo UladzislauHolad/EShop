@@ -1,20 +1,18 @@
 ﻿using EShop.Services.DTO;
 using EShop.Services.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using EShop.Data.Interfaces;
 using EShop.Data.Entities;
 using EShop.Services.Infrastructure;
 using AutoMapper;
-using EShop.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Services.Services
 {
     public class ProductService : IProductService
     {
         IRepository<Product> Db { get; set; }
+
+                                                             
 
         public ProductService(IRepository<Product> repository)
         {
@@ -33,28 +31,63 @@ namespace EShop.Services.Services
                 throw new ValidationException("Продукт не найден", "");
             }
 
-            return new ProductDTO { ProductId = p.ProductId, Name = p.Name, Price = p.Price, Description = p.Description};
+            var mapper = GetMapper();
+
+            return mapper.Map<Product, ProductDTO>(p);
         }
 
         public IEnumerable<ProductDTO> GetProducts()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
+            var mapper = GetMapper();
+
             return mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
         }
 
-        public void Add(ProductDTO product)
+        public void Add(ProductDTO productDTO)
         {
-            Db.Create(new Product { Name = product.Name, Price = product.Price, Description = product.Description });
+            var mapper = GetMapper();
+
+            Db.Create(mapper.Map<ProductDTO, Product>(productDTO));
         }
 
-        public void Update(ProductDTO product)
+        public void Update(ProductDTO productDTO)
         {
-            Db.Update(new Product { ProductId = product.ProductId, Name = product.Name, Price = product.Price, Description = product.Description });
+            var mapper = GetMapper();
+
+            Db.Update(mapper.Map<ProductDTO, Product>(productDTO));
         }
 
         public void Delete(int id)
         {
             Db.Delete(id);
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration((cfg) =>
+            {
+                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<ProductDTO, Product>()
+                    .AfterMap((src, dest) =>
+                    {
+                        foreach (var productCategory in dest.Categories)
+                        {
+                            productCategory.ProductId = src.ProductId;
+                        }
+                    });
+
+                cfg.CreateMap<ProductCategory, CategoryDTO>()
+                    .ForMember(dest => dest.CategoryId,
+                                opt => opt.MapFrom(src => src.CategoryId))
+                    .ForMember(dest => dest.Name,
+                                opt => opt.MapFrom(src => src.Category.Name));
+
+                cfg.CreateMap<CategoryDTO, ProductCategory>()
+                    .ForMember(pc => pc.CategoryId, opt => opt.MapFrom(cd => cd.CategoryId));
+            }
+            ).CreateMapper();
+
+            return mapper;
         }
     }
 }
