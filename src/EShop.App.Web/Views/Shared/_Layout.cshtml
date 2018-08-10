@@ -7,6 +7,11 @@
     <title>@ViewBag.Title</title>
 </head>
 <body class="col-md-10 col-md-offset-1">
+    <div class="navbar navbar-inverse" role="navigation">
+        <a class="navbar-brand" href="#">E-SHOP</a>
+        <a asp-controller="Product" asp-action="Index">Products</a>
+        <a asp-controller="Category" asp-action="Index">Categories</a>
+    </div>
     @RenderBody()
 </body>
 </html>
