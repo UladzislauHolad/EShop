@@ -34,6 +34,8 @@ namespace EShop.App.Web
                 options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IRepository<Category>, CategoryRepository>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
                 .AddFluentValidation(fvc => 
