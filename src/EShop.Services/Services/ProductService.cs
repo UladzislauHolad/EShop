@@ -39,8 +39,8 @@ namespace EShop.Services.Services
         public IEnumerable<ProductDTO> GetProducts()
         {
             var mapper = GetMapper();
-
-            return mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
+            var prods = mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
+            return prods;
         }
 
         public void Add(ProductDTO productDTO)
@@ -66,15 +66,13 @@ namespace EShop.Services.Services
         {
             var mapper = new MapperConfiguration((cfg) =>
             {
-                cfg.CreateMap<Product, ProductDTO>();
+                cfg.CreateMap<Product, ProductDTO>()
+                    .ForMember(dest => dest.Categories,
+                        opt => opt.MapFrom(src => src.ProductCategories));
+                //cfg.CreateMap<ProductDTO, Product>();
                 cfg.CreateMap<ProductDTO, Product>()
-                    .AfterMap((src, dest) =>
-                    {
-                        foreach (var productCategory in dest.Categories)
-                        {
-                            productCategory.ProductId = src.ProductId;
-                        }
-                    });
+                    .ForMember(dest => dest.ProductCategories,
+                        opt => opt.MapFrom(src => src.Categories));
 
                 cfg.CreateMap<ProductCategory, CategoryDTO>()
                     .ForMember(dest => dest.CategoryId,
