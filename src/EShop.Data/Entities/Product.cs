@@ -9,6 +9,6 @@ namespace EShop.Data.Entities
         public decimal Price { get; set; }
         public string Description { get; set; }
 
-        public virtual ICollection<ProductCategory> Categories { get; set; }
+        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
     }
 }

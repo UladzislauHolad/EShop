@@ -11,11 +11,11 @@ namespace EShop.Data.EF.ModelConfiguration
             builder.HasKey(pc => new { pc.ProductId, pc.CategoryId });
 
             builder.HasOne(pc => pc.Product)
-                .WithMany(p => p.Categories)
+                .WithMany(p => p.ProductCategories)
                 .HasForeignKey(pt => pt.CategoryId);
 
             builder.HasOne(pc => pc.Category)
-                .WithMany(c => c.Products)
+                .WithMany(c => c.ProductCategories)
                 .HasForeignKey(pc => pc.ProductId);
         }
     }
