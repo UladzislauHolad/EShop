@@ -26,10 +26,11 @@ namespace EShop.Data.Repositories
 
         public void Delete(int id)
         {
-            Product p = db.Products.Find(id);
+            Product p = db.Products.First(pr => pr.ProductId == id);
             if(p != null)
             {
                 db.Products.Remove(p);
+                db.SaveChanges();
             }
         }
 
@@ -40,7 +41,7 @@ namespace EShop.Data.Repositories
 
         public Product Get(int id)
         {
-            return db.Products.Find(id);
+            return db.Set<Product>().First(p=>p.ProductId == id);
         }
 
         public IEnumerable<Product> GetAll()
@@ -51,6 +52,7 @@ namespace EShop.Data.Repositories
         public void Update(Product item)
         {
             db.Entry(item).State = EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }
