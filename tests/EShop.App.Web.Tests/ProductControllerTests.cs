@@ -1,16 +1,11 @@
 ﻿using EShop.App.Web.Controllers;
-using EShop.Data.EF;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
-using EShop.Data.Repositories;
 using EShop.Services.Interfaces;
 using EShop.Services.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 using AutoMapper;
 using EShop.App.Web.Models;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EShop.Data.EF;
+﻿using EShop.Data.EF;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Data.Repositories;
@@ -10,7 +6,6 @@ using EShop.Services.Interfaces;
 using EShop.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

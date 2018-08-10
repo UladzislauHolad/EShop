@@ -1,11 +1,7 @@
 ﻿using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Ninject.Modules;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EShop.Services.Infrastructure
 {

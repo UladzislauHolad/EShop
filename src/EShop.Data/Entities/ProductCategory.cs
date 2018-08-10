@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EShop.Data.Entities
+﻿namespace EShop.Data.Entities
 {
     public class ProductCategory
     {

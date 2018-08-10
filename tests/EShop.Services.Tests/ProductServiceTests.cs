@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
-using EShop.Data.Repositories;
 using EShop.Services.DTO;
 using EShop.Services.Services;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace EShop.Services.Tests
@@ -58,7 +55,6 @@ namespace EShop.Services.Tests
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Delete(id));
             var service = new ProductService(mock.Object);
-            var mapper = GetMapper();
 
             service.Delete(id);
 
