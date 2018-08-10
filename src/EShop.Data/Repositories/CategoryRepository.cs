@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace EShop.Data.Repositories
 {
-    class CategoryRepository : IRepository<Category>
+    public class CategoryRepository : IRepository<Category>
     {
         ProductContext _context;
 
