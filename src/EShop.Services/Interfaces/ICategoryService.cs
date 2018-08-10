@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EShop.Services.Interfaces
 {
-    interface ICategoryService
+    public interface ICategoryService
     {
         IEnumerable<CategoryDTO> GetCategories();
         void Create(CategoryDTO categoryDTO);
