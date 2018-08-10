@@ -1,11 +1,11 @@
-﻿using EShop.Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace EShop.Services.DTO
+namespace EShop.App.Web.Models
 {
-    public class CategoryDTO
+    public class CategoryViewModel
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }

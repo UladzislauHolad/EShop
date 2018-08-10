@@ -13,6 +13,8 @@ namespace EShop.Services.DTO
         public decimal Price { get; set; }
         public string Description { get; set; }
 
+        public ICollection<CategoryDTO> Categories { get; set; }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as ProductDTO);

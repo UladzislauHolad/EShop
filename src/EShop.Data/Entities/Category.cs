@@ -10,6 +10,6 @@ namespace EShop.Data.Entities
         public string Name { get; set; }
         public int ParentId { get; set; }
 
-        public ICollection<ProductCategory> ProductCategories { get; set; }
+        public virtual ICollection<ProductCategory> Products { get; set; }
     }
 }
