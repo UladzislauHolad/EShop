@@ -45,7 +45,11 @@ namespace EShop.Data.Repositories
 
         public IEnumerable<Product> GetAll()
         {
-            return db.Products;
+            var prods = (db.Products
+                .Include(p => p.ProductCategories)
+                    .ThenInclude(p => p.Category));
+                
+            return prods;
         }
 
         public void Update(Product item)
