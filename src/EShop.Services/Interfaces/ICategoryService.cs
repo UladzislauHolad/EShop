@@ -1,12 +1,13 @@
-﻿using EShop.Data.Entities;
-using System;
+﻿using EShop.Services.DTO;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EShop.Services.Interfaces
 {
-    interface ICategoryRepository
+    interface ICategoryService
     {
-        IEnumerable<Category> GetCategories();
+        IEnumerable<CategoryDTO> GetCategories();
+        void Create(CategoryDTO categoryDTO);
+        void Delete(int id);
+        void Update(CategoryDTO categoryDTO);
     }
 }
