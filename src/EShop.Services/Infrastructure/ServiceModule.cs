@@ -13,6 +13,7 @@ namespace EShop.Services.Infrastructure
         public override void Load()
         {
             Bind<IRepository<Product>>().To<ProductRepository>();
+            Bind<IRepository<Category>>().To<CategoryRepository>();
         }
     }
 }
