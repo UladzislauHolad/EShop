@@ -1,0 +1,25 @@
+﻿@model IEnumerable<EShop.App.Web.Models.CategoryViewModel>
+
+@{
+    ViewBag.Title = "Category List";
+    Layout = "_Layout";
+}
+
+<div>
+    <div class="navbar-left col-md-2">
+        <div id="categories">
+            Place Holder
+        </div>
+    </div>
+    <div class="col-md-10">
+        <h3>Product List</h3>
+        <ul>
+            @foreach (EShop.App.Web.Models.CategoryViewModel c in Model)
+            {
+                <li>c.Name</li>
+            }
+        </ul>
+    </div>
+</div>
+
+
