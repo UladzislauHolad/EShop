@@ -27,7 +27,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void GetProducts_IsResultHaveProductDTOType_ResultIsProductDTO()
+        public void GetProducts_IsResultHaveIEnumerableProductDTOType_ResultIsIEnumerableProductDTO()
         {
             ProductService service = GetService(GetProducts());
 

@@ -13,39 +13,36 @@ namespace EShop.Services.Tests
     public class CategoryServiceTests
     {
         [Fact]
-        public void CheckCount()
+        public void GetCategories_CheckCountOfCategoriesInRepositoryAndFromService_CountsOfCategoriesAreMatch()
         {
             var categories = GetCategories();
             int expected = categories.Count();
-
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
             CategoryService service = new CategoryService(mock.Object);
 
             int result = service.GetCategories().Count();
 
-            mock.Verify(m => m.GetAll(), Times.Once);
             Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void CheckMapping()
+        public void GetCategories_MappingCategoryToCategoryDTO_CategoryToCategoryDTOMapped()
         {
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
             CategoryService service = new CategoryService(mock.Object);
-
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
             var expected = mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(categories);
 
             var result = service.GetCategories();
-            mock.Verify(m => m.GetAll(), Times.Once);
+
             Assert.True(expected.SequenceEqual(result));
         }
 
         [Fact]
-        public void CheckFormat()
+        public void GetCategories_IsResultHaveTypeIEnumerableCategoryDTO_ResultIsIEnumerableCategoryDTO()
         {
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
@@ -54,12 +51,11 @@ namespace EShop.Services.Tests
 
             var result = service.GetCategories();
 
-            mock.Verify(m => m.GetAll(), Times.Once);
             Assert.IsAssignableFrom<IEnumerable<CategoryDTO>>(result);
         }
 
         [Fact]
-        public void CanCreate()
+        public void Create_CreatingProductInRepository_ProductCreated()
         {
             var category = new Category { CategoryId = 1, Name = "P21", ParentId = 1 };
             var mock = new Mock<IRepository<Category>>();
@@ -73,7 +69,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CanDelete()
+        public void Delete_DeletingProductFromRepository_ProductDeleted()
         {
             int id = 2;
             var mock = new Mock<IRepository<Category>>();
@@ -86,7 +82,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CanUpdate()
+        public void Update_UpdatingProductInRepository_ProductUpdated()
         {
             var category = new Category { CategoryId = 1, Name = "P21", ParentId = 1 };
             var mock = new Mock<IRepository<Category>>();
