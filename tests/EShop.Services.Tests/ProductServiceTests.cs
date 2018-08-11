@@ -14,7 +14,7 @@ namespace EShop.Services.Tests
     public class ProductServiceTests
     {
         [Fact]
-        public void CheckMapping()
+        public void GetProducts_MappingProductToProductDTO_ProductToProductDTOMapped()
         {
             var products = GetProducts();
             ProductService service = GetService(products);
@@ -27,7 +27,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CheckFormat()
+        public void GetProducts_IsResultHaveProductDTOType_ResultIsProductDTO()
         {
             ProductService service = GetService(GetProducts());
 
@@ -37,7 +37,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CheckCount()
+        public void GetProducts_CheckCountOfProductsInRepositoryAndFromService_CountsOfProductsAreMatch()
         {
             var products = GetProducts();
             int expected = products.Count();
@@ -49,9 +49,9 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CanDelete()
+        public void Delete_DeletingProductFromRepository_ProductDeleted()
         {
-            int id = 2;
+            const int id = 2;
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Delete(id));
             var service = new ProductService(mock.Object);
@@ -62,7 +62,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CanCreate()
+        public void Add_CreateProductInRepository_ProductCreated()
         {
             var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
             var mock = new Mock<IRepository<Product>>();
@@ -76,7 +76,7 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void CanUpdate()
+        public void Update_UpdateProductInRepository_ProductUpdated()
         {
             var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
             var mock = new Mock<IRepository<Product>>();
