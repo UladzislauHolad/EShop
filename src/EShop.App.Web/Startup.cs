@@ -51,6 +51,18 @@ namespace EShop.App.Web
             app.UseDeveloperExceptionPage();
             app.UseMvc(routes => {
                 routes.MapRoute(
+                    name: "categorySelect",
+                    template: "Category/CategorySelect",
+                    defaults: new { controller = "Category", action = "CategorySelect" });
+                routes.MapRoute(
+                    name: "getChildCategories",
+                    template: "Childs/{id}",
+                    defaults: new { controller = "Category", action = "Childs" });
+                routes.MapRoute(
+                    name: "showProducts",
+                    template: "Products/Product{id}",
+                    defaults: new { controller = "Product", action = "Products" });
+                routes.MapRoute(
                     name: "edit",
                     template: "Products/Edit{id}",
                     defaults: new { controller = "Product", action = "Edit" });
