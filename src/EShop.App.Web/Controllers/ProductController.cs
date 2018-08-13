@@ -77,5 +77,18 @@ namespace EShop.App.Web.Controllers
             _service.Delete(id);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public PartialViewResult Products(int id)
+        {
+            var products = _service.GetProductsByCategoryId(id);
+
+            return PartialView(_mapper.Map<IEnumerable<ProductViewModel>>(products));
+        }
+
+        public PartialViewResult Categories(IEnumerable<CategoryViewModel> categories)
+        {
+            return PartialView(categories);
+        }
     }
 }
