@@ -6,20 +6,57 @@
 }
 
 <div>
-    <div class="navbar-left col-md-2">
-        <div id="categories">
-            Place Holder
-        </div>
-    </div>
     <div class="col-md-10">
-        <h3>Product List</h3>
-        <ul>
+        <h3>Category List</h3>
+        <ul id="list" class="list-group">
             @foreach (EShop.App.Web.Models.CategoryViewModel c in Model)
             {
-                <li>c.Name</li>
+                <li class="list-group-item">
+                    <div class="btn-group">
+                        <span class="btn btn-sm glyphicon glyphicon-plus" onclick="showChilds(this)"></span>
+                        <div class="btn">@c.Name</div>
+                    </div>
+                    <ul id="@c.CategoryId" hidden="hidden" style="list-style-type: none"></ul>
+                </li>
             }
         </ul>
     </div>
 </div>
+
+
+<script type="text/javascript">
+    function getChilds(ul) {
+        $.ajax({
+            type: "GET",
+            url: "Category/GetChilds",
+            data: "id=" + ul.attr("id"),
+            success: function (response) {
+                ul.text("");
+                for (var i = 0; i < response.length; i++) {
+                    ul.append("<li style=\"list-style-type: none\">"
+                        + "<span class=\"btn btn-sm glyphicon glyphicon-plus\" onclick=\"showChilds(this)\"></span>"
+                        + "<a>" + response[i].name + "</a>"
+                        + "<ul id=\"" + response[i].categoryId + "\" hidden=\"hidden\"></ul>"
+                        + "</li>");
+                }
+            },
+            complete: function () {
+                $(ul).prev("span").attr("class", "btn btn-sm glyphicon glyphicon-minus");
+                ul.toggle(200);
+            }
+        });
+    }
+
+    function showChilds(_this) {
+        var ul = $(_this).next("ul");
+        if (ul.css("display") == "none") {
+            getChilds(ul);
+        }
+        else {
+            ul.toggle(200);
+            $(ul).prev("span").attr("class", "btn btn-sm glyphicon glyphicon-plus");
+        }
+    }
+</script>
 
 

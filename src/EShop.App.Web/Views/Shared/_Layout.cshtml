@@ -4,13 +4,16 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" asp-href-include="~/lib/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="~/lib/jquery/jquery-3.3.1.js"></script>
     <title>@ViewBag.Title</title>
 </head>
 <body class="col-md-10 col-md-offset-1">
     <div class="navbar navbar-inverse" role="navigation">
         <a class="navbar-brand" href="#">E-SHOP</a>
-        <a asp-controller="Product" asp-action="Index">Products</a>
-        <a asp-controller="Category" asp-action="Index">Categories</a>
+        <ul class="nav navbar-nav">
+            <li><a asp-controller="Product" asp-action="Index">Products</a></li>
+            <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
+        </ul>
     </div>
     @RenderBody()
 </body>

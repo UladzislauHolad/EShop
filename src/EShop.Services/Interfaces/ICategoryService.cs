@@ -9,5 +9,6 @@ namespace EShop.Services.Interfaces
         void Create(CategoryDTO categoryDTO);
         void Delete(int id);
         void Update(CategoryDTO categoryDTO);
+        IEnumerable<CategoryDTO> GetChildCategories(int id);
     }
 }

@@ -25,7 +25,7 @@ namespace EShop.App.Web.Controllers
         // GET: Category
         public ViewResult Index()
         {
-            var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetCategories());
+            var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetChildCategories(0));
             return View(categories);
         }
 
@@ -102,6 +102,20 @@ namespace EShop.App.Web.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpGet]
+        public JsonResult GetChilds(int id)
+        {
+            var categories = _service.GetChildCategories(id);
+            return Json(categories);
+        }
+
+        [HttpGet]
+        public JsonResult GetParents()
+        {
+            var categories = _service.GetChildCategories(0);
+            return Json(categories);
         }
     }
 }
