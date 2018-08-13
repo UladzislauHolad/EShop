@@ -105,14 +105,14 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetChilds(int id)
+        public JsonResult Childs(int id)
         {
             var categories = _service.GetChildCategories(id);
             return Json(categories);
         }
 
         [HttpGet]
-        public JsonResult GetParents()
+        public PartialViewResult CategorySelect()
         {
             var categories = _service.GetChildCategories(0);
             return Json(categories);
