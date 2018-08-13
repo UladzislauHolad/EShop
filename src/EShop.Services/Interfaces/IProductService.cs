@@ -10,5 +10,6 @@ namespace EShop.Services.Interfaces
         void Add(ProductDTO product);
         void Delete(int id);
         void Update(ProductDTO product);
+        IEnumerable<ProductDTO> GetProductsByCategoryId(int id);
     }
 }
