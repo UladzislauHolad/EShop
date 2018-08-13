@@ -5,18 +5,19 @@ using EShop.Data.Interfaces;
 using EShop.Data.Entities;
 using EShop.Services.Infrastructure;
 using AutoMapper;
+using System.Linq;
 
 namespace EShop.Services.Services
 {
     public class ProductService : IProductService
     {
-        IRepository<Product> Db { get; set; }
+        IRepository<Product> _repository { get; set; }
 
                                                              
 
         public ProductService(IRepository<Product> repository)
         {
-            Db = repository;
+            _repository = repository;
         }
 
         public ProductDTO GetProduct(int? id)
@@ -25,7 +26,7 @@ namespace EShop.Services.Services
             {
                 throw new ValidationException("Не установлен id продукта", "");
             }
-            Product p = Db.Get(id.Value);
+            Product p = _repository.Get(id.Value);
             if(p == null)
             {
                 throw new ValidationException("Продукт не найден", "");
@@ -39,7 +40,7 @@ namespace EShop.Services.Services
         public IEnumerable<ProductDTO> GetProducts()
         {
             var mapper = GetMapper();
-            var prods = mapper.Map<IEnumerable<Product>, List<ProductDTO>>(Db.GetAll());
+            var prods = mapper.Map<IEnumerable<Product>, List<ProductDTO>>(_repository.GetAll());
             return prods;
         }
 
@@ -47,19 +48,29 @@ namespace EShop.Services.Services
         {
             var mapper = GetMapper();
 
-            Db.Create(mapper.Map<ProductDTO, Product>(productDTO));
+            _repository.Create(mapper.Map<ProductDTO, Product>(productDTO));
         }
 
         public void Update(ProductDTO productDTO)
         {
             var mapper = GetMapper();
 
-            Db.Update(mapper.Map<ProductDTO, Product>(productDTO));
+            _repository.Update(mapper.Map<ProductDTO, Product>(productDTO));
         }
 
         public void Delete(int id)
         {
-            Db.Delete(id);
+            _repository.Delete(id);
+        }
+
+        public IEnumerable<ProductDTO> GetProductsByCategoryId(int id)
+        {
+            var mapper = GetMapper();
+
+            var allProducts = _repository.GetAll();
+            var products = allProducts.Where(p => p.ProductCategories.Any(c => c.CategoryId == id) == true);
+
+            return mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
         private IMapper GetMapper()
@@ -69,7 +80,6 @@ namespace EShop.Services.Services
                 cfg.CreateMap<Product, ProductDTO>()
                     .ForMember(dest => dest.Categories,
                         opt => opt.MapFrom(src => src.ProductCategories));
-                //cfg.CreateMap<ProductDTO, Product>();
                 cfg.CreateMap<ProductDTO, Product>()
                     .ForMember(dest => dest.ProductCategories,
                         opt => opt.MapFrom(src => src.Categories));
@@ -81,7 +91,7 @@ namespace EShop.Services.Services
                                 opt => opt.MapFrom(src => src.Category.Name));
 
                 cfg.CreateMap<CategoryDTO, ProductCategory>()
-                    .ForMember(pc => pc.CategoryId, opt => opt.MapFrom(cd => cd.CategoryId));
+                    .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.CategoryId));
             }
             ).CreateMapper();
 
