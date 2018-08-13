@@ -110,12 +110,13 @@ namespace EShop.App.Web.Controllers
             var categories = _service.GetChildCategories(id);
             return Json(categories);
         }
-
+        
         [HttpGet]
         public PartialViewResult CategorySelect()
         {
-            var categories = _service.GetChildCategories(0);
-            return Json(categories);
+            var categories = _service.GetCategories();
+
+            return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
         }
     }
 }
