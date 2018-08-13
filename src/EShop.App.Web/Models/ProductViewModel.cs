@@ -9,6 +9,7 @@ namespace EShop.App.Web.Models
         public decimal Price { get; set; }
         public string Description { get; set; }
 
+        public List<int> CategoriesId { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
     }
 }
