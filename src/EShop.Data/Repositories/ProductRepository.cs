@@ -17,9 +17,13 @@ namespace EShop.Data.Repositories
             db = context;
         }
 
-        public void Create(Product item)
+        public void Create(Product product)
         {
-            db.Set<Product>().Add(item);
+            foreach (var category in product.ProductCategories)
+            {
+                category.ProductId = product.ProductId;
+            }
+            db.Set<Product>().Add(product);
             db.SaveChanges();
         }
 
