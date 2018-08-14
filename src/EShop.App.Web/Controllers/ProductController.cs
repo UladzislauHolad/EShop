@@ -71,10 +71,13 @@ namespace EShop.App.Web.Controllers
         {
             if(ModelState.IsValid)
             {
-                product.Categories = new List<CategoryViewModel>();
-                foreach (var categoryId in product.CategoriesId)
+                if(product.CategoriesId != null)
                 {
-                    product.Categories.Add(new CategoryViewModel { CategoryId = categoryId });
+                    product.Categories = new List<CategoryViewModel>();
+                    foreach (var categoryId in product.CategoriesId)
+                    {
+                        product.Categories.Add(new CategoryViewModel { CategoryId = categoryId });
+                    }
                 }
                 _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
                 return RedirectToAction("Index");
