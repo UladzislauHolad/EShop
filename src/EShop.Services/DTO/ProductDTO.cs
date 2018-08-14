@@ -12,11 +12,6 @@ namespace EShop.Services.DTO
 
         public ICollection<CategoryDTO> Categories { get; set; }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ProductDTO);
-        }
-
         public bool Equals(ProductDTO other)
         {
             return other != null &&
