@@ -15,7 +15,7 @@ namespace EShop.App.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICategoryService _service;
-        public int PageSize = 10;
+        public int PageSize = 3;
 
         public CategoryController(ICategoryService service, IMapper mapper)
         {
@@ -64,7 +64,7 @@ namespace EShop.App.Web.Controllers
         }
 
             // GET: Category/Edit/5
-        public ActionResult Edit(int id)
+        public ViewResult Edit(int id)
         {
             var category = _mapper.Map<CategoryViewModel>(_service.GetCategory(id));
             return View(category);
