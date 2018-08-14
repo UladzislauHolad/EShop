@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<EShop.App.Web.Models.CategoryViewModel>
 
 @{
-    ViewBag.Title = "Category List";
+    ViewBag.Title = "Catalog";
     Layout = "_Layout";
 }
 
 <div>
     <div class="col-md-3">
-        <h3>Category List</h3>
+        <h3>Catalog</h3>
         <ul id="categories" class="list-group">
             @foreach (EShop.App.Web.Models.CategoryViewModel c in Model)
             {
