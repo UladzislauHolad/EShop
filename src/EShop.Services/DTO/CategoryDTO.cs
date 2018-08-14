@@ -8,7 +8,6 @@ namespace EShop.Services.DTO
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public int ParentId { get; set; }
-        public ICollection<int> ChildIds { get; set; }
 
         public bool Equals(CategoryDTO other)
         {
