@@ -46,72 +46,45 @@ namespace EShop.App.Web.Controllers
         }
 
         // GET: Category/Create
+        [HttpGet]
         public ActionResult Create()
         {
+            return View(new CategoryViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult Create(CategoryViewModel category)
+        {
+            if (ModelState.IsValid)
+            {
+                _service.Create(_mapper.Map<CategoryViewModel, CategoryDTO>(category));
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
-        // POST: Category/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Category/Edit/5
+            // GET: Category/Edit/5
         public ActionResult Edit(int id)
         {
+            var category = _mapper.Map<CategoryViewModel>(_service.GetCategory(id));
+            return View(category);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(CategoryViewModel category)
+        {
+            if (ModelState.IsValid)
+            {
+                _service.Update((_mapper.Map<CategoryDTO>(category)));
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
-        // POST: Category/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Category/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
-        }
-
-        // POST: Category/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _service.Delete(id);
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -123,6 +96,14 @@ namespace EShop.App.Web.Controllers
         
         [HttpGet]
         public PartialViewResult CategorySelect()
+        {
+            var categories = _service.GetCategories();
+
+            return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
+        }
+
+        [HttpGet]
+        public PartialViewResult ParentCategorySelect()
         {
             var categories = _service.GetCategories();
 
