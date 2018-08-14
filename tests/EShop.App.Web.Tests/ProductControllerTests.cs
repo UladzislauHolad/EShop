@@ -45,46 +45,10 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Index_GeneratePageLinks_PageLinksGenerated()
-        {
-            var urlHelper = new Mock<IUrlHelper>();
-            urlHelper.SetupSequence(x => x.Action(It.IsAny<UrlActionContext>()))
-                .Returns("Test/Page1")
-                .Returns("Test/Page2")
-                .Returns("Test/Page3");
-            var urlHelperFactory = new Mock<IUrlHelperFactory>();
-            urlHelperFactory.Setup(f => f.GetUrlHelper(It.IsAny<ActionContext>()))
-                .Returns(urlHelper.Object);
-            PageLinkTagHelper helper = new PageLinkTagHelper(urlHelperFactory.Object)
-            {
-                PageModel = new PageInfo
-                {
-                    CurrentPage = 2,
-                    TotalItems = 28,
-                    ItemsPerPage = 10
-                },
-                PageAction = "Test"
-            };
-            TagHelperContext ctx = new TagHelperContext(
-                new TagHelperAttributeList(),
-                new Dictionary<object, object>(), "");
-            var content = new Mock<TagHelperContent>();
-            TagHelperOutput output = new TagHelperOutput(
-                "div",
-                new TagHelperAttributeList(),
-                (cache, encoder) => Task.FromResult(content.Object));
-
-            helper.Process(ctx, output);
-
-            Assert.Equal(@"<a href=""Test/Page1"">1</a>"
-                + @"<a href=""Test/Page2"">2</a>"
-                + @"<a href=""Test/Page3"">3</a>", output.Content.GetContent());
-        }
-
-        [Fact]
         public void Index_SendPageInfo_PageInfoSended()
         {
             ProductController controller = new ProductController(GetService(GetProducts()), GetMapper());
+            controller.PageSize = 3;
 
             ProductListViewModel result = controller.Index(2).ViewData.Model as ProductListViewModel;
 
@@ -146,6 +110,19 @@ namespace EShop.App.Web.Tests
             controller.Delete(testId);
 
             mock.Verify(m => m.Delete(testId), Times.Once());
+        }
+
+        [Fact]
+        public void AddProduct_ReturnViewWithProductViewModel_ViewReturnedWithProductViewModel()
+        {
+            var mock = new Mock<IProductService>();            
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(mock.Object, mapper);
+
+            var result = controller.AddProduct().ViewData.Model;
+
+            Assert.NotNull(result);
+            Assert.True(result is ProductViewModel);
         }
 
         private IMapper GetMapper()
