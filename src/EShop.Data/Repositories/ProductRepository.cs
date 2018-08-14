@@ -44,7 +44,10 @@ namespace EShop.Data.Repositories
 
         public Product Get(int id)
         {
-            return db.Set<Product>().First(p=>p.ProductId == id);
+            return db.Products
+                .Include(p => p.ProductCategories)
+                .ThenInclude(p => p.Category)
+                .First(p => p.ProductId == id);
         }
 
         public IEnumerable<Product> GetAll()
@@ -56,9 +59,16 @@ namespace EShop.Data.Repositories
             return prods;
         }
 
-        public void Update(Product item)
+        public void Update(Product product)
         {
-            db.Entry(item).State = EntityState.Modified;
+
+            foreach (var category in product.ProductCategories)
+            {
+                category.ProductId = product.ProductId;
+            }
+            var oldCat = db.ProductCategories.Where(pc => pc.ProductId == product.ProductId);
+            db.ProductCategories.RemoveRange(oldCat);
+            db.Products.Update(product);
             db.SaveChanges();
         }
     }
