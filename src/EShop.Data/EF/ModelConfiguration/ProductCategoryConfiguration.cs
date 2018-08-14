@@ -16,7 +16,8 @@ namespace EShop.Data.EF.ModelConfiguration
 
             builder.HasOne(pc => pc.Category)
                 .WithMany(c => c.ProductCategories)
-                .HasForeignKey(pc => pc.ProductId);
+                .HasForeignKey(pc => pc.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

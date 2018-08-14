@@ -25,6 +25,8 @@ namespace EShop.Data.Repositories
         public void Delete(int id)
         {
             Category category = _context.Categories.Find(id);
+            var childs = _context.Categories.Where(c => c.ParentId == id).ToList();
+            _context.Categories.RemoveRange(childs);
             _context.Categories.Remove(category);
             _context.SaveChanges();
         }
@@ -46,7 +48,7 @@ namespace EShop.Data.Repositories
 
         public void Update(Category category)
         {
-            _context.Entry(category);
+            _context.Categories.Update(category);
             _context.SaveChanges();
         }
     }
