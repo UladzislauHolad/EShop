@@ -24,10 +24,19 @@ namespace EShop.App.Web.Controllers
         }
 
         // GET: Category
-        public ViewResult Index()
+        public ViewResult Index(int page = 1)
         {
-            var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetChildCategories(0));
-            return View(categories);
+            var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetCategories());
+            return View(new CategoryListViewModel
+            {
+                Categories = categories.Skip((page - 1) * PageSize).Take(PageSize),
+                PageInfo = new PageInfo
+                {
+                    CurrentPage = page,
+                    ItemsPerPage = PageSize,
+                    TotalItems = categories.Count()
+                }
+            });
         }
 
         // GET: Category/Details/5
