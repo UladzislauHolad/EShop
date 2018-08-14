@@ -35,6 +35,13 @@ namespace EShop.Services.Services
             return mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(_repository.GetAll());
         }
 
+        public CategoryDTO GetCategory(int id)
+        {
+            var mapper = GetMapper();
+
+            return mapper.Map<CategoryDTO>(_repository.Get(id));
+        }
+
         public IEnumerable<CategoryDTO> GetChildCategories(int id)
         {
             var mapper = GetMapper();
