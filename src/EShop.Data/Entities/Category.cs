@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EShop.Data.Entities
 {
@@ -7,6 +8,8 @@ namespace EShop.Data.Entities
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public int ParentId { get; set; }
+
+        [NotMapped]
         public ICollection<int> ChildIds { get; set; }
 
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
