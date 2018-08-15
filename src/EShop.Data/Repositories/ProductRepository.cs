@@ -1,4 +1,4 @@
-﻿using EShop.Data.EF;
+﻿using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +10,11 @@ namespace EShop.Data.Repositories
 {
     public class ProductRepository : IRepository<Product>
     {
-        private ProductContext db;
+        private IDbContext _context;
 
-        public ProductRepository(ProductContext context)
+        public ProductRepository(IDbContext context)
         {
-            db = context;
+            _context = context;
         }
 
         public void Create(Product product)
@@ -23,28 +23,28 @@ namespace EShop.Data.Repositories
             {
                 category.ProductId = product.ProductId;
             }
-            db.Set<Product>().Add(product);
-            db.SaveChanges();
+            _context.Set<Product>().Add(product);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            Product p = db.Products.First(pr => pr.ProductId == id);
+            Product p = _context.Set<Product>().First(pr => pr.ProductId == id);
             if(p != null)
             {
-                db.Products.Remove(p);
-                db.SaveChanges();
+                _context.Set<Product>().Remove(p);
+                _context.SaveChanges();
             }
         }
 
         public IEnumerable<Product> Find(Func<Product, bool> predicate)
         {
-            return db.Products.Where(predicate).ToList();
+            return _context.Set<Product>().Where(predicate).ToList();
         }
 
         public Product Get(int id)
         {
-            return db.Products
+            return _context.Set<Product>()
                 .Include(p => p.ProductCategories)
                 .ThenInclude(p => p.Category)
                 .First(p => p.ProductId == id);
@@ -52,7 +52,7 @@ namespace EShop.Data.Repositories
 
         public IEnumerable<Product> GetAll()
         {
-            var prods = (db.Products
+            var prods = (_context.Set<Product>()
                 .Include(p => p.ProductCategories)
                     .ThenInclude(p => p.Category));
                 
@@ -66,10 +66,10 @@ namespace EShop.Data.Repositories
             {
                 category.ProductId = product.ProductId;
             }
-            var oldCat = db.ProductCategories.Where(pc => pc.ProductId == product.ProductId);
-            db.ProductCategories.RemoveRange(oldCat);
-            db.Products.Update(product);
-            db.SaveChanges();
+            var oldCat = _context.Set<ProductCategory>().Where(pc => pc.ProductId == product.ProductId);
+            _context.Set<ProductCategory>().RemoveRange(oldCat);
+            _context.Set<Product>().Update(product);
+            _context.SaveChanges();
         }
     }
 }
