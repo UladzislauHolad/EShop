@@ -1,9 +1,10 @@
-﻿using EShop.Data.Entities;
+﻿using EShop.Data.EF.Interfaces;
+using EShop.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data.EF
 {
-    public class ProductContext : DbContext
+    public class ProductContext : DbContext, IDbContext
     {
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
