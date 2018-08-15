@@ -7,6 +7,7 @@ using Xunit;
 using EShop.Services.Services;
 using AutoMapper;
 using EShop.Services.DTO;
+using System;
 
 namespace EShop.Services.Tests
 {
@@ -93,6 +94,22 @@ namespace EShop.Services.Tests
             service.Update(mapper.Map<Category, CategoryDTO>(category));
 
             mock.Verify(m => m.Update(It.Is<Category>(c => c.Name == category.Name)), Times.Once());
+        }
+
+
+
+        [Fact]
+        public void GetChildCategories_Invoke_ReturnedCollectionOfCategoryDTO()
+        {
+            const int id = 1;
+            var mock = new Mock<IRepository<Category>>();
+            mock.Setup(m => m.Find(It.IsAny<Func<Category, bool>>())).Returns(GetCategories());
+            var service = new CategoryService(mock.Object);
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
+
+            var result = service.GetChildCategories(id).ToArray();
+
+            Assert.Equal("C1", result[0].Name);
         }
 
         private IEnumerable<Category> GetCategories()
