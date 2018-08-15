@@ -40,8 +40,7 @@ namespace EShop.App.Web
             services.AddMvc()
                 .AddFluentValidation(fvc => 
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
-            services.AddMvc();
-            
+            services.AddMvc();            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
