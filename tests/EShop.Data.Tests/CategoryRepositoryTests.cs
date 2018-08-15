@@ -1,4 +1,3 @@
-﻿using Autofac;
 using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
 using EShop.Data.Repositories;
