@@ -77,22 +77,22 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Edit_UpdateProduct_ProductUpdated()
         {
-            Product testProduct = new Product
+            ProductViewModel productVM = new ProductViewModel
             {
                 ProductId = 1,
-                Name = "dasda",
+                Name = "name",
                 Price = 321,
-                Description = "dsaafa",
-                ProductCategories = null
-
+                Description = "desc",
+                CategoriesId = new List<int> { 1, 2, 3 }
             };
-            var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m => m.Update(testProduct));
-            var service = new ProductService(mock.Object);
             var mapper = GetMapper();
+            var product = mapper.Map<Product>(mapper.Map<ProductDTO>(productVM));
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.Update(product));
+            var service = new ProductService(mock.Object);
             ProductController controller = new ProductController(service, mapper);
 
-            controller.Edit(mapper.Map<Product, ProductViewModel>(testProduct));
+            controller.Edit(productVM);
 
             mock.Verify(m => m.Update(It.Is<Product>(p => p.ProductId == 1)), Times.Once());
         }
@@ -125,6 +125,66 @@ namespace EShop.App.Web.Tests
             Assert.True(result is ProductViewModel);
         }
 
+        [Fact]
+        public void AddProduct_AddValidModel_RedirectToIndex()
+        {
+            var mock = new Mock<IProductService>();
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(mock.Object, mapper);
+            var validProduct = new ProductViewModel();
+            validProduct.Name = "name";
+            validProduct.Price = 1231;
+            validProduct.Description = "desc";
+            validProduct.CategoriesId = new List<int> { 1, 2, 3 };
+
+            var result = controller.AddProduct(validProduct) as RedirectToActionResult;
+
+            Assert.Equal("Index", result.ActionName);
+        }
+
+        [Fact]
+        public void Products_GetProductsById_ProductsAreGot()
+        {
+            const int testId = 1;
+            var products = GetProducts();
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.GetAll()).Returns(products);
+            var service = new ProductService(mock.Object);
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(service, mapper);
+
+            var result = controller.Products(testId);
+
+            Assert.NotEmpty(result.ViewData.Model as IEnumerable<ProductViewModel>);
+        }
+
+        [Fact]
+        public void Categories_SetParameters_ReturnPartialViewWithCollection()
+        {
+            var mock = new Mock<IProductService>();
+            var mapper = GetMapper();
+            ProductController controller = new ProductController(mock.Object, mapper);
+            var categories = new List<CategoryViewModel> { new CategoryViewModel { CategoryId = 1, Name = "name", ParentId = 2 } };
+
+            var result = controller.Categories(categories);
+
+            Assert.NotEmpty(result.ViewData.Model as IEnumerable<CategoryViewModel>);
+        }
+
+        //[Fact]
+        //public void AddProduct_AddNotValidModel_ReturnView()
+        //{
+        //    var mock = new Mock<IProductService>();
+        //    var mapper = GetMapper();
+        //    ProductController controller = new ProductController(mock.Object, mapper);
+        //    var invalidProduct = new ProductViewModel();
+        //    invalidProduct.CategoriesId = new List<int>();
+
+        //    var result = controller.AddProduct(invalidProduct);
+
+        //    Assert.True(result is ViewResult);
+        //}
+
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg => {
@@ -134,6 +194,9 @@ namespace EShop.App.Web.Tests
                 cfg.CreateMap<Product, ProductViewModel>()
                     .ForMember(dest => dest.Categories,
                         opt => opt.MapFrom(src => src.ProductCategories));
+                cfg.CreateMap<ProductDTO, Product>()
+                    .ForMember(dest => dest.ProductCategories,
+                        opt => opt.MapFrom(src => src.Categories));
             });
             return new Mapper(config);
         }
@@ -148,13 +211,22 @@ namespace EShop.App.Web.Tests
 
         private IEnumerable<Product> GetProducts()
         {
+            ProductCategory[] productCategorys = new ProductCategory[]
+            {
+                new ProductCategory { CategoryId = 1, ProductId = 1 },
+                new ProductCategory { CategoryId = 2, ProductId = 2 },
+                new ProductCategory { CategoryId = 3, ProductId = 3 },
+                new ProductCategory { CategoryId = 4, ProductId = 4 },
+                new ProductCategory { CategoryId = 5, ProductId = 5 }
+            };
+
             List<Product> products = new List<Product>
             {
-                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 },
-                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22 },
-                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23 },
-                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24 },
-                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25 }
+                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21, ProductCategories = productCategorys },
+                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22, ProductCategories = productCategorys },
+                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23, ProductCategories = productCategorys },
+                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24, ProductCategories = productCategorys },
+                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories = productCategorys }
             };
 
             return products;

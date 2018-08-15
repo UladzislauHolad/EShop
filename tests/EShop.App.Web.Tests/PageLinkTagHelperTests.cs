@@ -1,6 +1,7 @@
 ﻿using EShop.App.Web.Infrastructure;
 using EShop.App.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Moq;
@@ -49,6 +50,61 @@ namespace EShop.App.Web.Tests
             Assert.Equal(@"<a href=""Test/Page1"">1</a>"
                 + @"<a href=""Test/Page2"">2</a>"
                 + @"<a href=""Test/Page3"">3</a>", output.Content.GetContent());
+        }
+
+        [Fact]
+        public void SetViewContext_SetInstanceOfViewContext_InstanceIsSet()
+        {
+            var mock = new Mock<IUrlHelperFactory>();
+            PageLinkTagHelper pageLinkTagHelper = new PageLinkTagHelper(mock.Object);
+
+            pageLinkTagHelper.ViewContext = new ViewContext();
+
+            Assert.NotNull(pageLinkTagHelper.ViewContext);
+        }
+
+        [Fact]
+        public void SetPageClassesEnabled_SetValue_ValueIsSet()
+        {
+            var mock = new Mock<IUrlHelperFactory>();
+            PageLinkTagHelper pageLinkTagHelper = new PageLinkTagHelper(mock.Object);
+
+            pageLinkTagHelper.PageClassesEnabled = true;
+
+            Assert.True(pageLinkTagHelper.PageClassesEnabled);
+        }
+
+        [Fact]
+        public void SetPageClass_SetValue_ValueIsSet()
+        {
+            var mock = new Mock<IUrlHelperFactory>();
+            PageLinkTagHelper pageLinkTagHelper = new PageLinkTagHelper(mock.Object);
+
+            pageLinkTagHelper.PageClass = "test";
+
+            Assert.Equal("test", pageLinkTagHelper.PageClass);
+        }
+
+        [Fact]
+        public void SetPageClassNormal_SetValue_ValueIsSet()
+        {
+            var mock = new Mock<IUrlHelperFactory>();
+            PageLinkTagHelper pageLinkTagHelper = new PageLinkTagHelper(mock.Object);
+
+            pageLinkTagHelper.PageClassNormal = "test";
+
+            Assert.Equal("test", pageLinkTagHelper.PageClassNormal);
+        }
+
+        [Fact]
+        public void SetPageClassSelected_SetValue_ValueIsSet()
+        {
+            var mock = new Mock<IUrlHelperFactory>();
+            PageLinkTagHelper pageLinkTagHelper = new PageLinkTagHelper(mock.Object);
+
+            pageLinkTagHelper.PageClassSelected = "test";
+
+            Assert.Equal("test", pageLinkTagHelper.PageClassSelected);
         }
     }
 }

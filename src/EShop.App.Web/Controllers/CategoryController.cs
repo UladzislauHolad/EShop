@@ -38,16 +38,9 @@ namespace EShop.App.Web.Controllers
                 }
             });
         }
-
-        // GET: Category/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
         // GET: Category/Create
         [HttpGet]
-        public ActionResult Create()
+        public ViewResult Create()
         {
             return View(new CategoryViewModel());
         }

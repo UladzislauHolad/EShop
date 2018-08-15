@@ -4,6 +4,7 @@ using EShop.App.Web.Models;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Interfaces;
 using EShop.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -75,7 +76,7 @@ namespace EShop.App.Web.Tests
             mock.Setup(repo => repo.Update(testCategory));
             var mapper = GetMapper();
             CategoryController controller = new CategoryController(new CategoryService(mock.Object), mapper);
-
+            
             controller.Edit(mapper.Map<CategoryViewModel>(testCategory));
 
             mock.Verify(m => m.Update(It.Is<Category>(c => c.CategoryId == 1)), Times.Once());
@@ -94,6 +95,67 @@ namespace EShop.App.Web.Tests
             controller.Delete(testId);
 
             mock.Verify(m => m.Delete(testId), Times.Once());
+        }
+
+        [Fact]
+        public void Create_ReturnView_ViewWithModelIsReturned()
+        {
+            var mock = new Mock<IRepository<Category>>();
+            var service = new CategoryService(mock.Object);
+            var mapper = GetMapper();
+            CategoryController controller = new CategoryController(service, mapper);
+
+            var result = (controller.Create() as ViewResult).ViewData.Model is CategoryViewModel;
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Create_InvokeWithValidCategoryViewModel_RedirectedToIndex()
+        {
+            CategoryViewModel testCategory = new CategoryViewModel { CategoryId = 1, Name = "Same1", ParentId = 0 };
+            var mock = new Mock<IRepository<Category>>();
+            var service = new CategoryService(mock.Object);
+            var mapper = GetMapper();
+            CategoryController controller = new CategoryController(service, mapper);
+
+            var result = controller.Create(testCategory);
+
+            Assert.True(result is RedirectToActionResult);
+        }
+
+        [Fact]
+        public void Childs_Invoke_JsonReturned()
+        {
+            const int testId = 1;
+            var mock = new Mock<ICategoryService>();
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.Childs(testId);
+
+            Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void CategorySelect_Invoke_ReturnPartialView()
+        {
+            var mock = new Mock<ICategoryService>();
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.CategorySelect();
+
+            Assert.True(result is PartialViewResult);
+        }
+
+        [Fact]
+        public void ParentCategorySelect_Invoke_ReturnPartialView()
+        {
+            var mock = new Mock<ICategoryService>();
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.ParentCategorySelect();
+
+            Assert.True(result is PartialViewResult);
         }
 
         private IEnumerable<Category> GetCategories()
