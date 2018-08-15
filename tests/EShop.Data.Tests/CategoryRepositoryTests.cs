@@ -1,4 +1,4 @@
-using EShop.Data.EF.Interfaces;
+﻿using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
 using EShop.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +26,8 @@ namespace EShop.Data.Tests
 
             Assert.Equal("C3", result.ElementAt(2).Name);
         }
+
+
 
         private List<Category> GetCategories()
         {

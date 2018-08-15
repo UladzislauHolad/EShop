@@ -1,5 +1,4 @@
-﻿using EShop.Data.EF;
-using EShop.Data.EF.Interfaces;
+﻿using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using System;
@@ -10,7 +9,7 @@ namespace EShop.Data.Repositories
 {
     public class CategoryRepository : IRepository<Category>
     {
-        IDbContext _context;
+        private IDbContext _context;
 
         public CategoryRepository(IDbContext context)
         {
