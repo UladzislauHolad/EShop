@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EShop.Data.Migrations
 {
-    [DbContext(typeof(IDbContext))]
+    [DbContext(typeof(EShopContext))]
     [Migration("20180814090221_InitialCreate")]
     partial class InitialCreate
     {
