@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using EShop.Data.EF.Interfaces;
 
 namespace EShop.App.Web
 {
@@ -30,11 +31,12 @@ namespace EShop.App.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.AddDbContext<ProductContext>(options =>
+            services.AddDbContext<EShopContext>(options =>
                 options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+            services.AddTransient<IDbContext, EShopContext>();
             services.AddTransient<IRepository<Product>, ProductRepository>();
-            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
+            services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
