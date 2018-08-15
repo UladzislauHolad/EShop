@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data.EF
 {
-    public class ProductContext : DbContext, IDbContext
+    public class EShopContext : DbContext, IDbContext
     {
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
 
-        public ProductContext(DbContextOptions options) : base(options)
+        public EShopContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
         }
