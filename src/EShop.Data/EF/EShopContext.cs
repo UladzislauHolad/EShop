@@ -21,5 +21,5 @@ namespace EShop.Data.EF
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
         }
-    }
+   }
 }
