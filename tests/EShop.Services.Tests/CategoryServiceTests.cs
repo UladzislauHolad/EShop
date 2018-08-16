@@ -112,7 +112,7 @@ namespace EShop.Services.Tests
             Assert.Equal("C1", result[0].Name);
         }
 
-        private IEnumerable<Category> GetCategories()
+        private IQueryable<Category> GetCategories()
         {
             List<Category> categories = new List<Category>
             {
@@ -123,7 +123,7 @@ namespace EShop.Services.Tests
                 new Category { CategoryId = 5, Name = "C5", ParentId = 5}
             };
 
-            return categories;
+            return categories.AsQueryable();
         }
     }
 }

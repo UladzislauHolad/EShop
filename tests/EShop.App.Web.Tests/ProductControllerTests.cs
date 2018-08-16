@@ -213,7 +213,7 @@ namespace EShop.App.Web.Tests
             return new Mapper(config);
         }
 
-        private IProductService GetService(IEnumerable<Product> products)
+        private IProductService GetService(IQueryable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
@@ -221,7 +221,7 @@ namespace EShop.App.Web.Tests
         }
 
 
-        private IEnumerable<Product> GetProducts()
+        private IQueryable<Product> GetProducts()
         {
             ProductCategory[] productCategorys = new ProductCategory[]
             {
@@ -241,7 +241,7 @@ namespace EShop.App.Web.Tests
                 new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories = productCategorys }
             };
 
-            return products;
+            return products.AsQueryable();
         }
     }
 }

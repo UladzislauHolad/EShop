@@ -50,7 +50,7 @@ namespace EShop.Data.Repositories
                 .First(p => p.ProductId == id);
         }
 
-        public IEnumerable<Product> GetAll()
+        public IQueryable<Product> GetAll()
         {
             var prods = (_context.Set<Product>()
                 .Include(p => p.ProductCategories)

@@ -89,7 +89,7 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Update(It.Is<Product>(p => p.Name == product.Name)), Times.Once());
         }
 
-        private IEnumerable<Product> GetProducts()
+        private IQueryable<Product> GetProducts()
         {
             List<Product> products = new List<Product>
             {
@@ -100,7 +100,7 @@ namespace EShop.Services.Tests
                 new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25 }
             };
 
-            return products;
+            return products.AsQueryable();
         }
 
         private IMapper GetMapper()
@@ -112,7 +112,7 @@ namespace EShop.Services.Tests
             return new Mapper(config);
         }
 
-        private ProductService GetService(IEnumerable<Product> products)
+        private ProductService GetService(IQueryable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
