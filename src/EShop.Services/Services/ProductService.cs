@@ -97,5 +97,24 @@ namespace EShop.Services.Services
 
             return mapper;
         }
+
+        public List<object> GetCategoriesWithCountOfProducts()
+        {
+            var products = _repository.GetAll();
+            var count = products.Count();
+            var productCategories = products.Select(p => p.ProductCategories);
+            var categories = products.SelectMany(p => p.ProductCategories).Select(c => c.Category).Distinct();
+            var query = productCategories
+                .SelectMany(x => x)
+                .GroupBy(y => y.CategoryId)
+                .Select(g => new
+                {
+                    g.Key,
+                    Count = g.Count()
+                });
+            var result = query.Join(categories, o => o.Key, i => i.CategoryId, (o, i) => new { Name = i.Name, o.Count });
+
+            return result.ToList<object>();
+        }
     }
 }
