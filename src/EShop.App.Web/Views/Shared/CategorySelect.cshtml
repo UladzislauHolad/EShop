@@ -1,0 +1,4 @@
+﻿@model IEnumerable<CategoryViewModel>
+
+<select id="my-select" multiple="multiple" name="CategoriesId" asp-items="@(new SelectList(Model, "CategoryId", "Name"))" hidden="hidden">
+</select>

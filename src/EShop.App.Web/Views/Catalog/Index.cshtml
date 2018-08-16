@@ -1,0 +1,95 @@
+﻿@model IEnumerable<EShop.App.Web.Models.CategoryViewModel>
+
+@{
+    ViewBag.Title = "Catalog";
+    Layout = "_Layout";
+}
+
+<div>
+    <div class="col-md-3">
+        <h3>Catalog</h3>
+        <ul id="categories" class="list-group">
+            @foreach (EShop.App.Web.Models.CategoryViewModel c in Model)
+            {
+                <li class="list-group-item li">
+                    <div onclick="showChilds(this)">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        @c.Name
+                    </div>
+                    <ul id="@c.CategoryId" class="nested" hidden="hidden"></ul>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-9">
+        <h3>Products</h3>
+        <div  id="products">
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function getChilds(ul) {
+        var id = ul.attr("id");
+        var isEmpty = false;
+        $.ajax({
+            type: "GET",
+            url: "Category/Childs/" + id,
+            success: function (response) {
+                ul.text("");
+                for (var i = 0; i < response.length; i++) {
+                    ul.append("<li class=\"li\">"
+                        + "<div onclick=\"showChilds(this)\">"
+                            + "<span class=\"glyphicon glyphicon-plus\"></span>"
+                            + response[i].name
+                        + "</div>"
+                        + "<ul id=\"" + response[i].categoryId + "\" class=\"nested\" hidden=\"hidden\"></ul>"
+                        + "</li>");
+                }
+                if (response.length == 0) {
+                    isEmpty = true;
+                }
+            },
+            complete: function () {
+                var glyph = $(ul).parent().find("span").first();
+                if (isEmpty) {
+                    glyph.attr("class", "glyphicon glyphicon-play");
+                }
+                else {
+                    glyph.attr("class", "glyphicon glyphicon-minus");
+                }
+                ul.toggle(200);
+            }
+        });
+    }
+
+    function showChilds(_this) {
+        var ul = $(_this).next("ul").first();
+        if (ul.css("display") == "none") {
+            getChilds(ul);
+            getProducts(ul);
+        }
+        else {
+            ul.toggle(200);
+            var glyph = $(ul).parent().find("span").first();
+            glyph.attr("class", "glyphicon glyphicon-plus");
+        }
+    }
+
+    function getProducts(ul) {
+        var dest = $("#products");
+        var id = $(ul).attr("id");
+        $.ajax({
+            type: "GET",
+            url: "Product/Products/"+id,
+            success: function (response) {
+                dest.text("");
+                dest.append(response);
+            }
+        });
+    }
+</script>
+
+

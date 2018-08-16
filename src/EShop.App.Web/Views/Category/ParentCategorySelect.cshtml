@@ -1,0 +1,3 @@
+﻿@model IEnumerable<CategoryViewModel>
+
+<select id="my-select" name="ParentId" asp-items="@(new SelectList(Model, "CategoryId", "Name"))" hidden="hidden"></select>

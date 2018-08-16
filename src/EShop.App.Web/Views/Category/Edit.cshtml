@@ -1,0 +1,42 @@
+﻿@model EShop.App.Web.Models.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Edit" method="post">
+    <h3>Edit Category</h3>
+    <hr/>
+    <div class="col-md-4">
+        <label asp-for="ParentId" class="control-label"></label>
+        <div id="mselect">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input asp-for="CategoryId" class="form-control" type="hidden" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Category/ParentCategorySelect",
+            success: function (response) {
+                $("#mselect").append(response);
+                $('#my-select').searchableOptionList({
+                    allowNullSelection: true
+                });
+            }
+        });
+    });
+</script>

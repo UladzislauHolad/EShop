@@ -1,0 +1,51 @@
+﻿body {
+}
+
+ul.nested {
+    padding-left: 10px;
+    list-style-type: none;
+}
+
+.li {
+    padding: 0 0 0 0px;
+}
+
+.li div {
+    cursor:pointer;
+    padding-left: 10px;
+}
+
+.li div:hover {
+    background-color:burlywood;
+    color: aliceblue;
+}
+
+.price {
+    display: inline-block;
+    float: right;
+}
+
+.product-name {
+    display: inline-block;
+    margin-top: 0;
+}
+
+.tag-list li {
+    background-color: #18bc9c;
+    border-radius: 4px;
+    padding: 3px 4px;
+    margin: 0 3px 3px 0;
+    display: inline-block;
+    text-align: center
+}
+
+.tag-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 20px
+}
+
+li.tag, li.tag a, li.tag i.glyphicon {
+    color: #fff;
+    font-size: 70%
+}
