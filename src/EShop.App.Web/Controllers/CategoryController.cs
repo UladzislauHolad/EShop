@@ -15,7 +15,7 @@ namespace EShop.App.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICategoryService _service;
-        public int PageSize = 3;
+        public int PageSize = 8;
 
         public CategoryController(ICategoryService service, IMapper mapper)
         {

@@ -12,7 +12,7 @@ namespace EShop.App.Web.Controllers
     {
         private IProductService _service;
         private readonly IMapper _mapper;
-        public int PageSize = 10;
+        public int PageSize = 8;
 
         public ProductController(IProductService service, IMapper mapper)
         {
