@@ -83,6 +83,19 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Edit_UpdateInvalidCategory_EditViewReturned()
+        {
+            CategoryViewModel testCategory = new CategoryViewModel { CategoryId = 1, Name = "Same1", ParentId = 0 };
+            var mock = new Mock<ICategoryService>();
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+            controller.ModelState.AddModelError("", "");
+
+            var result = controller.Edit(testCategory);
+
+            Assert.True(result is ViewResult);
+        }
+
+        [Fact]
         public void Delete_DeleteCategory_CategoryDeleted()
         {
             const int testId = 1;
@@ -108,6 +121,19 @@ namespace EShop.App.Web.Tests
             var result = (controller.Create() as ViewResult).ViewData.Model is CategoryViewModel;
 
             Assert.True(result);
+        }
+
+        [Fact]
+        public void Create_CreateInvalidCategory_ViewReturned()
+        {
+            CategoryViewModel testCategory = new CategoryViewModel { CategoryId = 1, Name = "Same1", ParentId = 0 };
+            var mock = new Mock<ICategoryService>();
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+            controller.ModelState.AddModelError("", "");
+
+            var result = controller.Create(testCategory);
+
+            Assert.True(result is ViewResult);
         }
 
         [Fact]

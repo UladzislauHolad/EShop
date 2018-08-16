@@ -98,6 +98,19 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Edit_UpdateNotValidModel_ReturnView()
+        {
+            var mock = new Mock<IProductService>();
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+            var invalidProduct = new ProductViewModel();
+            controller.ModelState.AddModelError("", "");
+
+            var result = controller.Edit(invalidProduct);
+
+            Assert.True(result is ViewResult);
+        }
+
+        [Fact]
         public void Delete_DeleteProduct_ProductDeleted()
         {
             const int testId = 1;
@@ -171,19 +184,18 @@ namespace EShop.App.Web.Tests
             Assert.NotEmpty(result.ViewData.Model as IEnumerable<CategoryViewModel>);
         }
 
-        //[Fact]
-        //public void AddProduct_AddNotValidModel_ReturnView()
-        //{
-        //    var mock = new Mock<IProductService>();
-        //    var mapper = GetMapper();
-        //    ProductController controller = new ProductController(mock.Object, mapper);
-        //    var invalidProduct = new ProductViewModel();
-        //    invalidProduct.CategoriesId = new List<int>();
+        [Fact]
+        public void AddProduct_AddNotValidModel_ReturnView()
+        {
+            var mock = new Mock<IProductService>();
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+            var invalidProduct = new ProductViewModel();
+            controller.ModelState.AddModelError("", "");
 
-        //    var result = controller.AddProduct(invalidProduct);
+            var result = controller.AddProduct(invalidProduct);
 
-        //    Assert.True(result is ViewResult);
-        //}
+            Assert.True(result is ViewResult);
+        }
 
         private IMapper GetMapper()
         {
