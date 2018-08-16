@@ -103,5 +103,12 @@ namespace EShop.App.Web.Controllers
         {
             return PartialView(categories);
         }
+
+        public JsonResult ChartData()
+        {
+            var data = _service.GetCategoriesWithCountOfProducts();
+
+            return Json(data);
+        }
     }
 }

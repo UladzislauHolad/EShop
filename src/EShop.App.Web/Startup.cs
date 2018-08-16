@@ -32,7 +32,9 @@ namespace EShop.App.Web
         {
             services.AddOptions();
             services.AddDbContext<EShopContext>(options =>
-                options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+                options
+                .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+
             services.AddTransient<IDbContext, EShopContext>();
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
