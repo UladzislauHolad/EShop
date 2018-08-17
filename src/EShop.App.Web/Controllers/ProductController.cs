@@ -85,6 +85,7 @@ namespace EShop.App.Web.Controllers
             return View();
         }
 
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
             _service.Delete(id);
