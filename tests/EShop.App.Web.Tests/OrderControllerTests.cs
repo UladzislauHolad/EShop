@@ -39,12 +39,27 @@ namespace EShop.App.Web.Tests
             Assert.True(result.ViewData.Model is IEnumerable<OrderViewModel>);
         }
 
+        [Fact]
+        public void Index_Invoke_OrderHaveIEnumerableProductOrderViewModel()
+        {
+            var mock = new Mock<IOrderService>();
+            mock.Setup(s => s.GetOrders()).Returns(GetOrders());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = ((controller.Index() as ViewResult).ViewData.Model as IEnumerable<OrderViewModel>).ToArray();
+
+            Assert.NotNull(result[0].ProductOrders);
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<OrderViewModel, OrderDTO>();
                 cfg.CreateMap<OrderDTO, OrderViewModel>();
+
+                cfg.CreateMap<ProductOrderDTO, ProductOrderViewModel>();
+                cfg.CreateMap<ProductOrderViewModel, ProductOrderDTO>();
 
                 cfg.CreateMap<ProductDTO, ProductViewModel>();
                 cfg.CreateMap<ProductViewModel, ProductDTO>();
@@ -55,37 +70,37 @@ namespace EShop.App.Web.Tests
 
         private IQueryable<OrderDTO> GetOrders()
         {
-            var product = new ProductDTO { ProductId = 1, Name = "P1", Description = "Des1", Count = 2 };
+            var product = new ProductDTO { ProductId = 1, Name = "P1", Description = "Des1", Count = 10 };
             List<OrderDTO> orders = new List<OrderDTO>
             {
                 new OrderDTO { OrderId = 1,
-                    Products = new List<ProductDTO>
+                    ProductOrders = new List<ProductOrderDTO>
                     {
-                        product
+                        new ProductOrderDTO { ProductOrderId = 1, Count = 1, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 2,
-                    Products = new List<ProductDTO>
+                    ProductOrders = new List<ProductOrderDTO>
                     {
-                       product
+                        new ProductOrderDTO { ProductOrderId = 2, Count = 1, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 3,
-                    Products = new List<ProductDTO>
+                    ProductOrders = new List<ProductOrderDTO>
                     {
-                        product
+                        new ProductOrderDTO { ProductOrderId = 3, Count = 1, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 4,
-                    Products = new List<ProductDTO>
+                    ProductOrders = new List<ProductOrderDTO>
                     {
-                        product
+                        new ProductOrderDTO { ProductOrderId = 4, Count = 1, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 5,
-                    Products = new List<ProductDTO>
+                    ProductOrders = new List<ProductOrderDTO>
                     {
-                        product
+                        new ProductOrderDTO { ProductOrderId = 5, Count = 1, Product = product }
                     }
                 }
             };
