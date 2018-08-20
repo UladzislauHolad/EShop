@@ -3,16 +3,14 @@ using EShop.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EShop.Data.Migrations
 {
     [DbContext(typeof(EShopContext))]
-    [Migration("20180814090221_InitialCreate")]
-    partial class InitialCreate
+    partial class EShopContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,16 +39,18 @@ namespace EShop.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Count");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(100);
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");
 

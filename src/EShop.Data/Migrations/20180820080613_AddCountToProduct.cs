@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EShop.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class AddCountToProduct : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,9 +27,10 @@ namespace EShop.Data.Migrations
                 {
                     ProductId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 50, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal", nullable: false),
-                    Description = table.Column<string>(maxLength: 500, nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(maxLength: 500, nullable: false),
+                    Count = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
