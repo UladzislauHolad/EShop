@@ -82,7 +82,7 @@ namespace EShop.App.Web.Controllers
                 _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(product);
         }
 
         [HttpDelete]

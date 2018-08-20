@@ -10,6 +10,7 @@ namespace EShop.App.Web.Models.ModelValidators
             RuleFor(prod => prod.Price).GreaterThan(0);
             RuleFor(prod => prod.Description).NotEmpty().MaximumLength(500);
             RuleFor(prod => prod.CategoriesId).NotNull();
+            RuleFor(prod => prod.Count).GreaterThan(-1);
         }
     }
 }
