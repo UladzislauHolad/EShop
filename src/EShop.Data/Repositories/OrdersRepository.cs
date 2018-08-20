@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace EShop.Data.Repositories
 {
@@ -37,7 +38,7 @@ namespace EShop.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public System.Linq.IQueryable<Order> GetAll()
+        public IQueryable<Order> GetAll()
         {
             return _context.Set<Order>()
                 .Include(o => o.Products);
