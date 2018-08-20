@@ -89,15 +89,63 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Update(It.Is<Product>(p => p.Name == product.Name)), Times.Once());
         }
 
+        [Fact]
+        public void GetCategoriesWithCountOfProducts_Invoke_ReturnsNameOfCategoriesAndCountOfProducts()
+        {
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.GetAll()).Returns(GetProducts());
+            var service = new ProductService(mock.Object);
+
+            var result = service.GetCategoriesWithCountOfProducts();
+
+            Assert.Equal(2, result.Count);            
+        }
+
         private IQueryable<Product> GetProducts()
         {
+            var category1 = new Category { CategoryId = 1, Name = "C1", ParentId = 0 };
+            var category2 = new Category { CategoryId = 2, Name = "C2", ParentId = 0 };
             List<Product> products = new List<Product>
             {
-                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 },
-                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22 },
-                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23 },
-                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24 },
-                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25 }
+                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductCategoryId = 1, ProductId = 1, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductCategoryId = 2, ProductId = 1, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductCategoryId = 3, ProductId = 2, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductCategoryId = 4, ProductId = 2, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductCategoryId = 5, ProductId = 3, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductCategoryId = 6, ProductId = 3, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductCategoryId = 7, ProductId = 4, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductCategoryId = 8, ProductId = 4, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductCategoryId = 9, ProductId = 5, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductCategoryId = 10, ProductId = 5, CategoryId = 2, Category = category2 },
+                        }
+                    }
             };
 
             return products.AsQueryable();
