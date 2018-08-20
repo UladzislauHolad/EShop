@@ -14,12 +14,12 @@
         <tbody>
             @foreach (EShop.App.Web.Models.CategoryViewModel c in Model.Categories)
             {
-                <tr id="@c.CategoryId">
+                <tr>
                     <td>@c.Name</td>
                     <td>
                         <div class="btn-toolbar pull-right" role="toolbar">
                             <div class="btn-group" role="group"><a class="btn btn-warning" asp-action="Edit" asp-route-id="@c.CategoryId"><span class="glyphicon glyphicon-pencil"></span></a></div>
-                            <div class="btn-group" role="group"><a class="btn btn-danger" id="@c.CategoryId"><span class="glyphicon glyphicon-trash"></span></a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-danger" id="@c.CategoryId" onclick="confirmDelete(this.id)"><span class="glyphicon glyphicon-trash"></span></a></div>
                         </div>
                     </td>
                 </tr>
@@ -69,8 +69,7 @@
                 url: "Category/Delete/" + id,
                 type: "Delete",
                 success: function () {
-                    $("tr#" + id).remove();
-                    $("#modal-delete-window").dialog("close");
+                    location.reload();
                 }
             });
         }
