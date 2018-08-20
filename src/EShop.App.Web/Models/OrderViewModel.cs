@@ -8,6 +8,6 @@ namespace EShop.App.Web.Models
     public class OrderViewModel
     {
         public int OrderId { get; set; }
-        public List<ProductViewModel> Products { get; set; }
+        public List<ProductOrderViewModel> ProductOrders { get; set; }
     }
 }
