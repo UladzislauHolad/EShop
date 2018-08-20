@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Remove="Migrations\20180814090221_InitialCreate.cs" />
     <Compile Remove="Migrations\20180820075022_AddCountToProduct.cs" />
+    <Compile Remove="Migrations\20180820095138_AddOder.cs" />
   </ItemGroup>
 
   <ItemGroup>
