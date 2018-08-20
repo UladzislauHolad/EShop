@@ -9,18 +9,19 @@ using System.Linq;
 
 namespace EShop.Data.Repositories
 {
-    public class OrdersRepository : IRepository<Order>
+    public class OrderRepository : IRepository<Order>
     {
         IDbContext _context;
 
-        public OrdersRepository(IDbContext context)
+        public OrderRepository(IDbContext context)
         {
             _context = context;
         }
 
-        public void Create(Order item)
+        public void Create(Order order)
         {
-            throw new NotImplementedException();
+            _context.Set<Order>().Add(order);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -41,7 +42,8 @@ namespace EShop.Data.Repositories
         public IQueryable<Order> GetAll()
         {
             return _context.Set<Order>()
-                .Include(o => o.Products);
+                .Include(o => o.ProductOrders)
+                .ThenInclude(o => o.Product);
         }
 
         public void Update(Order item)

@@ -36,7 +36,7 @@ namespace EShop.Data.Tests
 
                 using (var context = new EShopContext(options))
                 {
-                    var repository = new OrdersRepository(context);
+                    var repository = new OrderRepository(context);
                     var result = repository.GetAll();
 
                     Assert.Equal(5, await result.CountAsync());
@@ -50,37 +50,38 @@ namespace EShop.Data.Tests
 
         private IEnumerable<Order> GetOrders()
         {
-            var product = new Product { ProductId = 1, Name = "P1", Description = "Des1", Count = 2 };
+            var product = new Product { ProductId = 1, Name = "P1", Description = "Des1", Count = 10 };
             List<Order> orders = new List<Order>
             {
                 new Order { OrderId = 1,
-                    Products = new List<Product>
+                    ProductOrders = new List<ProductOrder>
                     {
-                        product
+                        new ProductOrder { ProductOrderId = 1, OrderId = 1, ProductId = 1, Count = 1, Product = product }
                     }
+
                 },
                 new Order { OrderId = 2,
-                Products = new List<Product>
+                    ProductOrders = new List<ProductOrder>
                     {
-                       product
+                        new ProductOrder { ProductOrderId = 2, OrderId = 2, ProductId = 1, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 3,
-                Products = new List<Product>
+                    ProductOrders = new List<ProductOrder>
                     {
-                        product
+                        new ProductOrder { ProductOrderId = 3, OrderId = 3, ProductId = 1, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 4,
-                Products = new List<Product>
+                    ProductOrders = new List<ProductOrder>
                     {
-                        product
+                        new ProductOrder { ProductOrderId = 4, OrderId = 4, ProductId = 1, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 5,
-                Products = new List<Product>
+                    ProductOrders = new List<ProductOrder>
                     {
-                        product
+                        new ProductOrder { ProductOrderId = 5, OrderId = 5, ProductId = 1, Count = 1, Product = product }
                     }
                 }
             };
