@@ -7,6 +7,6 @@ namespace EShop.Services.DTO
     public class OrderDTO
     {
         public int OrderId { get; set; }
-        public virtual ICollection<ProductDTO> Products { get; set; }
+        public ICollection<ProductOrderDTO> ProductOrders { get; set; }
     }
 }
