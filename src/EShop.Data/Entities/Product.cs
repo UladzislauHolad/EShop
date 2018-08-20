@@ -11,5 +11,6 @@ namespace EShop.Data.Entities
         public int Count { get; set; }
 
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
+        public virtual ICollection<ProductOrder> ProductOrders { get; set; }
     }
 }
