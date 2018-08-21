@@ -1,6 +1,8 @@
-﻿using EShop.Data.Entities;
+﻿using AutoMapper;
+using EShop.Data.Entities;
 using EShop.Data.Interfaces;
-using EShop.Services.Services;
+using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,16 @@ namespace EShop.Services.Tests
 {
     public class OrderServiceTests
     {
+        public OrderServiceTests()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<OrderProfile>();
+                cfg.AddProfile<ProductProfile>();
+                cfg.AddProfile<ProductOrderProfile>();
+            });
+        }
+
         [Fact]
         public void GetOrders_Invoke_ReturnOrdersCollection()
         {
@@ -32,6 +44,26 @@ namespace EShop.Services.Tests
             var service = new OrderService(mock.Object);
 
             var result = service.GetOrders().ToArray();
+
+            Assert.NotNull(result[0].ProductOrders);
+        }
+
+        [Fact]
+        public void Create_CreateOrder_OrderIsCreated()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder{ ProductId = 1, Count = 4 }
+                }
+            };
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Create(order));
+            var service = new OrderService(mock.Object);
+            var orderDto = Mapper.Map<Order ,OrderDTO>(order);
+            var result = service.Create(orderDto);
 
             Assert.NotNull(result[0].ProductOrders);
         }

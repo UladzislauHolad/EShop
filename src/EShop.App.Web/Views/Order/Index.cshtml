@@ -1,0 +1,39 @@
+﻿@model IEnumerable<OrderViewModel>
+
+@{
+    ViewBag.Title = "OrderList";
+    Layout = "_Layout";
+}
+
+<div class="col-md-10">
+    <h3>Order List</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Id</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (OrderViewModel order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>
+                        <div class="btn-toolbar pull-right" role="toolbar">
+                            <div class="btn-group" role="group"><a class="btn btn-warning" asp-action="Edit" asp-route-id="@order.OrderId"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-danger" asp-action="Delete" asp-route-id="@order.OrderId"><span class="glyphicon glyphicon-trash"></span></a></div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*<div page-model="@Model.PageInfo" page-action="Index"
+             page-classes-enabled="true"
+             page-class="btn" page-class-normal="btn-default"
+             page-class-selected="btn-primary" class="btn-group">
+        </div>*@
+    <div class="text-center">
+        <a asp-action="Create" class="btn btn-primary">
+            Add New Order
+        </a>
+    </div>
+</div>

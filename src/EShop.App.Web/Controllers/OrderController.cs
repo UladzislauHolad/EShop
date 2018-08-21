@@ -26,5 +26,17 @@ namespace EShop.App.Web.Controllers
 
             return View(orders);
         }
+
+        [HttpGet]
+        public ViewResult Create()
+        {
+            return View(new OrderViewModel());
+        }
+
+        [HttpGet]
+        public ViewResult Create(OrderViewModel order)
+        {
+            return View(new OrderViewModel());
+        }
     }
 }

@@ -48,6 +48,50 @@ namespace EShop.Data.Tests
             }
         }
 
+        [Fact]
+        public void Create_CreateNewOrder_OrderIsCreated()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder{ ProductId = 1, Count = 4 }
+                }
+            };
+            var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            try
+            {
+                var options = new DbContextOptionsBuilder<EShopContext>()
+                    .UseSqlite(connection)
+                    .Options;
+
+                // Create the schema in the database
+                using (var context = new EShopContext(options))
+                {
+                    context.Database.EnsureCreated();
+                    context.Set<Product>().Add(product);
+                    context.SaveChanges();
+                    var repository = new OrderRepository(context);
+                    repository.Create(order);
+                }
+
+                using (var context = new EShopContext(options))
+                {
+                    var result = context.Set<Order>().Find(order.OrderId);
+
+                    Assert.NotNull(result);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         private IEnumerable<Order> GetOrders()
         {
             var product = new Product { ProductId = 1, Name = "P1", Description = "Des1", Count = 10 };

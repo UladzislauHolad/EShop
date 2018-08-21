@@ -8,5 +8,6 @@ namespace EShop.Services.Interfaces
     public interface IOrderService
     {
         IEnumerable<OrderDTO> GetOrders();
+        void Create(OrderDTO orderDTO);
     }
 }
