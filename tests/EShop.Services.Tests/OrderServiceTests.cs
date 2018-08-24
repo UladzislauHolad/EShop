@@ -1,29 +1,19 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
 using EShop.Services.Profiles;
+using EShop.Services.Services;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace EShop.Services.Tests
 {
     public class OrderServiceTests
     {
-        public OrderServiceTests()
-        {
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<OrderProfile>();
-                cfg.AddProfile<ProductProfile>();
-                cfg.AddProfile<ProductOrderProfile>();
-            });
-        }
-
         [Fact]
         public void GetOrders_Invoke_ReturnOrdersCollection()
         {
@@ -56,16 +46,80 @@ namespace EShop.Services.Tests
                 OrderId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
-                    new ProductOrder{ ProductId = 1, Count = 4 }
+                    new ProductOrder{ Count = 4 }
                 }
             };
+            var mapper = GetMapper();
             var mock = new Mock<IRepository<Order>>();
             mock.Setup(repo => repo.Create(order));
             var service = new OrderService(mock.Object);
-            var orderDto = Mapper.Map<Order ,OrderDTO>(order);
-            var result = service.Create(orderDto);
+            var orderDto = mapper.Map<Order, OrderDTO>(order);
+            service.Create(orderDto);
 
-            Assert.NotNull(result[0].ProductOrders);
+            mock.Verify(m => m.Create(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once);
+        }
+
+        [Fact]
+        public void Update_UpdateOrder_OrderIsUpdated()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder
+                    {
+                        OrderId = 1,
+                        ProductId = 1,
+                        Name = "P1",
+                        Description = "Des1",
+                        Price = 1,
+                        Count = 2,
+                        OrderCount = 1,
+                        Product = new Product
+                        {
+                            ProductId = 1,
+                            Name = "P1",
+                            Description = "Des1",
+                            Price = 1,
+                            Count = 1
+                        }
+                    }
+                }
+            };
+
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(m => m.Update(order));
+            var service = new OrderService(mock.Object);
+            var mapper = GetMapper();
+
+            service.Update(mapper.Map<OrderDTO>(order));
+
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once());
+        }
+
+        [Fact]
+        public void Delete_InvokeWithValidId_OrderDeleted()
+        {
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Delete(1));
+            var service = new OrderService(mock.Object);
+
+            service.Delete(1);
+
+            mock.Verify(m => m.Delete(1));
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new OrderProfile());
+                cfg.AddProfile(new ProductOrderProfile());
+                cfg.AddProfile(new ProductProfile());
+            }).CreateMapper();
+
+            return mapper;
         }
 
         private IQueryable<Order> GetOrders()
@@ -76,31 +130,31 @@ namespace EShop.Services.Tests
                 new Order { OrderId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 1, OrderId = 1, ProductId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 1, OrderId = 1, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 2,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 2, OrderId = 2, ProductId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 2, OrderId = 2, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 3,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 3, OrderId = 3, ProductId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 3, OrderId = 3, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 4,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 4, OrderId = 4, ProductId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 4, OrderId = 4, Count = 1, Product = product }
                     }
                 },
                 new Order { OrderId = 5,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 5, OrderId = 5, ProductId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 5, OrderId = 5, Count = 1, Product = product }
                     }
                 }
             };
