@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,15 +29,23 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public ViewResult Create()
+        public ActionResult Create()
         {
-            return View(new OrderViewModel());
+            _service.Create(new OrderDTO());
+            return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public ViewResult Create(OrderViewModel order)
+        public ActionResult Delete(int id)
         {
-            return View(new OrderViewModel());
+            var order = _service.GetOrder(id);
+            if(order != null)
+            {
+                _service.Delete(id);
+
+                return RedirectToAction("Index");
+            }
+
+            return NotFound();
         }
     }
 }
