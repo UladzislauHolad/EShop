@@ -18,7 +18,7 @@
                     <td>@order.OrderId</td>
                     <td>
                         <div class="btn-toolbar pull-right" role="toolbar">
-                            <div class="btn-group" role="group"><a class="btn btn-warning" asp-action="Edit" asp-route-id="@order.OrderId"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-warning" asp-controller="ProductOrder" asp-action="Index" asp-route-id="@order.OrderId"><span class="glyphicon glyphicon-pencil"></span></a></div>
                             <div class="btn-group" role="group"><a class="btn btn-danger" asp-action="Delete" asp-route-id="@order.OrderId"><span class="glyphicon glyphicon-trash"></span></a></div>
                         </div>
                     </td>
