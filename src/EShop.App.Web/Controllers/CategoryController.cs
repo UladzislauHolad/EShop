@@ -8,6 +8,7 @@ using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EShop.App.Web.Controllers
 {
@@ -101,6 +102,22 @@ namespace EShop.App.Web.Controllers
             var categories = _service.GetCategories();
 
             return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
+        }
+
+        [HttpGet]
+        public PartialViewResult CategorySingleSelect()
+        {
+            var categories = _service.GetCategories();
+
+            return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
+        }
+
+        [HttpGet]
+        public JsonResult CategoryJson()
+        {
+            var categories = _service.GetCategories()
+                .Select(c => new { c.CategoryId, c.Name }).ToList();
+            return Json(new SelectList(categories, "CategoryId", "Name"));
         }
     }
 }
