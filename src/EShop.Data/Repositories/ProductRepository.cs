@@ -19,10 +19,10 @@ namespace EShop.Data.Repositories
 
         public void Create(Product product)
         {
-            foreach (var category in product.ProductCategories)
-            {
-                category.ProductId = product.ProductId;
-            }
+            //foreach (var category in product.ProductCategories)
+            //{
+            //    category.ProductId = product.ProductId;
+            //}
             _context.Set<Product>().Add(product);
             _context.SaveChanges();
         }
