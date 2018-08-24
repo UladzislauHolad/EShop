@@ -58,6 +58,10 @@ namespace EShop.App.Web
             app.UseDeveloperExceptionPage();
             app.UseMvc(routes => {
                 routes.MapRoute(
+                    name: "showOrders",
+                    template: "Orders",
+                    defaults: new { controller = "Order", action = "Index" });
+                routes.MapRoute(
                     name: "editCategory",
                     template: "Categories/Edit{id}",
                     defaults: new { controller = "Category", action = "Edit" });
