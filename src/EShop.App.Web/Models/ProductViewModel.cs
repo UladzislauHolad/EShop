@@ -12,5 +12,6 @@ namespace EShop.App.Web.Models
 
         public List<int> CategoriesId { get; set; }
         public List<CategoryViewModel> Categories { get; set; }
+        public List<ProductOrderViewModel> ProductOrders { get; set; }
     }
 }

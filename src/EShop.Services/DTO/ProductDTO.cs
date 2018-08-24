@@ -12,6 +12,7 @@ namespace EShop.Services.DTO
         public int Count { get; set; }
 
         public ICollection<CategoryDTO> Categories { get; set; }
+        public ICollection<ProductOrderDTO> ProductOrders { get; set; }
 
         public bool Equals(ProductDTO other)
         {
