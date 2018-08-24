@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ProductOrderViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-10">
+    <h3>Product List of Order #@ViewBag.OrderId</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Name</th><th>Price</th><th>OrderCount</th><th>Sum</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach ( ProductOrderViewModel po in Model)
+            {
+            <tr id="@po.ProductOrderId">
+                <td id="name">@po.Name</td>
+                <td id="price">@po.Price</td>
+                <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
+                <td id="sum">@(po.OrderCount * po.Price)</td>
+                <td>
+                    <div class="btn-toolbar pull-right" role="toolbar">
+                        <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                        <div class="btn-group" role="group"><a class="btn btn-danger" onclick="deleteProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    @*<div page-model="@Model.PageInfo" page-action="Index"
+         page-classes-enabled="true"
+         page-class="btn" page-class-normal="btn-default"
+         page-class-selected="btn-primary" class="btn-group">
+    </div>*@
+    <div class="text-center">
+        <div class="btn-group">
+            <a asp-action="Create" class="btn btn-primary">
+                Add Product To Order
+            </a>
+            <a asp-controller="Order" asp-action="Index" class="btn btn-default">
+                Back To Order List
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function activeEdit(id) {
+        var parent = $("#" + id);
+        var editBtn = parent.find("#edit-btn").first();
+        editBtn.attr('class', 'btn btn-warning');
+        var count = parseInt(parent.find("#order-count").first().val());
+        var price = parseInt(parent.find("#price").first().text());
+        parent.find("#sum").first().text(count * price);
+    }
+
+    function editProductOrder(productOrderId) {
+        var parent = $("#" + productOrderId);
+        var count = parseInt(parent.find("#order-count").first().val());
+
+        $.ajax({
+            url: "Products/" + productOrderId,
+            type: 'PATCH',
+            data: JSON.stringify({ OrderCount: count }),
+            contentType: "application/json",
+            accept: "json",
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+
+    function deleteProductOrder(productOrderId) {
+        $.ajax({
+            url: "Products/" + productOrderId,
+            type: 'DELETE',
+            success: function () {
+                location.reload();
+            }
+        });
+    }
+    
+</script>
