@@ -111,5 +111,11 @@ namespace EShop.App.Web.Controllers
 
             return Json(data);
         }
+        public PartialViewResult Product(int id)
+        {
+            var product = _mapper.Map<ProductViewModel>(_service.GetProduct(id));
+
+            return PartialView(product);
+        }
     }
 }
