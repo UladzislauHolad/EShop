@@ -1,0 +1,144 @@
+﻿@model ProductOrderViewModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form asp-action="Create" method="post">
+    <h3>Order #@Model.OrderId</h3>
+    <hr />
+    <div class="col-md-4">
+        <label>Category</label>
+        <select id="category-select" name="CategoryId" class="form-control">
+        </select>
+        <label>Product</label>
+        <select required id="product-select" name="CategoryId" class="form-control">
+        </select>
+    </div>
+    <div class="col-md-4">
+        <div id="product-info">
+        </div>
+        <input asp-for="OrderId" class="form-control" type="hidden" />
+        <div class="form-group">
+            <label asp-for="OrderCount" class="control-label"></label>
+            <input asp-for="OrderCount" id="order-count" class="form-control" min="1" max="20" />
+            <span asp-validation-for="Count" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <a asp-action="Index" asp-route-id="@Model.OrderId" class="btn btn-default">Cancel</a>
+    </div>
+</form>
+
+<script>
+    $(function() { 
+        var url = "/Category/CategoryJson"; 
+        var categorySelect = "#Countryid"; 
+        $.getJSON(url, function (data) { 
+            var items = ''; 
+            $("#category-select").empty(); 
+            $.each(data,function(i, row) { 
+                items += "<option value='" + row.value + "'>" + row.text + "</option>"; 
+            }); 
+            if (data.length == 0) {
+                items += "<option value='0'>Not Found</option>"
+            }
+            $("#category-select").html(items);
+            getProductJson();
+        }); 
+    }); 
+
+    $("#category-select").change(function () {
+        getProductJson();
+    });
+
+    $("#product-select").change(function () {
+        var productId = $("#product-select").val();
+        displayProductInfo(productId);
+    });
+
+    function getProductJson() {
+        var categoryId = $("#category-select").val();
+        var url = "/Product/ProductJson/?id=" + categoryId;
+        $.getJSON(url, function (data) {
+            var items = '';
+            $("#product-select").empty();
+            $.each(data, function (i, row) {
+                items += "<option value='" + row.value + "'>" + row.text + "</option>";
+            });
+            if (data.length == 0) {
+                items += "<option value='0'>Not Found</option>"
+            }
+            $("#product-select").html(items);
+            var productId = $("#product-select").val();
+            displayProductInfo(productId);
+        });
+    }
+
+    function displayProductInfo(productId) {
+        $.ajax({
+            type: "GET",
+            url: "/Product/Product/?id=" + productId,
+            success: function (response) {
+                $("#product-info").text("");
+                $("#product-info").append(response);
+                $("#order-count").attr("max", $("#count").val());
+            }
+        });
+    }
+    //$(document).ready(function () {
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Category/CategorySingleSelect",
+    //        success: function (response) {
+    //            $("#category-select").append(response);
+    //            $('#cat-select').searchableOptionList({
+    //                events: {
+    //                    onInitialized: function () {
+    //                        let categoryId = $(".sol-radio").val();
+    //                        loadProducts(categoryId);
+    //                    },
+    //                    onChange: function (sol, selected) {
+    //                        let categoryId = selected[0].defaultValue;
+    //                        loadProducts(categoryId);
+    //                    }
+    //                }
+    //            });
+    //        }
+    //    });
+    //});
+
+    //function loadProducts(categoryId) {
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Product/ProductSelect/?id=" + categoryId,
+    //        success: function (response) {
+    //            $("#product-select").append(response);
+    //            $('#my-select').searchableOptionList({
+    //                events: {
+    //                    onInitialized: function () {
+    //                        let productId = $(".sol-radio").val();
+    //                        displayProductInfo(productId);
+    //                    },
+    //                    onChange: function (sol, selected) {
+    //                        let productId = selected[0].defaultValue;
+    //                        displayProductInfo(productId);
+    //                    }
+    //                }
+    //            });
+    //        }
+    //    });
+    //}
+
+    //function displayProductInfo(productId) {
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/Product/Product/?id=" + productId,
+    //        success: function (response) {
+    //            $("#product-info").text("");
+    //            $("#product-info").append(response);
+    //            $("#order-count").attr("max", $("#count").val());
+    //        }
+    //    });
+    //}
+</script>
