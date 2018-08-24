@@ -3,6 +3,7 @@ using EShop.App.Web.Models;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -125,6 +126,16 @@ namespace EShop.App.Web.Controllers
             var product = _mapper.Map<ProductViewModel>(_service.GetProduct(id));
 
             return PartialView(product);
+        }
+
+        [HttpGet]
+        public JsonResult ProductJson(int id)
+        {
+            var products = _service.GetProducts()
+                .Where(p => p.Categories
+                    .Any(c => c.CategoryId == id))
+                .Select(p => new { p.ProductId, p.Name }).ToList();
+            return Json(new SelectList(products, "ProductId", "Name"));
         }
     }
 }
