@@ -8,7 +8,7 @@ using Xunit;
 
 namespace EShop.App.Web.Tests
 {
-    public class DomainProfileTests
+    public class ProductProfileTests
     {
         [Fact]
         public void DomainProfile_MapToProductDTO_MappedToProductDTO()
