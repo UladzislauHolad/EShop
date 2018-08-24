@@ -11,16 +11,9 @@ namespace EShop.Data.EF.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<ProductOrder> builder)
         {
-            builder.HasKey(pc => new { pc.ProductId, pc.OrderId });
-
-            builder.HasOne(pc => pc.Product)
-                .WithMany(p => p.ProductOrders)
-                .HasForeignKey(pt => pt.OrderId);
-
-            builder.HasOne(pc => pc.Order)
-                .WithMany(c => c.ProductOrders)
-                .HasForeignKey(pc => pc.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasOne(po => po.Product)
+            //    .WithOne(p => p.ProductOrder)
+            //    .HasForeignKey<Product>(l => l.ProductForeignKey);
         }
 
     }
