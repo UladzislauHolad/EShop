@@ -26,7 +26,25 @@ namespace EShop.Data.Repositories
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var order = _context.Set<Order>().SingleOrDefault(o => o.OrderId == id);
+            var productOrders = _context.Set<ProductOrder>().Where(po => po.OrderId == id).Include(po => po.Product);
+            if(productOrders != null)//?
+            {
+                var productsForUpdate = new List<Product>();
+                foreach(var po in productOrders)
+                {
+                    int newCount = po.OrderCount + po.Product.Count;
+                    var product = po.Product;//?
+                    product.Count = newCount;
+                    productsForUpdate.Add(product);
+                }
+
+                _context.Set<Product>().UpdateRange(productsForUpdate);
+                _context.SaveChanges();
+            }
+
+            _context.Set<Order>().Remove(order);
+            _context.SaveChanges();
         }
 
         public IEnumerable<Order> Find(Func<Order, bool> predicate)
@@ -36,7 +54,7 @@ namespace EShop.Data.Repositories
 
         public Order Get(int id)
         {
-            throw new NotImplementedException();
+            return _context.Set<Order>().AsNoTracking().Include(o => o.ProductOrders).ThenInclude(po => po.Product).Single(o => o.OrderId == id);
         }
 
         public IQueryable<Order> GetAll()
@@ -46,9 +64,12 @@ namespace EShop.Data.Repositories
                 .ThenInclude(o => o.Product);
         }
 
-        public void Update(Order item)
+        public void Update(Order order)
         {
-            throw new NotImplementedException();
+
+
+            _context.Set<Order>().Update(order);
+            _context.SaveChanges();
         }
     }
 }
