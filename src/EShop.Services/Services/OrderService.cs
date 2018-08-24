@@ -17,22 +17,51 @@ namespace EShop.Services.Services
         public OrderService(IRepository<Order> repository)
         {
             _repository = repository;
-            Mapper.Initialize(cfg =>
-            {
-                cfg.AddProfile<OrderProfile>();
-                cfg.AddProfile<ProductProfile>();
-                cfg.AddProfile<ProductOrderProfile>();
-            });
         }
 
         public void Create(OrderDTO orderDTO)
         {
-            _repository.Create(Mapper.Map<Order>(orderDTO));
+            var mapper = GetMapper();
+
+            _repository.Create(mapper.Map<Order>(orderDTO));
+        }
+
+        public void Delete(int id)
+        {
+            var mapper = GetMapper();
+            _repository.Delete(id);
+        }
+
+        public OrderDTO GetOrder(int id)
+        {
+            var mapper = GetMapper();
+            return mapper.Map<OrderDTO>(_repository.Get(id));
         }
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            return Mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            var mapper = GetMapper();
+
+            return mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+        }
+
+        public void Update(OrderDTO orderDTO)
+        {
+            var mapper = GetMapper();
+
+            _repository.Update(mapper.Map<Order>(orderDTO));
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new OrderProfile());
+                cfg.AddProfile(new ProductOrderProfile());
+                cfg.AddProfile(new ProductProfile());
+            }).CreateMapper();
+
+            return mapper;
         }
     }
 }
