@@ -16,5 +16,7 @@ namespace EShop.Data.EF.Interfaces
         void RemoveRange([NotNullAttribute] IEnumerable<object> entities);
         EntityEntry<TEntity> Remove<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
         EntityEntry<TEntity> Add<TEntity>([NotNullAttribute] TEntity entity) where TEntity : class;
+        EntityEntry<TEntity> Attach<TEntity>([NotNull] TEntity entity) where TEntity : class;
+        EntityEntry<TEntity> Entry<TEntity>([NotNull] TEntity entity) where TEntity : class;
     }
 }
