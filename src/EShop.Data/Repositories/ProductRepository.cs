@@ -47,7 +47,7 @@ namespace EShop.Data.Repositories
             return _context.Set<Product>()
                 .Include(p => p.ProductCategories)
                 .ThenInclude(p => p.Category)
-                .First(p => p.ProductId == id);
+                .SingleOrDefault(p => p.ProductId == id);
         }
 
         public IQueryable<Product> GetAll()
