@@ -52,11 +52,85 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Update(It.Is<ProductOrder>(po => po.ProductOrderId == 1)), Times.Once);
         }
 
+        [Fact]
+        public void Create_CreateProductOrder_ProductOrderWithRelationCreated()
+        {
+            var productOrderDto = new ProductOrderDTO
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                OrderCount = 2,
+                Product = new ProductDTO
+                {
+                    ProductId = 1,
+                    Name = "P2",
+                    Description = "Des2",
+                    Price = 1,
+                    Count = 2
+                }
+            };
+            var mapper = GetMapper();
+            var productOrder = mapper.Map<ProductOrder>(productOrderDto);
+            List<ProductOrder> productOrderList = null;
+            var mock = new Mock<IRepository<ProductOrder>>();
+            mock.Setup(repo => repo.Create(productOrder));
+            mock.Setup(repo => repo.Find(It.IsAny<Func<ProductOrder, bool>>())).Returns(productOrderList);
+            //mock.Setup(repo => repo.Update(productOrder));
+            var service = new ProductOrderService(mock.Object);
+
+            service.Create(productOrderDto);
+
+            mock.Verify(m => m.Create(It.Is<ProductOrder>(po => po.Name == "P2")), Times.Once);
+            mock.Verify(m => m.Find(It.IsAny<Func<ProductOrder, bool>>()), Times.Once);
+        }
+
+        [Fact]
+        public void Create_CreateExistProductOrder_ProductOrderWithRelationCreated()
+        {
+            var productOrderDto = new ProductOrderDTO
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                OrderCount = 2,
+                Product = new ProductDTO
+                {
+                    ProductId = 1,
+                    Name = "P2",
+                    Description = "Des2",
+                    Price = 1,
+                    Count = 2
+                }
+            };
+            var mapper = GetMapper();
+            var productOrder = mapper.Map<ProductOrder>(productOrderDto);
+            List<ProductOrder> productOrderList = new List<ProductOrder>();
+            productOrderList.Add(productOrder);
+            var mock = new Mock<IRepository<ProductOrder>>();
+            mock.Setup(repo => repo.Create(productOrder));
+            mock.Setup(repo => repo.Find(It.IsAny<Func<ProductOrder, bool>>())).Returns(productOrderList);
+            mock.Setup(repo => repo.Update(productOrder));
+            var service = new ProductOrderService(mock.Object);
+
+            service.Create(productOrderDto);
+
+            mock.Verify(m => m.Update(It.Is<ProductOrder>(po => po.OrderCount == 4)), Times.Once);
+            mock.Verify(m => m.Find(It.IsAny<Func<ProductOrder, bool>>()), Times.Once);
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new ProductOrderProfile());
+                cfg.AddProfile(new ProductProfile());
             }).CreateMapper();
 
             return mapper;
