@@ -3,14 +3,16 @@ using EShop.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EShop.Data.Migrations
 {
     [DbContext(typeof(EShopContext))]
-    partial class EShopContextModelSnapshot : ModelSnapshot
+    [Migration("20180827164655_Apply ProductCategoryConfiguration")]
+    partial class ApplyProductCategoryConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,12 +112,12 @@ namespace EShop.Data.Migrations
 
             modelBuilder.Entity("EShop.Data.Entities.ProductCategory", b =>
                 {
-                    b.HasOne("EShop.Data.Entities.Category", "Category")
+                    b.HasOne("EShop.Data.Entities.Product", "Product")
                         .WithMany("ProductCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("EShop.Data.Entities.Product", "Product")
+                    b.HasOne("EShop.Data.Entities.Category", "Category")
                         .WithMany("ProductCategories")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade);
