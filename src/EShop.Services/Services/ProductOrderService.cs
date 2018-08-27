@@ -39,7 +39,6 @@ namespace EShop.Services.Services
                     var existedProductOrder = _productOrderRepository.Find(po => po.ProductId == productOrderDTO.ProductId).SingleOrDefault();
                     if(existedProductOrder != null)
                     {
-                        //var existedProductOrder = existedProductOrders.Single();
                         existedProductOrder.Name = product.Name;
                         existedProductOrder.Description = product.Description;
                         existedProductOrder.Price = product.Price;
@@ -61,16 +60,6 @@ namespace EShop.Services.Services
                     }
                 }
             }
-
-            //var productOrderList = _productOrderRepository.Find(p => p.ProductId == productOrderDTO.ProductId);
-            //if(productOrderList == null)
-            //{
-            //    _productOrderRepository.Create(mapper.Map<ProductOrder>(productOrderDTO));
-            //}
-            //var po = productOrderList.Single();
-            //po.OrderCount += productOrderDTO.OrderCount;
-            //po.Product.Count -= productOrderDTO.OrderCount;
-            //_productOrderRepository.Update(po);
         }
 
         public void Delete(int id)
