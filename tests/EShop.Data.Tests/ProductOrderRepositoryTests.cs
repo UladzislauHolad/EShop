@@ -198,7 +198,6 @@ namespace EShop.Data.Tests
                 {
                     context.Database.EnsureCreated();
                     context.Orders.Add(order);
-                    context.Products.Add(product);
                     context.SaveChanges();
                 }
                 using (var context = new EShopContext(options))
@@ -210,13 +209,10 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     var result = context.ProductOrders.SingleOrDefault(po => po.ProductOrderId == 1);
-                    var oldProduct = context.Products.SingleOrDefault(p => p.ProductId == 1);
-                    var newProduct = context.Products.SingleOrDefault(p => p.ProductId == 2);
+                    var product = context.Products.SingleOrDefault(p => p.ProductId == 1);
 
                     Assert.NotNull(result);
-                    Assert.Equal("P2", result.Name);
-                    Assert.Equal(2, oldProduct.Count);
-                    Assert.Equal(1, newProduct.Count);
+                    Assert.Equal(0, product.Count);
                 }
             }
             finally
