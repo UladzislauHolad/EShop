@@ -171,19 +171,19 @@ namespace EShop.Data.Tests
             {
                 ProductOrderId = 1,
                 OrderId = 1,
-                ProductId = 2,
-                Name = "P2",
-                Description = "Des2",
+                ProductId = 1,
+                Name = "P1",
+                Description = "Des1",
                 Price = 1,
-                OrderCount = 1,
-            };
-
-            var product = new Product
-                ProductId = 2,
-                Name = "P2",
-                Description = "Des2",
-                Price = 1,
-                Count = 2
+                OrderCount = 2,
+                Product = new Product
+                {
+                    ProductId = 1,
+                    Name = "P1",
+                    Description = "Des1",
+                    Price = 1,
+                    Count = 0
+                }
             };
 
             var connection = new SqliteConnection("DataSource=:memory:");
