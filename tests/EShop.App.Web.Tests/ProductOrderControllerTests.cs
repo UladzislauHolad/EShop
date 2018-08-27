@@ -76,14 +76,34 @@ namespace EShop.App.Web.Tests
         public void Create_InvokeWithValidInstanceOfProductOrder_RedirectToIndex()
         {
             var order = new OrderDTO { OrderId = 1 };
-            var productOrder = new ProductOrderViewModel { OrderId = 1 };
+            var productOrderDto = new ProductOrderDTO
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                OrderCount = 2,
+                Product = new ProductDTO
+                {
+                    ProductId = 1,
+                    Name = "P2",
+                    Description = "Des2",
+                    Price = 1,
+                    Count = 2
+                }
+            };
+            var mapper = GetMapper();
             var orderServiceMock = new Mock<IOrderService>();
             orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
             var productOrderServiceMock = new Mock<IProductOrderService>();
-            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+            productOrderServiceMock.Setup(m => m.Create(productOrderDto));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, mapper);
 
-            var result = controller.Create(productOrder);
+            var result = controller.Create(mapper.Map<ProductOrderViewModel>(productOrderDto));
 
+            productOrderServiceMock.Verify(m => m.Create(It.Is<ProductOrderDTO>(po => po.Name == "P2")), Times.Once);
             Assert.True(result is RedirectToActionResult);
             Assert.Equal("Index", (result as RedirectToActionResult).ActionName);
         }
