@@ -307,5 +307,69 @@ namespace EShop.Data.Tests
                 connection.Close();
             }
         }
+
+        [Fact]
+        public void Create_CreateNewProductOrder_NewProductOrderCreated()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+            };
+
+            var productOrder = new ProductOrder
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                Count = 2,
+                OrderCount = 2
+            };
+
+            var product = new Product
+            {
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                Count = 2
+            };
+
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            try
+            {
+                var options = new DbContextOptionsBuilder<EShopContext>()
+                    .UseSqlite(connection)
+                    .Options;
+                using (var context = new EShopContext(options))
+                {
+                    context.Database.EnsureCreated();
+                    context.Orders.Add(order);
+                    context.Products.Add(product);
+                    context.SaveChanges();
+                }
+                using (var context = new EShopContext(options))
+                {
+                    var repository = new ProductOrderRepository(context);
+                    repository.Create(productOrder);
+                }
+
+                using (var context = new EShopContext(options))
+                {
+                    var result = context.ProductOrders.SingleOrDefault(po => po.ProductOrderId == 1);
+
+                    Assert.NotNull(result);
+                    Assert.Equal("P2", result.Name);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }

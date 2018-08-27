@@ -19,9 +19,10 @@ namespace EShop.Data.Repositories
             _context = context;
         }
 
-        public void Create(ProductOrder item)
+        public void Create(ProductOrder productOrder)
         {
-            throw new NotImplementedException();
+            _context.Set<ProductOrder>().Add(productOrder);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
