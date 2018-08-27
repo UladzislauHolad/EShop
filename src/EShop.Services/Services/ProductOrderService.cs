@@ -64,7 +64,12 @@ namespace EShop.Services.Services
 
         public void Delete(int id)
         {
-            _productOrderRepository.Delete(id);
+            var productOrder = _productOrderRepository.Get(id);
+            if(productOrder != null)
+            {
+                productOrder.Product.Count += productOrder.OrderCount;
+                _productOrderRepository.Delete(id);
+            }
         }
 
         public ProductOrderDTO GetProductOrder(int id)
