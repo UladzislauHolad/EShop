@@ -15,6 +15,7 @@ namespace EShop.App.Web.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public int Count { get; set; } //Убрать из модели
 
         public ProductViewModel Product { get; set; }
     }
