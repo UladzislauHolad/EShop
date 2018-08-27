@@ -13,44 +13,83 @@ namespace EShop.Services.Services
 {
     public class ProductOrderService : IProductOrderService
     {
-        IRepository<ProductOrder> _repository;
+        IRepository<Product> _productRepository;
+        IRepository<Order> _orderRepository;
+        IRepository<ProductOrder> _productOrderRepository;
 
-        public ProductOrderService(IRepository<ProductOrder> repository)
+        public ProductOrderService(IRepository<Product> productRepository,
+            IRepository<Order> orderRepository, 
+            IRepository<ProductOrder> productOrderRepository)
         {
-            _repository = repository;
+            _productRepository = productRepository;
+            _orderRepository = orderRepository;
+            _productOrderRepository = productOrderRepository;
         }
 
         public void Create(ProductOrderDTO productOrderDTO)
         {
             var mapper = GetMapper();
-            var productOrderList = _repository.Find(p => p.ProductId == productOrderDTO.ProductId);
-            if(productOrderList == null)
+
+            var product = _productRepository.Get(productOrderDTO.ProductId);
+            if(product != null)
             {
-                _repository.Create(mapper.Map<ProductOrder>(productOrderDTO));
+                var order = _orderRepository.Get(productOrderDTO.OrderId);
+                if(order != null)
+                {
+                    var existedProductOrder = _productOrderRepository.Find(po => po.ProductId == productOrderDTO.ProductId).SingleOrDefault();
+                    if(existedProductOrder != null)
+                    {
+                        //var existedProductOrder = existedProductOrders.Single();
+                        existedProductOrder.Name = product.Name;
+                        existedProductOrder.Description = product.Description;
+                        existedProductOrder.Price = product.Price;
+                        existedProductOrder.OrderCount += productOrderDTO.OrderCount;
+                        product.Count -= productOrderDTO.OrderCount;
+
+                        _productRepository.Save();
+                        _productOrderRepository.Update(existedProductOrder);
+                    }
+                    else
+                    {
+                        productOrderDTO.Name = product.Name;
+                        productOrderDTO.Description = product.Description;
+                        productOrderDTO.Price = product.Price;
+                        product.Count -= productOrderDTO.OrderCount;
+
+                        _productRepository.Update(product);
+                        _productOrderRepository.Create(mapper.Map<ProductOrder>(productOrderDTO));
+                    }
+                }
             }
-            var po = productOrderList.First();
-            po.OrderCount += productOrderDTO.OrderCount;
-            po.Product.Count -= productOrderDTO.OrderCount;
-            _repository.Update(po);
+
+            //var productOrderList = _productOrderRepository.Find(p => p.ProductId == productOrderDTO.ProductId);
+            //if(productOrderList == null)
+            //{
+            //    _productOrderRepository.Create(mapper.Map<ProductOrder>(productOrderDTO));
+            //}
+            //var po = productOrderList.Single();
+            //po.OrderCount += productOrderDTO.OrderCount;
+            //po.Product.Count -= productOrderDTO.OrderCount;
+            //_productOrderRepository.Update(po);
         }
 
         public void Delete(int id)
         {
-            _repository.Delete(id);
+            _productOrderRepository.Delete(id);
         }
 
         public ProductOrderDTO GetProductOrder(int id)
         {
             var mapper = GetMapper();
 
-            return mapper.Map<ProductOrderDTO>(_repository.Get(id));
+            return mapper.Map<ProductOrderDTO>(_productOrderRepository.Get(id));
         }
 
         public void Update(ProductOrderDTO productOrderDTO)
         {
             var mapper = GetMapper();
 
-            _repository.Update(mapper.Map<ProductOrder>(productOrderDTO));
+            _productOrderRepository.Update(mapper.Map<ProductOrder>(productOrderDTO));
         }
 
         private IMapper GetMapper()
