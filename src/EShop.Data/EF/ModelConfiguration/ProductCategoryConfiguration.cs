@@ -12,11 +12,11 @@ namespace EShop.Data.EF.ModelConfiguration
 
             builder.HasOne(pc => pc.Product)
                 .WithMany(p => p.ProductCategories)
-                .HasForeignKey(pt => pt.CategoryId);
+                .HasForeignKey(pt => pt.ProductId);
 
             builder.HasOne(pc => pc.Category)
                 .WithMany(c => c.ProductCategories)
-                .HasForeignKey(pc => pc.ProductId)
+                .HasForeignKey(pc => pc.CategoryId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

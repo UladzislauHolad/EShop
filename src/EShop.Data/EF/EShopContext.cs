@@ -24,7 +24,7 @@ namespace EShop.Data.EF
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             //modelBuilder.ApplyConfiguration(new ProductOrderConfiguration());
-            //modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderConfiguration());
         }
    }
