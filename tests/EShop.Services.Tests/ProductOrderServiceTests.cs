@@ -251,7 +251,7 @@ namespace EShop.Services.Tests
                 }
             };
             var productOrder = mapper.Map<ProductOrder>(productOrderDto);
-            List<ProductOrder> productOrderList = null;
+            List<ProductOrder> productOrderList = new List<ProductOrder>();
             var productRepository = new Mock<IRepository<Product>>();
             productRepository.Setup(repo => repo.Get(productOrderCreateModel.ProductId)).Returns(product);
             var orderRepository = new Mock<IRepository<Order>>();
