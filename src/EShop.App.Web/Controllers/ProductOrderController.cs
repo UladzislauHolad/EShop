@@ -53,19 +53,16 @@ namespace EShop.App.Web.Controllers
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrder.OrderId));
             if (order != null)
             {
-                //Переписать на репозиторий ProductOrder
-                //Добавлять через ProductOrderService
-                //var product = new ProductViewModel
-                //{
-                //    ProductId = productOrder.ProductId,
-                //    Name = productOrder.Name,
-                //    Price = productOrder.Price,
-                //    Description = productOrder.Description,
-                //    Count = productOrder.Count - productOrder.OrderCount
-                //};
-                //productOrder.Product = product;
-                order.ProductOrders.Add(productOrder);
-                _orderService.Update(_mapper.Map<OrderDTO>(order));
+                var product = new ProductViewModel
+                {
+                    ProductId = productOrder.ProductId,
+                    Name = productOrder.Name,
+                    Price = productOrder.Price,
+                    Description = productOrder.Description,
+                    Count = productOrder.Count
+                };
+                productOrder.Product = product;
+                _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrder));
 
                 return RedirectToAction("Index", new { id = order.OrderId });
             }
