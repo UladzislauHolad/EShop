@@ -85,7 +85,8 @@ namespace EShop.Data.Tests
         [Fact]
         public void Update_UpdateProduct_ProductWithProductCategoryCollectionIsUpdated()
         {
-            var newproduct = new Product {
+            var newproduct = new Product
+            {
                 ProductId = 1,
                 Name = "New",
                 Description = "Des21",
@@ -274,9 +275,9 @@ namespace EShop.Data.Tests
         {
             List<ProductCategory> productCategories = new List<ProductCategory>
             {
-                new ProductCategory { ProductCategoryId = 1, ProductId = 1, CategoryId = 1},
-                new ProductCategory { ProductCategoryId = 2, ProductId = 1, CategoryId = 2},
-                new ProductCategory { ProductCategoryId = 3, ProductId = 1, CategoryId = 3},
+                new ProductCategory { ProductId = 1, CategoryId = 1},
+                new ProductCategory { ProductId = 1, CategoryId = 2},
+                new ProductCategory { ProductId = 1, CategoryId = 3},
             };
 
             return productCategories;
