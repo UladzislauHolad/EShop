@@ -179,7 +179,6 @@ namespace EShop.Data.Tests
             };
 
             var product = new Product
-            {
                 ProductId = 2,
                 Name = "P2",
                 Description = "Des2",

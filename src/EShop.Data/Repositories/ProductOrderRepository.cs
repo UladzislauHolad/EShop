@@ -56,6 +56,8 @@ namespace EShop.Data.Repositories
 
         public void Update(ProductOrder productOrder)
         {
+            _context.Set<ProductOrder>().Update(productOrder);
+            _context.SaveChanges();
             //ProductOrder existedProductOrder = _context.Set<ProductOrder>()
             //    .Include(po => po.Product)
             //    .SingleOrDefault(po => po.ProductOrderId == productOrder.ProductOrderId);
