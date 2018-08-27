@@ -118,36 +118,35 @@ namespace EShop.App.Web.Tests
             Assert.True(result is NotFoundResult);
         }
 
-        //[Fact]
-        //public void Delete_InvokeWithValidOrderId_RedirectToIndex()
-        //{
-        //    var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
-        //    var orderServiceMock = new Mock<IOrderService>();
-        //    var productOrderServiceMock = new Mock<IProductOrderService>();
-        //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
-        //    productOrderServiceMock.Setup(m => m.Delete(1));
-        //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+        [Fact]
+        public void Delete_InvokeWithValidOrderId_JsonResult()
+        {
+            var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
+            var orderServiceMock = new Mock<IOrderService>();
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Delete(1));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Delete(1);
+            var result = controller.Delete(1, 1);
 
-        //    Assert.True(result is RedirectToActionResult);
-        //    Assert.Equal("Index", (result as RedirectToActionResult).ActionName);
-        //}
+            Assert.True(result is JsonResult);
+        }
 
-        //[Fact]
-        //public void Delete_InvokeWithNotValidOrderId_NotFoundResult()
-        //{
-        //    ProductOrderDTO productOrder = null;
-        //    var orderServiceMock = new Mock<IOrderService>();
-        //    var productOrderServiceMock = new Mock<IProductOrderService>();
-        //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
-        //    productOrderServiceMock.Setup(m => m.Delete(1));
-        //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+        [Fact]
+        public void Delete_InvokeWithNotValidOrderId_NotFoundResult()
+        {
+            ProductOrderDTO productOrder = null;
+            var orderServiceMock = new Mock<IOrderService>();
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Delete(1));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Delete(1);
+            var result = controller.Delete(1, 1);
 
-        //    Assert.True(result is NotFoundResult);
-        //}
+            Assert.True(result is NotFoundResult);
+        }
 
         //[Fact]
         //public void Edit_InvokeWithNotValidId_NotFoundResult()
