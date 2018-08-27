@@ -41,7 +41,7 @@ namespace EShop.Data.Repositories
 
         public IEnumerable<ProductOrder> Find(Func<ProductOrder, bool> predicate)
         {
-            return _context.Set<ProductOrder>().Include(po => po.Product).Where(predicate);
+            return _context.Set<ProductOrder>().Include(po => po.Product).Where(predicate).DefaultIfEmpty();
         }
 
         public ProductOrder Get(int id)
@@ -52,6 +52,11 @@ namespace EShop.Data.Repositories
         public IQueryable<ProductOrder> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
         }
 
         public void Update(ProductOrder productOrder)

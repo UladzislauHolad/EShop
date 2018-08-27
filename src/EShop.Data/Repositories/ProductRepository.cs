@@ -59,9 +59,13 @@ namespace EShop.Data.Repositories
             return prods;
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(Product product)
         {
-
             foreach (var category in product.ProductCategories)
             {
                 category.ProductId = product.ProductId;

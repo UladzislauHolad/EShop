@@ -54,7 +54,10 @@ namespace EShop.Data.Repositories
 
         public Order Get(int id)
         {
-            return _context.Set<Order>().AsNoTracking().Include(o => o.ProductOrders).ThenInclude(po => po.Product).Single(o => o.OrderId == id);
+            return _context.Set<Order>().AsNoTracking()
+                .Include(o => o.ProductOrders)
+                .ThenInclude(po => po.Product)
+                .SingleOrDefault(o => o.OrderId == id);
         }
 
         public IQueryable<Order> GetAll()
@@ -64,10 +67,13 @@ namespace EShop.Data.Repositories
                 .ThenInclude(o => o.Product);
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(Order order)
         {
-
-
             _context.Set<Order>().Update(order);
             _context.SaveChanges();
         }

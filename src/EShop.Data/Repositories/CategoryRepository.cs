@@ -46,6 +46,11 @@ namespace EShop.Data.Repositories
             return _context.Set<Category>();
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(Category category)
         {
             _context.Set<Category>().Update(category);
