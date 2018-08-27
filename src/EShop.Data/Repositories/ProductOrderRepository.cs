@@ -28,14 +28,7 @@ namespace EShop.Data.Repositories
         public void Delete(int id)
         {
             var productOrder = _context.Set<ProductOrder>().Single(po => po.ProductOrderId == id);
-            var product = _context.Set<Product>().Single(p => p.ProductId == productOrder.ProductId);
-            int updatedCount = product.Count + productOrder.OrderCount;
-            product.Count = updatedCount;
-
             _context.Set<ProductOrder>().Remove(productOrder);
-            _context.SaveChanges();
-
-            _context.Set<Product>().Update(product);
             _context.SaveChanges();
         }
 
