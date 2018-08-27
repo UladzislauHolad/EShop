@@ -62,7 +62,7 @@
         var count = parseInt(parent.find("#order-count").first().val());
 
         $.ajax({
-            url: "Products/" + productOrderId,
+            url: @ViewBag.OrderId + "/Products/" + productOrderId,
             type: 'PATCH',
             data: JSON.stringify({ OrderCount: count }),
             contentType: "application/json",
