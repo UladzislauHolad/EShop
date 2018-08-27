@@ -489,21 +489,15 @@ namespace EShop.Data.Tests
                 {
                     context.Database.EnsureCreated();
                     context.Orders.Add(order);
-                    context.Products.Add(product);
                     context.SaveChanges();
                 }
                 using (var context = new EShopContext(options))
                 {
                     var repository = new ProductOrderRepository(context);
-                    repository.Create(productOrder);
-                }
-
-                using (var context = new EShopContext(options))
-                {
-                    var result = context.ProductOrders.SingleOrDefault(po => po.ProductOrderId == 1);
+                    var result = repository.Find(po => po.ProductId == 1).Single();
 
                     Assert.NotNull(result);
-                    Assert.Equal("P2", result.Name);
+                    Assert.Equal("P1", result.Name);
                 }
             }
             finally
