@@ -38,7 +38,6 @@ namespace EShop.Services.Tests
                 }
             };
             var productRepository = new Mock<IRepository<Product>>();
-            //productRepository.Setup(repo => repo.Get(productOrderCreateModel.ProductId)).Returns(product);
             var orderRepository = new Mock<IRepository<Order>>();
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(repo => repo.Get(1)).Returns(productOrder);
@@ -62,19 +61,59 @@ namespace EShop.Services.Tests
         //    mock.Verify(m => m.Get(1));
         //}
 
-        //[Fact]
-        //public void Update_InvokeWithValidInstance_ProductUpdated()
-        //{
-        //    var productOrder = new ProductOrder { ProductOrderId = 1 };
-        //    var mapper = GetMapper();
-        //    var mock = new Mock<IRepository<ProductOrder>>();
-        //    mock.Setup(repo => repo.Update(productOrder));    
-        //    var service = new ProductOrderService(mock.Object);
+        [Fact]
+        public void Update_InvokeWithValidInstance_ProductUpdated()
+        {
+            var productOrder = new ProductOrder
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                OrderCount = 2,
+            };
 
-        //    service.Update(mapper.Map<ProductOrderDTO>(productOrder));
+            Product product = new Product
+            {
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                Count = 2
+            };
 
-        //    mock.Verify(m => m.Update(It.Is<ProductOrder>(po => po.ProductOrderId == 1)), Times.Once);
-        //}
+            var existedProductOrder = new ProductOrder
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                Name = "P2",
+                Description = "Des2",
+                Price = 1,
+                OrderCount = 2,
+                Product = new Product
+                {
+                    ProductId = 1,
+                    Name = "P2",
+                    Description = "Des2",
+                    Price = 1,
+                    Count = 2
+                }
+            };
+
+            var mapper = GetMapper();
+            var productRepository = new Mock<IRepository<Product>>();
+            productRepository.Setup(repo => repo.Get(1)).Returns(product);
+            var orderRepository = new Mock<IRepository<Order>>();
+            var productOrderRepository = new Mock<IRepository<ProductOrder>>();
+            productOrderRepository.Setup(repo => repo.Update(productOrder));
+            productOrderRepository.Setup(repo => repo.Get(1)).Returns(existedProductOrder);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+
+            service.Update(mapper.Map<ProductOrderDTO>(productOrder));
+
+            productOrderRepository.Verify(m => m.Update(It.Is<ProductOrder>(po => po.ProductOrderId == 1)), Times.Once);
+            productOrderRepository.Verify(m => m.Get(1), Times.Once);
+        }
 
         //[Fact]
         //public void Create_CreateProductOrder_ProductOrderWithRelationCreated()
