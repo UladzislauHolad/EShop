@@ -41,7 +41,7 @@ namespace EShop.Data.Repositories
 
         public IEnumerable<ProductOrder> Find(Func<ProductOrder, bool> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Set<ProductOrder>().Include(po => po.Product).Where(predicate);
         }
 
         public ProductOrder Get(int id)
