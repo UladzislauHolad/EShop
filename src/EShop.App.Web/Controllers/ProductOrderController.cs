@@ -31,7 +31,7 @@ namespace EShop.App.Web.Controllers
             if (order != null)
             {
                 ViewBag.OrderId = order.OrderId;
-                return View(order.ProductOrders);
+                return View(order.ProductOrders); //добавить модельдля отображения информации о заказе
             }
             return NotFound();
         }
@@ -54,15 +54,16 @@ namespace EShop.App.Web.Controllers
             if (order != null)
             {
                 //Переписать на репозиторий ProductOrder
-                var product = new ProductViewModel
-                {
-                    ProductId = productOrder.ProductId,
-                    Name = productOrder.Name,
-                    Price = productOrder.Price,
-                    Description = productOrder.Description,
-                    Count = productOrder.Count - productOrder.OrderCount
-                };
-                productOrder.Product = product;
+                //Добавлять через ProductOrderService
+                //var product = new ProductViewModel
+                //{
+                //    ProductId = productOrder.ProductId,
+                //    Name = productOrder.Name,
+                //    Price = productOrder.Price,
+                //    Description = productOrder.Description,
+                //    Count = productOrder.Count - productOrder.OrderCount
+                //};
+                //productOrder.Product = product;
                 order.ProductOrders.Add(productOrder);
                 _orderService.Update(_mapper.Map<OrderDTO>(order));
 
