@@ -303,31 +303,32 @@ namespace EShop.Data.Tests
         }
 
         [Fact]
-        public void Create_CreateNewProductOrder_NewProductOrderCreated()
+        public void Find_FindProductOrderByProductId_ProductOrderIsFound()
         {
             var order = new Order
             {
                 OrderId = 1,
-            };
-
-            var productOrder = new ProductOrder
-            {
-                ProductOrderId = 1,
-                OrderId = 1,
-                ProductId = 1,
-                Name = "P2",
-                Description = "Des2",
-                Price = 1,
-                OrderCount = 2
-            };
-
-            var product = new Product
-            {
-                ProductId = 1,
-                Name = "P2",
-                Description = "Des2",
-                Price = 1,
-                Count = 2
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder
+                    {
+                        ProductOrderId = 1,
+                        OrderId = 1,
+                        ProductId = 1,
+                        Name = "P1",
+                        Description = "Des1",
+                        Price = 1,
+                        OrderCount = 1,
+                        Product = new Product
+                        {
+                            ProductId = 1,
+                            Name = "P1",
+                            Description = "Des1",
+                            Price = 1,
+                            Count = 1
+                        }
+                    }
+                }
             };
 
             var connection = new SqliteConnection("DataSource=:memory:");
