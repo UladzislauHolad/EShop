@@ -76,34 +76,23 @@ namespace EShop.App.Web.Tests
         public void Create_InvokeWithValidInstanceOfProductOrder_RedirectToIndex()
         {
             var order = new OrderDTO { OrderId = 1 };
-            var productOrderDto = new ProductOrderDTO
+            var productOrderCreateModel = new ProductOrderCreateViewModel
             {
                 ProductOrderId = 1,
                 OrderId = 1,
                 ProductId = 1,
-                Name = "P2",
-                Description = "Des2",
-                Price = 1,
                 OrderCount = 2,
-                Product = new ProductDTO
-                {
-                    ProductId = 1,
-                    Name = "P2",
-                    Description = "Des2",
-                    Price = 1,
-                    Count = 2
-                }
             };
             var mapper = GetMapper();
             var orderServiceMock = new Mock<IOrderService>();
             orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
             var productOrderServiceMock = new Mock<IProductOrderService>();
-            productOrderServiceMock.Setup(m => m.Create(productOrderDto));
+            productOrderServiceMock.Setup(m => m.Create(mapper.Map<ProductOrderDTO>(productOrderCreateModel)));
             var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, mapper);
 
-            var result = controller.Create(mapper.Map<ProductOrderViewModel>(productOrderDto));
+            var result = controller.Create(mapper.Map<ProductOrderCreateViewModel>(productOrderCreateModel));
 
-            productOrderServiceMock.Verify(m => m.Create(It.Is<ProductOrderDTO>(po => po.Name == "P2")), Times.Once);
+            productOrderServiceMock.Verify(m => m.Create(It.Is<ProductOrderDTO>(po => po.OrderCount == 2)), Times.Once);
             Assert.True(result is RedirectToActionResult);
             Assert.Equal("Index", (result as RedirectToActionResult).ActionName);
         }
@@ -112,13 +101,19 @@ namespace EShop.App.Web.Tests
         public void Create_InvokeWithNotValidInstanceOfProductOrder_NotFoundResult()
         {
             OrderDTO order = null;
-            var productOrder = new ProductOrderViewModel { OrderId = 1 };
+            var productOrderCreateModel = new ProductOrderCreateViewModel
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                OrderCount = 2,
+            };
             var orderServiceMock = new Mock<IOrderService>();
             orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
             var productOrderServiceMock = new Mock<IProductOrderService>();
             var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-            var result = controller.Create(productOrder);
+            var result = controller.Create(productOrderCreateModel);
 
             Assert.True(result is NotFoundResult);
         }
@@ -245,6 +240,7 @@ namespace EShop.App.Web.Tests
             {
                 cfg.AddProfile(new OrderProfile());
                 cfg.AddProfile(new ProductOrderProfile());
+                cfg.AddProfile(new ProductOrderCreateViewModelProfile());
                 cfg.AddProfile(new ProductProfile());
             }).CreateMapper();
 
