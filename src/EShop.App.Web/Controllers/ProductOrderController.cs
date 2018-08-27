@@ -48,21 +48,12 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpPost("Orders/{id}/Products")]
-        public ActionResult Create(ProductOrderViewModel productOrder)
+        public ActionResult Create(ProductOrderCreateViewModel productOrderCreateModel)
         {
-            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrder.OrderId));
+            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrderCreateModel.OrderId));
             if (order != null)
             {
-                var product = new ProductViewModel
-                {
-                    ProductId = productOrder.ProductId,
-                    Name = productOrder.Name,
-                    Price = productOrder.Price,
-                    Description = productOrder.Description,
-                    Count = productOrder.Count
-                };
-                productOrder.Product = product;
-                _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrder));
+                _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrderCreateModel));
 
                 return RedirectToAction("Index", new { id = order.OrderId });
             }
