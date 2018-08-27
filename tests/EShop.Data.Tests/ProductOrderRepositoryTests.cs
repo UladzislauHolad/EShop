@@ -64,11 +64,8 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     var deletedProductOrder = context.Set<ProductOrder>().SingleOrDefault(po => po.ProductOrderId == 1);
-                    var updatedProduct = context.Set<Product>().Find(1);
 
                     Assert.Null(deletedProductOrder);
-                    Assert.NotNull(updatedProduct);
-                    Assert.Equal(2, updatedProduct.Count);
                 }
             }
             finally
