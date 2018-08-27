@@ -104,7 +104,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -181,7 +180,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -249,32 +247,32 @@ namespace EShop.Data.Tests
                 new Order { OrderId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 1, OrderId = 1, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 1, OrderId = 1, Product = product }
                     }
 
                 },
                 new Order { OrderId = 2,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 2, OrderId = 2, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 2, OrderId = 2, Product = product }
                     }
                 },
                 new Order { OrderId = 3,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 3, OrderId = 3, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 3, OrderId = 3, Product = product }
                     }
                 },
                 new Order { OrderId = 4,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 4, OrderId = 4, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 4, OrderId = 4, Product = product }
                     }
                 },
                 new Order { OrderId = 5,
                     ProductOrders = new List<ProductOrder>
                     {
-                        new ProductOrder { ProductOrderId = 5, OrderId = 5, Count = 1, Product = product }
+                        new ProductOrder { ProductOrderId = 5, OrderId = 5, Product = product }
                     }
                 }
             };

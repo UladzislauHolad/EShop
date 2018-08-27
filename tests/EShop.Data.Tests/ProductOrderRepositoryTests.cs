@@ -28,7 +28,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -93,7 +92,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -156,7 +154,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -178,7 +175,6 @@ namespace EShop.Data.Tests
                 Name = "P2",
                 Description = "Des2",
                 Price = 1,
-                Count = 2,
                 OrderCount = 1,
             };
 
@@ -246,7 +242,6 @@ namespace EShop.Data.Tests
                         Name = "P1",
                         Description = "Des1",
                         Price = 1,
-                        Count = 2,
                         OrderCount = 1,
                         Product = new Product
                         {
@@ -268,7 +263,6 @@ namespace EShop.Data.Tests
                 Name = "P2",
                 Description = "Des2",
                 Price = 1,
-                Count = 2,
                 OrderCount = 2
             };
 
@@ -324,7 +318,6 @@ namespace EShop.Data.Tests
                 Name = "P2",
                 Description = "Des2",
                 Price = 1,
-                Count = 2,
                 OrderCount = 2
             };
 

@@ -115,31 +115,31 @@ namespace EShop.App.Web.Tests
                 new OrderDTO { OrderId = 1,
                     ProductOrders = new List<ProductOrderDTO>
                     {
-                        new ProductOrderDTO { ProductOrderId = 1, Count = 1, Product = product }
+                        new ProductOrderDTO { ProductOrderId = 1, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 2,
                     ProductOrders = new List<ProductOrderDTO>
                     {
-                        new ProductOrderDTO { ProductOrderId = 2, Count = 1, Product = product }
+                        new ProductOrderDTO { ProductOrderId = 2, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 3,
                     ProductOrders = new List<ProductOrderDTO>
                     {
-                        new ProductOrderDTO { ProductOrderId = 3, Count = 1, Product = product }
+                        new ProductOrderDTO { ProductOrderId = 3, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 4,
                     ProductOrders = new List<ProductOrderDTO>
                     {
-                        new ProductOrderDTO { ProductOrderId = 4, Count = 1, Product = product }
+                        new ProductOrderDTO { ProductOrderId = 4, Product = product }
                     }
                 },
                 new OrderDTO { OrderId = 5,
                     ProductOrders = new List<ProductOrderDTO>
                     {
-                        new ProductOrderDTO { ProductOrderId = 5, Count = 1, Product = product }
+                        new ProductOrderDTO { ProductOrderId = 5, Product = product }
                     }
                 }
             };
