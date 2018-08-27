@@ -75,7 +75,7 @@
 
     function deleteProductOrder(productOrderId) {
         $.ajax({
-            url: "Products/" + productOrderId,
+            url: @ViewBag.OrderId + "/Products/" + productOrderId,
             type: 'DELETE',
             success: function () {
                 location.reload();
