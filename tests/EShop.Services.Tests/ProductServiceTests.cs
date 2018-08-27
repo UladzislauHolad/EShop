@@ -71,7 +71,7 @@ namespace EShop.Services.Tests
             var mapper = GetMapper();
 
             service.Add(mapper.Map<Product, ProductDTO>(product));
-            
+
             mock.Verify(m => m.Create(It.Is<Product>(p => p.Name == product.Name)), Times.Once());
         }
 
@@ -98,7 +98,7 @@ namespace EShop.Services.Tests
 
             var result = service.GetCategoriesWithCountOfProducts();
 
-            Assert.Equal(2, result.Count);            
+            Assert.Equal(2, result.Count);
         }
 
         private IQueryable<Product> GetProducts()
@@ -111,39 +111,39 @@ namespace EShop.Services.Tests
                     ProductCategories =
                         new List<ProductCategory>
                         {
-                            new ProductCategory { ProductCategoryId = 1, ProductId = 1, CategoryId = 1, Category = category1 },
-                            new ProductCategory { ProductCategoryId = 2, ProductId = 1, CategoryId = 2, Category = category2 },
+                            new ProductCategory { ProductId = 1, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 1, CategoryId = 2, Category = category2 },
                         }
                     },
                 new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22,
                     ProductCategories =
                         new List<ProductCategory>
                         {
-                            new ProductCategory { ProductCategoryId = 3, ProductId = 2, CategoryId = 1, Category = category1 },
-                            new ProductCategory { ProductCategoryId = 4, ProductId = 2, CategoryId = 2, Category = category2 },
+                            new ProductCategory { ProductId = 2, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 2, CategoryId = 2, Category = category2 },
                         }
                     },
                 new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23,
                     ProductCategories =
                         new List<ProductCategory>
                         {
-                            new ProductCategory { ProductCategoryId = 5, ProductId = 3, CategoryId = 1, Category = category1 },
-                            new ProductCategory { ProductCategoryId = 6, ProductId = 3, CategoryId = 2, Category = category2 },
+                            new ProductCategory { ProductId = 3, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 3, CategoryId = 2, Category = category2 },
                         }
                     },
                 new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24,
                     ProductCategories =
                         new List<ProductCategory>
                         {
-                            new ProductCategory { ProductCategoryId = 7, ProductId = 4, CategoryId = 1, Category = category1 },
-                            new ProductCategory { ProductCategoryId = 8, ProductId = 4, CategoryId = 2, Category = category2 },
+                            new ProductCategory { ProductId = 4, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 4, CategoryId = 2, Category = category2 },
                         }
                     },
                 new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories =
                         new List<ProductCategory>
                         {
-                            new ProductCategory { ProductCategoryId = 9, ProductId = 5, CategoryId = 1, Category = category1 },
-                            new ProductCategory { ProductCategoryId = 10, ProductId = 5, CategoryId = 2, Category = category2 },
+                            new ProductCategory { ProductId = 5, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 5, CategoryId = 2, Category = category2 },
                         }
                     }
             };
@@ -153,7 +153,8 @@ namespace EShop.Services.Tests
 
         private IMapper GetMapper()
         {
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<ProductDTO, Product>();
                 cfg.CreateMap<Product, ProductDTO>();
             });
