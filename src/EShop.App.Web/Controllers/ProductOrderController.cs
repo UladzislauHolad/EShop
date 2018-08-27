@@ -24,7 +24,7 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("Orders/{id}/Products")]
+        [HttpGet("Orders/{id}")]
         public ActionResult Index([FromRoute]int id)
         {
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(id));
@@ -36,7 +36,7 @@ namespace EShop.App.Web.Controllers
             return NotFound();
         }
 
-        [HttpGet("Orders/{id}/Product")]
+        [HttpGet("Orders/{id}/Products")]
         public ActionResult Create([FromRoute]int id)
         {
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(id));
@@ -47,7 +47,7 @@ namespace EShop.App.Web.Controllers
             return NotFound();
         }
 
-        [HttpPost("Orders/{id}/Product")]
+        [HttpPost("Orders/{id}/Products")]
         public ActionResult Create(ProductOrderViewModel productOrder)
         {
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrder.OrderId));
