@@ -46,7 +46,7 @@ namespace EShop.Data.Repositories
 
         public ProductOrder Get(int id)
         {
-            return _context.Set<ProductOrder>().SingleOrDefault(po => po.ProductOrderId == id);
+            return _context.Set<ProductOrder>().Include(po => po.Product).SingleOrDefault(po => po.ProductOrderId == id);
         }
 
         public IQueryable<ProductOrder> GetAll()
