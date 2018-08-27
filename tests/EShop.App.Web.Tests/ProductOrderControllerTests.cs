@@ -151,13 +151,14 @@ namespace EShop.App.Web.Tests
         //[Fact]
         //public void Edit_InvokeWithNotValidId_NotFoundResult()
         //{
+        //    NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
         //    ProductOrderDTO productOrder = null;
         //    var orderServiceMock = new Mock<IOrderService>();
         //    var productOrderServiceMock = new Mock<IProductOrderService>();
         //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
         //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Edit(1);
+        //    var result = controller.Edit(2);
 
         //    Assert.True(result is NotFoundResult);
         //}
@@ -165,73 +166,77 @@ namespace EShop.App.Web.Tests
         //[Fact]
         //public void Edit_InvokeWithValidId_ViewResult()
         //{
-        //    ProductOrderDTO productOrder = new ProductOrderDTO { ProductOrderId = 1};
+        //    NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
+        //    ProductOrderDTO productOrder = new ProductOrderDTO { ProductOrderId = 1 };
         //    var orderServiceMock = new Mock<IOrderService>();
         //    var productOrderServiceMock = new Mock<IProductOrderService>();
         //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
         //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Edit(1);
+        //    var result = controller.Edit(1, 1, newOrderCount);
 
-        //    Assert.True(result is ViewResult);
+        //    Assert.True(result is JsonResult);
         //}
 
-        //[Fact]
-        //public void Edit_InvokeWithValidModel_RedirectToIndex()
-        //{
-        //    OrderDTO order = new OrderDTO { OrderId = 1 };
-        //    var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
-        //    var productForUpdate = new ProductOrderViewModel { OrderId = 1, ProductOrderId = 1, Count = 2 };
-        //    var mapper = GetMapper();
-        //    var orderServiceMock = new Mock<IOrderService>();
-        //    orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
-        //    var productOrderServiceMock = new Mock<IProductOrderService>();
-        //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
-        //    productOrderServiceMock.Setup(m => m.Update(mapper.Map<ProductOrderDTO>(productForUpdate)));
-        //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+        [Fact]
+        public void Edit_InvokeWithValidModel_JsonResult()
+        {
+            OrderDTO order = new OrderDTO { OrderId = 1 };
+            var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
+            var productForUpdate = new ProductOrderDTO { OrderId = 1, ProductOrderId = 1, OrderCount = 5 };
+            NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
+            var mapper = GetMapper();
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Update(productForUpdate));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Edit(productForUpdate);
+            var result = controller.Edit(1, 1, newOrderCount);
 
-        //    Assert.True(result is RedirectToActionResult);
-        //}
+            Assert.True(result is JsonResult);
+        }
 
-        //[Fact]
-        //public void Edit_InvokeWithNotValidProductOrderId_BadRequestResult()
-        //{
-        //    OrderDTO order = new OrderDTO { OrderId = 1 };
-        //    ProductOrderDTO productOrder = null;
-        //    var productForUpdate = new ProductOrderViewModel { OrderId = 1, ProductOrderId = 1, Count = 2 };
-        //    var mapper = GetMapper();
-        //    var orderServiceMock = new Mock<IOrderService>();
-        //    orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
-        //    var productOrderServiceMock = new Mock<IProductOrderService>();
-        //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
-        //    productOrderServiceMock.Setup(m => m.Update(mapper.Map<ProductOrderDTO>(productForUpdate)));
-        //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+        [Fact]
+        public void Edit_InvokeWithNotValidProductOrderId_BadRequestResult()
+        {
+            OrderDTO order = new OrderDTO { OrderId = 1 };
+            ProductOrderDTO productOrder = null;
+            NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
+            var productForUpdate = new ProductOrderDTO { OrderId = 1, ProductOrderId = 1, OrderCount = 5 };
+            var mapper = GetMapper();
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Update(productForUpdate));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Edit(productForUpdate);
+            var result = controller.Edit(1, 1, newOrderCount);
 
-        //    Assert.True(result is BadRequestResult);
-        //}
+            Assert.True(result is BadRequestResult);
+        }
 
-        //[Fact]
-        //public void Edit_InvokeWithNotValidOrderId_BadRequestResult()
-        //{
-        //    OrderDTO order = null;
-        //    var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
-        //    var productForUpdate = new ProductOrderViewModel { OrderId = 1, ProductOrderId = 1, Count = 2 };
-        //    var mapper = GetMapper();
-        //    var orderServiceMock = new Mock<IOrderService>();
-        //    orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
-        //    var productOrderServiceMock = new Mock<IProductOrderService>();
-        //    productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
-        //    productOrderServiceMock.Setup(m => m.Update(mapper.Map<ProductOrderDTO>(productForUpdate)));
-        //    var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+        [Fact]
+        public void Edit_InvokeWithNotValidOrderId_BadRequestResult()
+        {
+            OrderDTO order = null;
+            var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
+            var productForUpdate = new ProductOrderDTO { OrderId = 1, ProductOrderId = 1, OrderCount = 5 };
+            NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
+            var mapper = GetMapper();
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Update(productForUpdate));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
 
-        //    var result = controller.Edit(productForUpdate);
+            var result = controller.Edit(1, 1, newOrderCount);
 
-        //    Assert.True(result is BadRequestResult);
-        //}
+            Assert.True(result is BadRequestResult);
+        }
 
         private IMapper GetMapper()
         {
