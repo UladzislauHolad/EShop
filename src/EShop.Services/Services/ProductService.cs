@@ -40,7 +40,7 @@ namespace EShop.Services.Services
         public IEnumerable<ProductDTO> GetProducts()
         {
             var mapper = GetMapper();
-            var prods = mapper.Map<IEnumerable<Product>, List<ProductDTO>>(_repository.GetAll());
+            var prods = mapper.Map<IEnumerable<Product>, List<ProductDTO>>(_repository.GetAll().Where(p => p.IsDeleted == false));
             return prods;
         }
 
@@ -60,7 +60,12 @@ namespace EShop.Services.Services
 
         public void Delete(int id)
         {
-            _repository.Delete(id);
+            var product = _repository.Get(id);
+            if(product != null)
+            {
+                product.IsDeleted = true;
+                _repository.Save();
+            }
         }
 
         public IEnumerable<ProductDTO> GetProductsByCategoryId(int id)
@@ -68,7 +73,7 @@ namespace EShop.Services.Services
             var mapper = GetMapper();
 
             var allProducts = _repository.GetAll();
-            var products = allProducts.Where(p => p.ProductCategories.Any(c => c.CategoryId == id) == true);
+            var products = allProducts.Where(p => p.ProductCategories.Any(c => c.CategoryId == id) == true && p.IsDeleted == false);
 
             return mapper.Map<IEnumerable<ProductDTO>>(products);
         }
@@ -100,7 +105,7 @@ namespace EShop.Services.Services
 
         public List<object> GetCategoriesWithCountOfProducts()
         {
-            var products = _repository.GetAll();
+            var products = _repository.GetAll().Where(p => p.IsDeleted == false);
             var count = products.Count();
             var productCategories = products.Select(p => p.ProductCategories);
             var categories = products.SelectMany(p => p.ProductCategories).Select(c => c.Category).Distinct();
