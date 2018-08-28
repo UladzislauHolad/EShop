@@ -27,12 +27,10 @@ namespace EShop.App.Web.Controllers
         [HttpGet("Orders/{id}")]
         public ActionResult Index([FromRoute]int id)
         {
-            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(id));
+            var order = _orderService.GetOrder(id);
             if (order != null)
             {
-                ViewBag.OrderId = order.OrderId;
-                ViewBag.Confirmed = order.IsConfirmed;
-                return View(order.ProductOrders); //добавить модельдля отображения информации о заказе
+                return View(_mapper.Map<ProductOrderListViewModel>(order));
             }
             return NotFound();
         }
@@ -48,7 +46,7 @@ namespace EShop.App.Web.Controllers
                     return BadRequest();
                 }
 
-                return View(new ProductOrderViewModel { OrderId = order.OrderId });
+                return View(new ProductOrderCreateViewModel { OrderId = order.OrderId });
             }
             return NotFound();
         }
