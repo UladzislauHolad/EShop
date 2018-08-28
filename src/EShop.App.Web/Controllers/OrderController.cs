@@ -24,7 +24,8 @@ namespace EShop.App.Web.Controllers
         [HttpGet]
         public ViewResult Index()
         {
-            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders());
+            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders()
+                .OrderByDescending(o => o.OrderId));
 
             return View(orders);
         }
