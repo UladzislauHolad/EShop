@@ -8,6 +8,8 @@ namespace EShop.App.Web.Models
     public class OrderViewModel
     {
         public int OrderId { get; set; }
+        public DateTime Date { get; set; }
+        public bool IsConfirmed { get; set; }
         public List<ProductOrderViewModel> ProductOrders { get; set; }
     }
 }

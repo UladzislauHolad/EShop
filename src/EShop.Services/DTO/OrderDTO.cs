@@ -7,6 +7,8 @@ namespace EShop.Services.DTO
     public class OrderDTO
     {
         public int OrderId { get; set; }
+        public DateTime Date { get; set; }
+        public bool IsConfirmed { get; set; }
         public ICollection<ProductOrderDTO> ProductOrders { get; set; }
     }
 }
