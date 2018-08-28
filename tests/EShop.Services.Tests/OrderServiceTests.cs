@@ -60,6 +60,25 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
+        public void Confirm_ConfirmInvalidOrder_OrderNotConfirmed()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(order);
+            mock.Setup(repo => repo.Update(order));
+            var service = new OrderService(mock.Object);
+            var orderDto = mapper.Map<Order, OrderDTO>(order);
+
+            service.Confirm(1);
+
+            mock.Verify(m => m.Update(It.IsAny<Order>()), Times.Once);
+        }
+
+        [Fact]
         public void Update_UpdateOrder_OrderIsUpdated()
         {
             var order = new Order
