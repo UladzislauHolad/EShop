@@ -59,6 +59,20 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Create_InvokeOnConfirmedOrder_BadRequestResult()
+        {
+            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+
+            var result = controller.Create(1);
+
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
         public void Create_InvokeWithNotValidId_NotFoundResultReturned()
         {
             OrderDTO order = null;
@@ -98,6 +112,29 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Create_InvokeWithValidInstanceOnConfirmedOrder_BadRequestResult()
+        {
+            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var productOrderCreateModel = new ProductOrderCreateViewModel
+            {
+                ProductOrderId = 1,
+                OrderId = 1,
+                ProductId = 1,
+                OrderCount = 2,
+            };
+            var mapper = GetMapper();
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.Create(mapper.Map<ProductOrderDTO>(productOrderCreateModel)));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, mapper);
+
+            var result = controller.Create(mapper.Map<ProductOrderCreateViewModel>(productOrderCreateModel));
+
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
         public void Create_InvokeWithNotValidInstanceOfProductOrder_NotFoundResult()
         {
             OrderDTO order = null;
@@ -121,8 +158,10 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Delete_InvokeWithValidOrderId_JsonResult()
         {
+            var order = new OrderDTO { OrderId = 1};
             var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
             var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
             var productOrderServiceMock = new Mock<IProductOrderService>();
             productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
             productOrderServiceMock.Setup(m => m.Delete(1));
@@ -131,6 +170,23 @@ namespace EShop.App.Web.Tests
             var result = controller.Delete(1, 1);
 
             Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void Delete_InvokeOnConfirmedOrder_BadRequestResult()
+        {
+            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Delete(1));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+
+            var result = controller.Delete(1, 1);
+
+            Assert.True(result is BadRequestResult);
         }
 
         [Fact]
@@ -196,6 +252,26 @@ namespace EShop.App.Web.Tests
             var result = controller.Edit(1, 1, newOrderCount);
 
             Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithValidModelOnConfirmedOrder_BadRequesResult()
+        {
+            OrderDTO order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
+            var productForUpdate = new ProductOrderDTO { OrderId = 1, ProductOrderId = 1, OrderCount = 5 };
+            NewOrderCount newOrderCount = new NewOrderCount { OrderCount = 5 };
+            var mapper = GetMapper();
+            var orderServiceMock = new Mock<IOrderService>();
+            orderServiceMock.Setup(m => m.GetOrder(1)).Returns(order);
+            var productOrderServiceMock = new Mock<IProductOrderService>();
+            productOrderServiceMock.Setup(m => m.GetProductOrder(1)).Returns(productOrder);
+            productOrderServiceMock.Setup(m => m.Update(productForUpdate));
+            var controller = new ProductOrderController(orderServiceMock.Object, productOrderServiceMock.Object, GetMapper());
+
+            var result = controller.Edit(1, 1, newOrderCount);
+
+            Assert.True(result is BadRequestResult);
         }
 
         [Fact]
