@@ -12,7 +12,10 @@ namespace EShop.App.Web.Profiles
     {
         public ProductOrderProfile()
         {
-            CreateMap<ProductOrderDTO, ProductOrderViewModel>();
+            CreateMap<ProductOrderDTO, ProductOrderViewModel>()
+                .ForMember(dest => dest.IsNotAvailable,
+                opt => opt.MapFrom(src => src.Product.IsDeleted));
+
             CreateMap<ProductOrderViewModel, ProductOrderDTO>();
         }
     }
