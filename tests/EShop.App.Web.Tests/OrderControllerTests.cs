@@ -91,6 +91,20 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Delete_DeleteConfirmedOrder_BadRequestResult()
+        {
+            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(order);
+            mock.Setup(m => m.Delete(1));
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Delete(1);
+
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
         public void Confirm_ConfirmNotConfirmedOrder_RedirectToAction()
         {
             var order = new OrderDTO { OrderId = 1 };
