@@ -40,12 +40,11 @@ namespace EShop.Services.Tests
         public void GetProducts_CheckCountOfProductsInRepositoryAndFromService_CountsOfProductsAreMatch()
         {
             var products = GetProducts();
-            int expected = products.Count();
             ProductService service = GetService(products);
 
             int result = service.GetProducts().Count();
 
-            Assert.Equal(expected, result);
+            Assert.Equal(4, result);
         }
 
         [Fact]
@@ -53,12 +52,14 @@ namespace EShop.Services.Tests
         {
             const int id = 2;
             var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m => m.Delete(id));
+            mock.Setup(m => m.Get(id)).Returns(new Product { ProductId = 1 });
+            mock.Setup(m => m.Save());
             var service = new ProductService(mock.Object);
 
             service.Delete(id);
 
-            mock.Verify(m => m.Delete(id), Times.Once());
+            mock.Verify(m => m.Get(id), Times.Once);
+            mock.Verify(m => m.Save(), Times.Once);
         }
 
         [Fact]
@@ -131,7 +132,7 @@ namespace EShop.Services.Tests
                             new ProductCategory { ProductId = 3, CategoryId = 2, Category = category2 },
                         }
                     },
-                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24,
+                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24, IsDeleted = true,
                     ProductCategories =
                         new List<ProductCategory>
                         {
