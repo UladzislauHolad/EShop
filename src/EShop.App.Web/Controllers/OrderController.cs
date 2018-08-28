@@ -21,6 +21,7 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
         public ViewResult Index()
         {
             var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders());
@@ -35,6 +36,7 @@ namespace EShop.App.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             var order = _service.GetOrder(id);
@@ -46,12 +48,13 @@ namespace EShop.App.Web.Controllers
                 }
                 _service.Delete(id);
 
-                return RedirectToAction("Index");
+                return Json(new { succes = true });
             }
 
             return NotFound();
         }
 
+        [HttpPatch]
         public ActionResult Confirm(int id)
         {
             var order = _service.GetOrder(id);
@@ -65,7 +68,7 @@ namespace EShop.App.Web.Controllers
                 order.Date = DateTime.Now;
                 _service.Update(order);
 
-                return RedirectToAction("Index");
+                return Json(new { succes = true });
             }
 
             return NotFound();
