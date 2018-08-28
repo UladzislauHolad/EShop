@@ -63,7 +63,7 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Delete_InvokeWithValidId_RedirectToIndexView()
+        public void Delete_InvokeWithValidId_JsonResult()
         {
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO());
@@ -72,8 +72,7 @@ namespace EShop.App.Web.Tests
 
             var result = controller.Delete(1);
 
-            Assert.True(result is RedirectToActionResult);
-            Assert.Equal("Index", (result as RedirectToActionResult).ActionName);
+            Assert.True(result is JsonResult);
         }
 
         [Fact]
@@ -116,7 +115,8 @@ namespace EShop.App.Web.Tests
 
             var result = controller.Confirm(1);
 
-            Assert.True(result is RedirectToActionResult);
+            mock.Verify(m => m.Confirm(1), Times.Once);
+            Assert.True(result is JsonResult);
         }
 
         [Fact]
@@ -126,7 +126,7 @@ namespace EShop.App.Web.Tests
             var orderForUpdate = new OrderDTO { OrderId = 1, IsConfirmed = true };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Update(orderForUpdate));
+            mock.Setup(m => m.Confirm(1));
             var controller = new OrderController(mock.Object, GetMapper());
 
             var result = controller.Confirm(1);
