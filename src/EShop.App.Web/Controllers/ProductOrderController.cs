@@ -31,6 +31,7 @@ namespace EShop.App.Web.Controllers
             if (order != null)
             {
                 ViewBag.OrderId = order.OrderId;
+                ViewBag.Confirmed = order.IsConfirmed;
                 return View(order.ProductOrders); //добавить модельдля отображения информации о заказе
             }
             return NotFound();
@@ -42,6 +43,11 @@ namespace EShop.App.Web.Controllers
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(id));
             if (order != null)
             {
+                if(order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
+
                 return View(new ProductOrderViewModel { OrderId = order.OrderId });
             }
             return NotFound();
@@ -53,6 +59,10 @@ namespace EShop.App.Web.Controllers
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrderCreateModel.OrderId));
             if (order != null)
             {
+                if (order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
                 _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrderCreateModel));
 
                 return RedirectToAction("Index", new { id = order.OrderId });
@@ -63,9 +73,14 @@ namespace EShop.App.Web.Controllers
         [HttpDelete("Orders/{orderId}/Products/{productOrderId}")]
         public ActionResult Delete([FromRoute]int orderId, [FromRoute]int productOrderId)
         {
+            var order = _orderService.GetOrder(orderId);
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
-            if(productOrder != null)
+            if(productOrder != null && order != null)
             {
+                if (order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
                 _productOrderService.Delete(productOrderId);
 
                 return Json(new { success = true });
@@ -80,6 +95,10 @@ namespace EShop.App.Web.Controllers
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
             if (order != null && productOrder != null)
             {
+                if (order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
                 productOrder.OrderCount = OrderCount.OrderCount;
                 _productOrderService.Update(_mapper.Map<ProductOrderDTO>(productOrder));
 
