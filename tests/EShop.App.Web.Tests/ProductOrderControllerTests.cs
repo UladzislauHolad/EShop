@@ -27,6 +27,7 @@ namespace EShop.App.Web.Tests
             var result = controller.Index(1);
 
             Assert.True(result is ViewResult);
+            Assert.True((result as ViewResult).ViewData.Model is ProductOrderListViewModel);
         }
 
         [Fact]
@@ -55,7 +56,7 @@ namespace EShop.App.Web.Tests
             var result = controller.Create(1);
 
             Assert.True(result is ViewResult);
-            Assert.True((result as ViewResult).ViewData.Model is ProductOrderViewModel);
+            Assert.True((result as ViewResult).ViewData.Model is ProductOrderCreateViewModel);
         }
 
         [Fact]
