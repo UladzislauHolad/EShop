@@ -40,6 +40,10 @@ namespace EShop.App.Web.Controllers
             var order = _service.GetOrder(id);
             if(order != null)
             {
+                if (order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
                 _service.Delete(id);
 
                 return RedirectToAction("Index");
