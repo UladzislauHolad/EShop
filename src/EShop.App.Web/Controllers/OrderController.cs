@@ -47,5 +47,24 @@ namespace EShop.App.Web.Controllers
 
             return NotFound();
         }
+
+        public ActionResult Confirm(int id)
+        {
+            var order = _service.GetOrder(id);
+            if(order != null)
+            {
+                if(order.IsConfirmed)
+                {
+                    return BadRequest();
+                }
+                order.IsConfirmed = true;
+                order.Date = DateTime.Now;
+                _service.Update(order);
+
+                return RedirectToAction("Index");
+            }
+
+            return NotFound();
+        }
     }
 }
