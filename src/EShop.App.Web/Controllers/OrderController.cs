@@ -55,6 +55,7 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpPatch]
+        //Orders/1
         public ActionResult Confirm(int id)
         {
             var order = _service.GetOrder(id);
@@ -64,9 +65,7 @@ namespace EShop.App.Web.Controllers
                 {
                     return BadRequest();
                 }
-                order.IsConfirmed = true;
-                order.Date = DateTime.Now;
-                _service.Update(order);
+                _service.Confirm(id);
 
                 return Json(new { succes = true });
             }

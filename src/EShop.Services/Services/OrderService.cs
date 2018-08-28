@@ -19,6 +19,17 @@ namespace EShop.Services.Services
             _repository = repository;
         }
 
+        public void Confirm(int id)
+        {
+            var order = _repository.Get(id);
+            if(order != null)
+            {
+                order.IsConfirmed = true;
+                order.Date = DateTime.Now;
+                _repository.Update(order);
+            }
+        }
+
         public void Create(OrderDTO orderDTO)
         {
             var mapper = GetMapper();

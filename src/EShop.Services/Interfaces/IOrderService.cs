@@ -12,5 +12,6 @@ namespace EShop.Services.Interfaces
         OrderDTO GetOrder(int id);
         void Update(OrderDTO orderDTO);
         void Delete(int id);
+        void Confirm(int id);
     }
 }
