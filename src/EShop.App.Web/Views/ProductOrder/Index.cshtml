@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductOrderViewModel>
+﻿@model ProductOrderListViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -6,7 +6,7 @@
 }
 
 <div class="col-md-10">
-    <h3>Product List of Order #@ViewBag.OrderId</h3>
+    <h3>Product List of Order #@Model.OrderId</h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -14,35 +14,47 @@
                 <th>Price</th>
                 <th>OrderCount</th>
                 <th>Sum</th>
-                @if (!ViewBag.Confirmed)
+                @if (Model.IsConfirmed)
                 {
                     <th></th>
                 }
             </tr>
         </thead>
         <tbody>
-            @foreach (ProductOrderViewModel po in Model)
+            @foreach (ProductOrderViewModel po in Model.ProductOrders)
             {
-                <tr id="@po.ProductOrderId">
-                    <td id="name">@po.Name</td>
-                    <td id="price">@po.Price</td>
-                    @if (ViewBag.Confirmed)
+            <tr id="@po.ProductOrderId">
+                <td id="name">@po.Name</td>
+                <td id="price">@po.Price</td>
+                @if (Model.IsConfirmed)
+                {
+                    <td>@po.OrderCount</td>
+                    <td>@(po.OrderCount * po.Price)</td>
+                }
+                else
+                {
+                    @if (po.IsNotAvailable)
                     {
-                        <td>@po.OrderCount</td>
-                        <td>@(po.OrderCount * po.Price)</td>
+                        <td style="color:red">Not Available</td>
+                        <td style="color:red">Not Available</td>
                     }
                     else
                     {
                         <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
                         <td id="sum">@(po.OrderCount * po.Price)</td>
-                        <td>
-                            <div class="btn-toolbar pull-right" role="toolbar">
-                                <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
-                                <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
-                            </div>
-                        </td>
                     }
-                </tr>
+
+                    <td>
+                        <div class="btn-toolbar pull-right" role="toolbar">
+                            @if (!po.IsNotAvailable)
+                            {
+                                <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                            }
+                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                        </div>
+                    </td>
+                }
+            </tr>
             }
         </tbody>
     </table>
@@ -53,7 +65,7 @@
         </div>*@
     <div class="text-center">
         <div class="btn-group">
-            @if (!ViewBag.Confirmed)
+            @if (!Model.IsConfirmed)
             {
                 <a asp-action="Create" class="btn btn-primary">
                     Add Product To Order
@@ -85,7 +97,7 @@
         var count = parseInt(parent.find("#order-count").first().val());
 
         $.ajax({
-            url: @ViewBag.OrderId + "/Products/" + productOrderId,
+            url: @Model.OrderId + "/Products/" + productOrderId,
             type: 'PATCH',
             data: JSON.stringify({ OrderCount: count }),
             contentType: "application/json",
@@ -95,16 +107,6 @@
             }
         });
     }
-
-    @*function deleteProductOrder(productOrderId) {
-        $.ajax({
-            url: @ViewBag.OrderId + "/Products/" + productOrderId,
-            type: 'DELETE',
-            success: function () {
-                location.reload();
-            }
-        });
-    }*@
 
     function confirmDelete(_id) {
         var id = _id;
@@ -130,7 +132,7 @@
 
         function deleteConfirmed() {
             $.ajax({
-                url: @ViewBag.OrderId + "/Products/" + id,
+                url: @Model.OrderId + "/Products/" + id,
                 type: "Delete",
                 success: function () {
                     $("tr#" + id).remove();
