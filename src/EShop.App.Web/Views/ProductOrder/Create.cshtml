@@ -1,4 +1,4 @@
-﻿@model ProductOrderViewModel
+﻿@model ProductOrderCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -23,7 +23,6 @@
         <div class="form-group">
             <label asp-for="OrderCount" class="control-label"></label>
             <input asp-for="OrderCount" id="order-count" class="form-control" min="1" max="20" />
-            <span asp-validation-for="Count" class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">Add</button>
         <a asp-action="Index" asp-route-id="@Model.OrderId" class="btn btn-default">Cancel</a>
