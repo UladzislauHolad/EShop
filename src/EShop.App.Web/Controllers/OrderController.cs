@@ -70,7 +70,7 @@ namespace EShop.App.Web.Controllers
                 {
                     _service.Confirm(id);
 
-                    return Json(new { success = true });
+                    return Ok();
                 }
                 else
                 {
