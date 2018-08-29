@@ -1,12 +1,86 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Dashboard</h2>
+
+<div id="selector" style="width: 500px; height: 300px;"></div>
+
+<script>
+    $(document).ready(function () {
+        //var model;
+        //$.ajax({
+        //    type: "Get",
+        //    url: "Product/ChartData/",
+        //    success: function (response) {
+        //        model = response;
+        //    }
+        //});
+
+        //var model = [
+        //    {
+        //        name: 'United States',
+        //        value: 65
+        //    },
+        //    {
+        //        name: 'United Kingdom',
+        //        value: 58
+        //    },
+        //    {
+        //        name: 'Germany',
+        //        value: 30
+        //    },
+        //    {
+        //        name: 'India',
+        //        value: 60
+        //    },
+        //    {
+        //        name: 'Russia',
+        //        value: 65,
+        //        exploded: true
+        //    },
+        //    {
+        //        name: 'China',
+        //        value: 75
+        //    }
+        //];
+
+        $('#selector').jqChart({
+            title: { text: 'Count of Products' },
+            legend: { title: 'Categories' },
+            dataSource: {
+                ajax: {
+                    type: "GET",
+                    url: "/Category/CategoryWithCountOfProducts/",
+                    data: "",
+                    dataType: 'json'
+                }
+            },
+            shadows: {
+                enabled: true
+            },
+            series: [
+                {
+                    type: 'pie',
+                    labels: {
+                        stringFormat: '%.1f%%',
+                        valueType: 'percentage',
+                        font: '15px sans-serif',
+                        fillStyle: 'white'
+                    },
+                    explodedRadius: 10,
+                    dataLabelsField: 'name',
+                    dataValuesField: 'count',
+                    explodedField: 'exploded'
+                }
+            ]
+        });
+    });
+</script>
+
 <!-- Chart code -->
-<div id="chartdiv"></div>
+@*<div id="chartdiv"></div>
 <script>
     var chartData;
     $.ajax({
@@ -29,5 +103,5 @@
             });
         }
     });
-    
-</script>
+
+</script>*@
