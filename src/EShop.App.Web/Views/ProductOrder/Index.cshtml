@@ -14,7 +14,7 @@
                 <th>Price</th>
                 <th>OrderCount</th>
                 <th>Sum</th>
-                @if (Model.IsConfirmed)
+                @if (!Model.IsConfirmed)
                 {
                     <th></th>
                 }
