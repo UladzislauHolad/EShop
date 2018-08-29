@@ -49,7 +49,7 @@ namespace EShop.App.Web.Controllers
                 }
                 _service.Delete(id);
 
-                return Json(new { succes = true });
+                return Json(new { success = true });
             }
 
             return NotFound();
@@ -66,9 +66,16 @@ namespace EShop.App.Web.Controllers
                 {
                     return BadRequest();
                 }
-                _service.Confirm(id);
+                if(_service.IsConfirmAvailable(id))
+                {
+                    _service.Confirm(id);
 
-                return Json(new { succes = true });
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return BadRequest(new { message = "This order have not available products" });
+                }
             }
 
             return NotFound();

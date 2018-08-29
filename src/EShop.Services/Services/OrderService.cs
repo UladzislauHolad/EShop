@@ -6,6 +6,7 @@ using EShop.Services.Interfaces;
 using EShop.Services.Profiles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EShop.Services.Services
@@ -63,6 +64,17 @@ namespace EShop.Services.Services
             _repository.Update(mapper.Map<Order>(orderDTO));
         }
 
+        public bool IsConfirmAvailable(int id)
+        {
+            bool result = true;
+            var order = _repository.Get(id);
+            if(order != null)
+            {
+                result = !order.ProductOrders.Any(po => po.Product.IsDeleted == true);
+            }
+
+            return result;
+        }
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>

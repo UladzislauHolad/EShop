@@ -13,5 +13,6 @@ namespace EShop.Services.Interfaces
         void Update(OrderDTO orderDTO);
         void Delete(int id);
         void Confirm(int id);
+        bool IsConfirmAvailable(int id);
     }
 }
