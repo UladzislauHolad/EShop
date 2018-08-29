@@ -16,14 +16,13 @@ namespace EShop.Services.Tests
         [Fact]
         public void GetProducts_MappingProductToProductDTO_ProductToProductDTOMapped()
         {
-            var products = GetProducts();
-            ProductService service = GetService(products);
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
-            var expected = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(repo => repo.GetAll()).Returns(new List<Product> { new Product() }.AsQueryable());
+            ProductService service = new ProductService(mock.Object);
 
             var result = service.GetProducts();
 
-            Assert.True(expected.SequenceEqual(result));
+            Assert.True(result is IEnumerable<ProductDTO>);
         }
 
         [Fact]
