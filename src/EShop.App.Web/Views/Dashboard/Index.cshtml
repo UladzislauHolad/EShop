@@ -4,46 +4,25 @@
 }
 
 <h2>Dashboard</h2>
-
-<div class="col-md-4" id="categories-chart" style="width: 500px; height: 300px;"></div>
-<div class="col-md-4" id="top-selling-products" style="width: 500px; height: 300px;"></div>
-<div class="col-md-4" id="selling-timeline" style="width: 500px; height: 300px;"></div>
+<div>
+    <div class="row">
+        <div class="col-lg-4" id="categories-chart" style="width: 500px; height: 300px;"></div>
+        <div class="col-lg-4" id="top-selling-products" style="width: 500px; height: 300px;"></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-8" id="selling-timeline" style="width: 1000px; height: 400px;"></div>
+    </div>
+</div>
 
 <script>
     $(document).ready(function () {
-        $('#selling-timeline').jqChart({
-            title: { text: 'Top selling Products' },
-            legend: { title: 'Product' },
-            dataSource: {
-                ajax: {
-                    type: "GET",
-                    url: "/Order/GetConfirmedProducts/",
-                    data: "",
-                    dataType: 'json'
-                }
-            },
-            shadows: {
-                enabled: true
-            },
-            series: [
-                {
-                    type: 'pie',
-                    labels: {
-                        stringFormat: '%.1f%%',
-                        valueType: 'percentage',
-                        font: '15px sans-serif',
-                        fillStyle: 'white'
-                    },
-                    explodedRadius: 10,
-                    dataLabelsField: 'name',
-                    dataValuesField: 'count',
-                    explodedField: 'exploded'
-                }
-            ]
-        });
         $('#top-selling-products').jqChart({
             title: { text: 'Top selling Products' },
             legend: { title: 'Product' },
+            border: {
+                visible: false
+            },
             dataSource: {
                 ajax: {
                     type: "GET",
@@ -74,6 +53,9 @@
         $('#categories-chart').jqChart({
             title: { text: 'Count of Products' },
             legend: { title: 'Categories' },
+            border: {
+                visible: false
+            },
             dataSource: {
                 ajax: {
                     type: "GET",
@@ -102,4 +84,49 @@
             ]
         });
     });
+
+    var chart = new DataViz.Chart({
+        title: { text: 'Orders' },
+        tooltips: { type: 'shared' },
+        animation: { duration: 1 },
+        border: {
+            visible: true,
+            padding: 20,
+            lineWidth: 0
+        },
+        dataSource: {
+            ajax: {
+                type: "GET",
+                url: "/Order/GetConfirmedOrdersByDate/",
+                data: "",
+                dataType: 'json',
+
+            }
+        },
+        axes: [
+            {
+                location: 'bottom',
+                type: 'dateTime',
+                labels: {
+                    stringFormat: 'mm/dd/yy'
+                },
+                interval: 1,
+                intervalType: 'days'
+            }
+        ],
+        series: [
+            {
+                type: 'line',
+                title: 'Orders count',
+                strokeStyle: '#418CF0',
+                lineWidth: 2,
+                xValuesField: {
+                    name: 'date',
+                    type: 'dateTime' // string, numeric, dateTime
+                },
+                yValuesField: 'count'
+            }
+        ]
+    });
+    chart.write('selling-timeline');
 </script>

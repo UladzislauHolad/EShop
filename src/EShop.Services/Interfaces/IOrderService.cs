@@ -15,5 +15,6 @@ namespace EShop.Services.Interfaces
         void Confirm(int id);
         bool IsConfirmAvailable(int id);
         object GetCountOfConfirmedProducts();
+        object GetCountOfConfirmedOrdersByDate();
     }
 }

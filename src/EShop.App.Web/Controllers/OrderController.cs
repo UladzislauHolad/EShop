@@ -88,5 +88,13 @@ namespace EShop.App.Web.Controllers
 
             return Json(data);
         }
+
+        [HttpGet]
+        public JsonResult GetConfirmedOrdersByDate()
+        {
+            var data = _service.GetCountOfConfirmedOrdersByDate();
+
+            return Json(data);
+        }
     }
 }

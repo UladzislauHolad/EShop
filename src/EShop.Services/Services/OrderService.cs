@@ -109,5 +109,14 @@ namespace EShop.Services.Services
 
             return products;
         }
+
+        public object GetCountOfConfirmedOrdersByDate()
+        {
+            var orders = _repository.GetAll()
+                .GroupBy(o => o.Date.Date)
+                .Select(g => new { Date = g.Key, Count = g.Count() });
+            
+            return orders;
+        }
     }
 }
