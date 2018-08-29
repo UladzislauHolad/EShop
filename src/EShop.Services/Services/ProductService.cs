@@ -64,6 +64,7 @@ namespace EShop.Services.Services
             if(product != null)
             {
                 product.IsDeleted = true;
+                product.ProductCategories = null;
                 _repository.Save();
             }
         }
