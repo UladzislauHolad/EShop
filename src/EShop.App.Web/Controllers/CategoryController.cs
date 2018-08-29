@@ -119,5 +119,13 @@ namespace EShop.App.Web.Controllers
                 .Select(c => new { c.CategoryId, c.Name }).ToList();
             return Json(new SelectList(categories, "CategoryId", "Name"));
         }
+
+        [HttpGet]
+        public JsonResult CategoryWithCountOfProducts()
+        {
+            var data = _service.GetCategoryNameWithCountOfProducts();
+
+            return Json(data);
+        }
     }
 }
