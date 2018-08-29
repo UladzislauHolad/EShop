@@ -80,5 +80,13 @@ namespace EShop.App.Web.Controllers
 
             return NotFound();
         }
+
+        [HttpGet]
+        public JsonResult GetConfirmedProducts()
+        {
+            var data = _service.GetCountOfConfirmedProducts();
+
+            return Json(data);
+        }
     }
 }

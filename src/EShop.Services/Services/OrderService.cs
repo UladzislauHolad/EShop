@@ -98,5 +98,16 @@ namespace EShop.Services.Services
 
             return mapper;
         }
+
+        public object GetCountOfConfirmedProducts()
+        {
+            var orders = _repository.GetAll();
+            var products = orders.Where(o => o.IsConfirmed)
+                .SelectMany(o => o.ProductOrders)
+                .GroupBy(pc => pc.Name)
+                .Select(g => new { Name = g.Key, Count = g.Select(p => p.OrderCount).Sum() });
+
+            return products;
+        }
     }
 }
