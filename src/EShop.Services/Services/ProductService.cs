@@ -22,16 +22,9 @@ namespace EShop.Services.Services
 
         public ProductDTO GetProduct(int? id)
         {
-            if(id == null)
-            {
-                throw new ValidationException("Не установлен id продукта", "");
-            }
+            
             Product p = _repository.Get(id.Value);
-            if(p == null)
-            {
-                throw new ValidationException("Продукт не найден", "");
-            }
-
+            
             var mapper = GetMapper();
 
             return mapper.Map<Product, ProductDTO>(p);
