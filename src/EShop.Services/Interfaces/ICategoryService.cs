@@ -11,5 +11,6 @@ namespace EShop.Services.Interfaces
         void Update(CategoryDTO categoryDTO);
         IEnumerable<CategoryDTO> GetChildCategories(int id);
         CategoryDTO GetCategory(int id);
+        object GetCategoryNameWithCountOfProducts();
     }
 }
