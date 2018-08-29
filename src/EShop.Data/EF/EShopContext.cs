@@ -12,6 +12,7 @@ namespace EShop.Data.EF
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<ProductOrder> ProductOrders { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
 
         public EShopContext(DbContextOptions options) : base(options)
         {
@@ -25,7 +26,7 @@ namespace EShop.Data.EF
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             //modelBuilder.ApplyConfiguration(new ProductOrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
         }
    }
 }

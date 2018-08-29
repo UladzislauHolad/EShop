@@ -10,5 +10,6 @@ namespace EShop.Data.Entities
         public DateTime Date { get; set; }
         public bool IsConfirmed { get; set; }
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
+        public Customer Customer { get; set; }
     }
 }
