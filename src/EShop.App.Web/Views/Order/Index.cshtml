@@ -122,6 +122,10 @@
             $.ajax({
                 url: "Order/Confirm/" + id,
                 type: "Patch",
+                error: function (response) {
+                    $("#modal-confirm-window").dialog("close");
+                    alert(response.responseJSON.message);
+                },
                 success: function () {
                     location.reload();
                 }
