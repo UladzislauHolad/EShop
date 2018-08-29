@@ -64,7 +64,7 @@ namespace EShop.Services.Tests
         {
             var order = new Order
             {
-                OrderId = 1,
+                OrderId = 1
             };
             var mapper = GetMapper();
             var mock = new Mock<IRepository<Order>>();
@@ -76,6 +76,90 @@ namespace EShop.Services.Tests
             service.Confirm(1);
 
             mock.Verify(m => m.Update(It.IsAny<Order>()), Times.Once);
+        }
+
+        [Fact]
+        public void IsConfirmAvailable_InvokeWithValidOrder_True()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder
+                    {
+                        Product = new Product {IsDeleted = false}
+                    }
+                }
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(order);
+            var service = new OrderService(mock.Object);
+
+            var result = service.IsConfirmAvailable(1);
+
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void IsConfirmAvailable_InvokeWithOrderWithDeletedProduct_False()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>
+                {
+                    new ProductOrder
+                    {
+                        Product = new Product {IsDeleted = true}
+                    }
+                }
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(order);
+            var service = new OrderService(mock.Object);
+
+            var result = service.IsConfirmAvailable(1);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsConfirmAvailable_InvokeWithOrderWithoutProductOrders_False()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = new List<ProductOrder>()
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(order);
+            var service = new OrderService(mock.Object);
+
+            var result = service.IsConfirmAvailable(1);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void IsConfirmAvailable_InvokeWithOrderWithNullProductOrders_False()
+        {
+            var order = new Order
+            {
+                OrderId = 1,
+                ProductOrders = null
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(order);
+            var service = new OrderService(mock.Object);
+
+            var result = service.IsConfirmAvailable(1);
+
+            Assert.False(result);
         }
 
         [Fact]

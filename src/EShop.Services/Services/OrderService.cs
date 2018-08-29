@@ -70,7 +70,19 @@ namespace EShop.Services.Services
             var order = _repository.Get(id);
             if(order != null)
             {
-                result = !order.ProductOrders.Any(po => po.Product.IsDeleted == true);
+                if(order.ProductOrders != null)
+                {
+                    bool haveDeletedOrder = order.ProductOrders.Any(po => po.Product.IsDeleted == true);
+                    bool haveNoProductOrders = order.ProductOrders.Count == 0;
+                    if (haveDeletedOrder || haveNoProductOrders)
+                    {
+                        result = false;
+                    }
+                }
+                else
+                {
+                    result = false;
+                }
             }
 
             return result;
