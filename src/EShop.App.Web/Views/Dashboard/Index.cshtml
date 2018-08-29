@@ -5,48 +5,73 @@
 
 <h2>Dashboard</h2>
 
-<div id="selector" style="width: 500px; height: 300px;"></div>
+<div class="col-md-4" id="categories-chart" style="width: 500px; height: 300px;"></div>
+<div class="col-md-4" id="top-selling-products" style="width: 500px; height: 300px;"></div>
+<div class="col-md-4" id="selling-timeline" style="width: 500px; height: 300px;"></div>
 
 <script>
     $(document).ready(function () {
-        //var model;
-        //$.ajax({
-        //    type: "Get",
-        //    url: "Product/ChartData/",
-        //    success: function (response) {
-        //        model = response;
-        //    }
-        //});
-
-        //var model = [
-        //    {
-        //        name: 'United States',
-        //        value: 65
-        //    },
-        //    {
-        //        name: 'United Kingdom',
-        //        value: 58
-        //    },
-        //    {
-        //        name: 'Germany',
-        //        value: 30
-        //    },
-        //    {
-        //        name: 'India',
-        //        value: 60
-        //    },
-        //    {
-        //        name: 'Russia',
-        //        value: 65,
-        //        exploded: true
-        //    },
-        //    {
-        //        name: 'China',
-        //        value: 75
-        //    }
-        //];
-
-        $('#selector').jqChart({
+        $('#selling-timeline').jqChart({
+            title: { text: 'Top selling Products' },
+            legend: { title: 'Product' },
+            dataSource: {
+                ajax: {
+                    type: "GET",
+                    url: "/Order/GetConfirmedProducts/",
+                    data: "",
+                    dataType: 'json'
+                }
+            },
+            shadows: {
+                enabled: true
+            },
+            series: [
+                {
+                    type: 'pie',
+                    labels: {
+                        stringFormat: '%.1f%%',
+                        valueType: 'percentage',
+                        font: '15px sans-serif',
+                        fillStyle: 'white'
+                    },
+                    explodedRadius: 10,
+                    dataLabelsField: 'name',
+                    dataValuesField: 'count',
+                    explodedField: 'exploded'
+                }
+            ]
+        });
+        $('#top-selling-products').jqChart({
+            title: { text: 'Top selling Products' },
+            legend: { title: 'Product' },
+            dataSource: {
+                ajax: {
+                    type: "GET",
+                    url: "/Order/GetConfirmedProducts/",
+                    data: "",
+                    dataType: 'json'
+                }
+            },
+            shadows: {
+                enabled: true
+            },
+            series: [
+                {
+                    type: 'pie',
+                    labels: {
+                        stringFormat: '%.1f%%',
+                        valueType: 'percentage',
+                        font: '15px sans-serif',
+                        fillStyle: 'white'
+                    },
+                    explodedRadius: 10,
+                    dataLabelsField: 'name',
+                    dataValuesField: 'count',
+                    explodedField: 'exploded'
+                }
+            ]
+        });
+        $('#categories-chart').jqChart({
             title: { text: 'Count of Products' },
             legend: { title: 'Categories' },
             dataSource: {
@@ -78,30 +103,3 @@
         });
     });
 </script>
-
-<!-- Chart code -->
-@*<div id="chartdiv"></div>
-<script>
-    var chartData;
-    $.ajax({
-        type: "Get",
-        url: "Product/ChartData/",
-        success: function (response) {
-            chartData = response;
-            AmCharts.makeChart("chartdiv", {
-                "type": "pie",
-                "theme": "dark",
-                "dataProvider": chartData,
-                "valueField": "count",
-                "titleField": "name",
-                "balloon": {
-                    "fixedPosition": true
-                },
-                "export": {
-                    "enabled": true
-                }
-            });
-        }
-    });
-
-</script>*@
