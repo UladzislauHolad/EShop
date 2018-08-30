@@ -63,7 +63,7 @@ namespace EShop.App.Web.Controllers
                 }
                 _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrderCreateModel));
 
-                return RedirectToAction("Index", new { id = order.OrderId });
+                return RedirectToAction("Edit", "Order", new { id = order.OrderId });
             }
             return NotFound();
         }
@@ -81,7 +81,7 @@ namespace EShop.App.Web.Controllers
                 }
                 _productOrderService.Delete(productOrderId);
 
-                return Json(new { success = true });
+                return Ok();
             }
             return NotFound();
         }
