@@ -85,7 +85,7 @@
         });
     });
 
-    var chart = new DataViz.Chart({
+    $('#selling-timeline').jqChart({
         title: { text: 'Orders' },
         tooltips: { type: 'shared' },
         animation: { duration: 1 },
@@ -99,8 +99,7 @@
                 type: "GET",
                 url: "/Order/GetConfirmedOrdersByDate/",
                 data: "",
-                dataType: 'json',
-
+                dataType: 'json'
             }
         },
         axes: [
@@ -128,5 +127,4 @@
             }
         ]
     });
-    chart.write('selling-timeline');
 </script>
