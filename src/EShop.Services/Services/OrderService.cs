@@ -113,6 +113,7 @@ namespace EShop.Services.Services
         public object GetCountOfConfirmedOrdersByDate()
         {
             var orders = _repository.GetAll()
+                .Where(o => o.IsConfirmed)
                 .GroupBy(o => o.Date.Date)
                 .Select(g => new { Date = g.Key, Count = g.Count() });
             
