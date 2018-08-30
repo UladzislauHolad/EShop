@@ -33,8 +33,19 @@ namespace EShop.App.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            _service.Create(new OrderDTO());
-            return RedirectToAction("Index");
+            return View(new OrderViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Create(OrderViewModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                _service.Create(_mapper.Map<OrderDTO>(order));
+                return RedirectToAction("Index");
+            }
+
+            return View(order);
         }
 
         [HttpDelete]

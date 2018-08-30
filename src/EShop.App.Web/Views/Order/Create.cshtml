@@ -1,0 +1,51 @@
+﻿@model OrderViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Create Order";
+}
+<form asp-action="Create" method="post">
+    <h3>Create Order</h3>
+    <hr />
+    @*<div class="col-md-4 category-select">
+            <label asp-for="Categories" class="control-label"></label>
+            <div id="mselect">
+            </div>
+            <span asp-validation-for="CategoriesId" class="text-danger"></span>
+        </div>*@
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Customer.FirstName" class="control-label"></label>
+            <input asp-for="Customer.FirstName" class="form-control" />
+            <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.LastName" class="control-label"></label>
+            <input asp-for="Customer.LastName" class="form-control" />
+            <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Patronymic" class="control-label"></label>
+            <input asp-for="Customer.Patronymic" class="form-control" />
+            <span asp-validation-for="Customer.Patronymic" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Phone" class="control-label"></label>
+            <input asp-for="Customer.Phone" class="form-control" />
+            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Address" class="control-label"></label>
+            <input asp-for="Customer.Address" class="form-control" />
+            <span asp-validation-for="Customer.Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Comment" class="control-label"></label>
+            <input asp-for="Customer.Comment" class="form-control" />
+            <span asp-validation-for="Customer.Comment" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>

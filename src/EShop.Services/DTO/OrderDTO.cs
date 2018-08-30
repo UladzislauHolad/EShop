@@ -10,5 +10,6 @@ namespace EShop.Services.DTO
         public DateTime Date { get; set; }
         public bool IsConfirmed { get; set; }
         public ICollection<ProductOrderDTO> ProductOrders { get; set; }
+        public CustomerDTO Customer { get; set; }
     }
 }

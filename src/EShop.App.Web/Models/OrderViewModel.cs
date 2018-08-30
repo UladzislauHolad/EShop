@@ -11,5 +11,6 @@ namespace EShop.App.Web.Models
         public DateTime Date { get; set; }
         public bool IsConfirmed { get; set; }
         public List<ProductOrderViewModel> ProductOrders { get; set; }
+        public CustomerViewModel Customer { get; set; }
     }
 }
