@@ -40,10 +40,12 @@ namespace EShop.App.Web
             services.AddTransient<IRepository<Category>, CategoryRepository>();
             services.AddTransient<IRepository<Order>, OrderRepository>();
             services.AddTransient<IRepository<ProductOrder>, ProductOrderRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IProductOrderService, ProductOrderService>();
+            services.AddTransient<ICustomerService, СustomerService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
                 .AddFluentValidation(fvc => 
