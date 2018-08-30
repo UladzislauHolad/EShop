@@ -193,15 +193,6 @@ namespace EShop.Data.Tests
                 }
             };
 
-            //var product = new Product
-            //{
-            //    ProductId = 1,
-            //    Name = "P1",
-            //    Description = "Des1",
-            //    Price = 1,
-            //    Count = 2
-            //};
-
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
@@ -214,7 +205,6 @@ namespace EShop.Data.Tests
                 {
                     context.Database.EnsureCreated();
                     context.Orders.Add(order);
-                    //context.Products.Add(product);
                     context.SaveChanges();
                 }
                 using (var context = new EShopContext(options))
