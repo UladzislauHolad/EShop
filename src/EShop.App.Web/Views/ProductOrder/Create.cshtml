@@ -25,7 +25,7 @@
             <input asp-for="OrderCount" id="order-count" class="form-control" min="1" max="20" />
         </div>
         <button type="submit" class="btn btn-primary">Add</button>
-        <a asp-action="Index" asp-route-id="@Model.OrderId" class="btn btn-default">Cancel</a>
+        <a asp-controller="Order" asp-action="Edit" asp-route-id="@Model.OrderId" class="btn btn-default">Cancel</a>
     </div>
 </form>
 
@@ -85,59 +85,4 @@
             }
         });
     }
-    //$(document).ready(function () {
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Category/CategorySingleSelect",
-    //        success: function (response) {
-    //            $("#category-select").append(response);
-    //            $('#cat-select').searchableOptionList({
-    //                events: {
-    //                    onInitialized: function () {
-    //                        let categoryId = $(".sol-radio").val();
-    //                        loadProducts(categoryId);
-    //                    },
-    //                    onChange: function (sol, selected) {
-    //                        let categoryId = selected[0].defaultValue;
-    //                        loadProducts(categoryId);
-    //                    }
-    //                }
-    //            });
-    //        }
-    //    });
-    //});
-
-    //function loadProducts(categoryId) {
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Product/ProductSelect/?id=" + categoryId,
-    //        success: function (response) {
-    //            $("#product-select").append(response);
-    //            $('#my-select').searchableOptionList({
-    //                events: {
-    //                    onInitialized: function () {
-    //                        let productId = $(".sol-radio").val();
-    //                        displayProductInfo(productId);
-    //                    },
-    //                    onChange: function (sol, selected) {
-    //                        let productId = selected[0].defaultValue;
-    //                        displayProductInfo(productId);
-    //                    }
-    //                }
-    //            });
-    //        }
-    //    });
-    //}
-
-    //function displayProductInfo(productId) {
-    //    $.ajax({
-    //        type: "GET",
-    //        url: "/Product/Product/?id=" + productId,
-    //        success: function (response) {
-    //            $("#product-info").text("");
-    //            $("#product-info").append(response);
-    //            $("#order-count").attr("max", $("#count").val());
-    //        }
-    //    });
-    //}
 </script>
