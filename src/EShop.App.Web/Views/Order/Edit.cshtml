@@ -1,0 +1,231 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Order #@Model.OrderId</h3>
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <h3>Customer</h3>
+            
+        <form id="customer-form" onchange="enableSubmit()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="OrderId" class="form-control" type="hidden" />
+            <input asp-for="Customer.CustomerId" class="form-control" type="hidden" />
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.FirstName" class="control-label"></label>
+                    <input asp-for="Customer.FirstName" class="form-control" />
+                    <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.LastName" class="control-label"></label>
+                    <input asp-for="Customer.LastName" class="form-control" />
+                    <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Patronymic" class="control-label"></label>
+                    <input asp-for="Customer.Patronymic" class="form-control" />
+                    <span asp-validation-for="Customer.Patronymic" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Phone" class="control-label"></label>
+                    <input asp-for="Customer.Phone" class="form-control" />
+                    <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Address" class="control-label"></label>
+                    <input asp-for="Customer.Address" class="form-control" />
+                    <span asp-validation-for="Customer.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Comment" class="control-label"></label>
+                    <input asp-for="Customer.Comment" class="form-control" />
+                    <span asp-validation-for="Customer.Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="text-center">
+                <br />
+                <button id="submit" type="submit" class="btn btn-primary" disabled>Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <h3>Product List</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>OrderCount</th>
+                <th>Sum</th>
+                @if (!Model.IsConfirmed)
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ProductOrderViewModel po in Model.ProductOrders)
+            {
+            <tr id="@po.ProductOrderId">
+                <td id="name">@po.Name</td>
+                <td id="price">@po.Price</td>
+                @if (Model.IsConfirmed)
+                {
+                    <td>@po.OrderCount</td>
+                    <td>@(po.OrderCount * po.Price)</td>
+                }
+                else
+                {
+                    @if (po.IsNotAvailable)
+                    {
+                        <td style="color:red">Not Available</td>
+                        <td style="color:red">Not Available</td>
+                    }
+                    else
+                    {
+                        <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
+                        <td id="sum">@(po.OrderCount * po.Price)</td>
+                    }
+
+                    <td>
+                        <div class="btn-toolbar pull-right" role="toolbar">
+                            @if (!po.IsNotAvailable)
+                            {
+                                <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                            }
+                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                        </div>
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+    @*<div page-model="@Model.PageInfo" page-action="Index"
+                page-classes-enabled="true"
+                page-class="btn" page-class-normal="btn-default"
+                page-class-selected="btn-primary" class="btn-group">
+        </div>*@
+    <div class="text-center">
+        <div class="btn-group">
+            @if (!Model.IsConfirmed)
+            {
+                <a asp-controller="ProductOrder" asp-action="Create" class="btn btn-primary">
+                    Add Product To Order
+                </a>
+            }
+            <a asp-controller="Order" asp-action="Index" class="btn btn-default">
+                Back To Order List
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="modal-delete-window"></div>
+
+
+<script>
+    function enableSubmit() {
+        $("#submit").attr("disabled", false);
+    }
+
+    $('#customer-form').submit(function () {
+        var data = $("#customer-form").serialize();
+        $.ajax({
+            url: "/Order/Edit",
+            type: "Patch",
+            data: data,
+            success: function () {
+                alert("Customer is updated!");
+            },
+            error: function () {
+                alert("Error!");
+            }
+        });
+        return false;
+    });
+
+    function activeEdit(id) {
+        var parent = $("#" + id);
+        var editBtn = parent.find("#edit-btn").first();
+        editBtn.attr('class', 'btn btn-warning');
+        var count = parseInt(parent.find("#order-count").first().val());
+        var price = parseInt(parent.find("#price").first().text());
+        parent.find("#sum").first().text(count * price);
+    }
+
+    function disableEdit(id) {
+        var parent = $("#" + id);
+        var editBtn = parent.find("#edit-btn").first();
+        editBtn.attr('class', 'btn btn-warning disabled');
+    }
+
+    function editProductOrder(productOrderId) {
+        var parent = $("#" + productOrderId);
+        var count = parseInt(parent.find("#order-count").first().val());
+
+        $.ajax({
+            url: "/Orders/" + @Model.OrderId + "/Products/" + productOrderId,
+            type: 'PATCH',
+            data: JSON.stringify({ OrderCount: count }),
+            contentType: "application/json",
+            accept: "json",
+            success: function () {
+                disableEdit(productOrderId);
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    }
+
+    function confirmDelete(_id) {
+        var id = _id;
+        $("#modal-delete-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Delete",
+                    click: deleteConfirmed
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function deleteConfirmed() {
+            $.ajax({
+                url: "/Orders/" + @Model.OrderId + "/Products/" + id,
+                type: "Delete",
+                success: function () {
+                    $("tr#" + id).remove();
+                    $("#modal-delete-window").dialog("close");
+                },
+                error: function () {
+                    alert("Error");
+                }
+
+            });
+        }
+
+        function cancel() {
+            $("#modal-delete-window").dialog("close");
+        }
+    }
+</script>

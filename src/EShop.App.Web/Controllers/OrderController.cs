@@ -107,5 +107,31 @@ namespace EShop.App.Web.Controllers
 
             return Json(data);
         }
+
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var order = _service.GetOrder(id);
+            if(order != null && !order.IsConfirmed)
+            {
+                return View(_mapper.Map<OrderViewModel>(order));
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPatch]
+        public ActionResult Edit(OrderViewModel order)
+        {
+            var existOrder = _service.GetOrder(order.OrderId);
+            if (existOrder != null && !existOrder.IsConfirmed)
+            {
+                existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
+                _service.Update(_mapper.Map<OrderDTO>(existOrder));
+                return Accepted();
+            }
+
+            return BadRequest();
+        }
     }
 }

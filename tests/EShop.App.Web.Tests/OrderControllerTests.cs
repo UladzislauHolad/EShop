@@ -63,6 +63,91 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Edit_InvokeWithValidId_ViewResult()
+        {
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { IsConfirmed = false });
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(1);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is ViewResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithIdOfConfirmedOrder_BadRequestResult()
+        {
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { IsConfirmed = true });
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(1);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithNotValidId_BadRequestResult()
+        {
+            OrderDTO order = null;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(order);
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(1);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithValidOrder_OkResult()
+        {
+            OrderDTO order = new OrderDTO { OrderId = 1, IsConfirmed = false };
+            OrderViewModel orderViewModel = new OrderViewModel { OrderId = 1 };
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(order);
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(orderViewModel);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is OkResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithNotValidOrder_BadRequest()
+        {
+            OrderDTO order = null;
+            OrderViewModel orderViewModel = new OrderViewModel { OrderId = 1 };
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(order);
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(orderViewModel);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
+        public void Edit_InvokeWithConfirmedOrder_BadRequest()
+        {
+            OrderDTO order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            OrderViewModel orderViewModel = new OrderViewModel { OrderId = 1 };
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetOrder(1)).Returns(order);
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Edit(orderViewModel);
+
+            mock.Verify(m => m.GetOrder(1), Times.Once);
+            Assert.True(result is BadRequestResult);
+        }
+
+        [Fact]
         public void Delete_InvokeWithValidId_JsonResult()
         {
             var mock = new Mock<IOrderService>();
