@@ -133,5 +133,17 @@ namespace EShop.App.Web.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet]
+        public ActionResult Info(int id)
+        {
+            var existOrder = _service.GetOrder(id);
+            if(existOrder != null)
+            {
+                return View(_mapper.Map<OrderViewModel>(existOrder));
+            }
+
+            return NotFound();
+        }
     }
 }
