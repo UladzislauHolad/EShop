@@ -8,6 +8,7 @@ namespace EShop.App.Web.Controllers
 {
     public class DashboardController : Controller
     {
+        [HttpGet("Dashboard")]
         public IActionResult Index()
         {
             return View();

@@ -25,6 +25,8 @@ namespace EShop.App.Web.Controllers
         }
 
         // GET: Category
+        [HttpGet("Categories")]
+        [HttpGet("Categories/Pages/{page}")]
         public ViewResult Index(int page = 1)
         {
             var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetCategories());
@@ -40,13 +42,13 @@ namespace EShop.App.Web.Controllers
             });
         }
         // GET: Category/Create
-        [HttpGet]
+        [HttpGet("Categories/new")]
         public ViewResult Create()
         {
             return View(new CategoryViewModel());
         }
 
-        [HttpPost]
+        [HttpPost("Categories/new")]
         public IActionResult Create(CategoryViewModel category)
         {
             if (ModelState.IsValid)
@@ -58,13 +60,14 @@ namespace EShop.App.Web.Controllers
         }
 
             // GET: Category/Edit/5
-        public ViewResult Edit(int id)
+        [HttpGet("Categories/{id}")]
+        public ViewResult Edit([FromRoute]int id)
         {
             var category = _mapper.Map<CategoryViewModel>(_service.GetCategory(id));
             return View(category);
         }
 
-        [HttpPost]
+        [HttpPost("Categories/{id}")]
         public IActionResult Edit(CategoryViewModel category)
         {
             if (ModelState.IsValid)
@@ -75,14 +78,15 @@ namespace EShop.App.Web.Controllers
             return View();
         }
 
-        public ActionResult Delete(int id)
+        [HttpDelete("Categories/{id}")]
+        public ActionResult Delete([FromRoute]int id)
         {
             _service.Delete(id);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         [HttpGet]
-        public JsonResult Childs(int id)
+        public JsonResult Childs([FromRoute]int id)
         {
             var categories = _service.GetChildCategories(id);
             return Json(categories);

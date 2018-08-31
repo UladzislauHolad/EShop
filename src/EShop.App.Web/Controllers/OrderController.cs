@@ -21,7 +21,7 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("Orders")]
         public ViewResult Index()
         {
             var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders()
@@ -30,13 +30,13 @@ namespace EShop.App.Web.Controllers
             return View(orders);
         }
 
-        [HttpGet]
+        [HttpGet("Orders/new")]
         public ActionResult Create()
         {
             return View(new OrderViewModel());
         }
 
-        [HttpPost]
+        [HttpPost("Orders/new")]
         public ActionResult Create(OrderViewModel order)
         {
             if (ModelState.IsValid)
@@ -48,38 +48,37 @@ namespace EShop.App.Web.Controllers
             return View(order);
         }
 
-        [HttpDelete]
-        public ActionResult Delete(int id)
+        [HttpDelete("Orders/{orderId}")]
+        public ActionResult Delete([FromRoute]int orderId)
         {
-            var order = _service.GetOrder(id);
+            var order = _service.GetOrder(orderId);
             if(order != null)
             {
                 if (order.IsConfirmed)
                 {
                     return BadRequest();
                 }
-                _service.Delete(id);
+                _service.Delete(orderId);
 
-                return Json(new { success = true });
+                return Ok();
             }
 
             return NotFound();
         }
 
-        [HttpPatch]
-        //Orders/1
-        public ActionResult Confirm(int id)
+        [HttpPatch("Orders/api/{orderId}")]
+        public ActionResult Confirm(int orderId)
         {
-            var order = _service.GetOrder(id);
+            var order = _service.GetOrder(orderId);
             if(order != null)
             {
                 if(order.IsConfirmed)
                 {
                     return BadRequest();
                 }
-                if(_service.IsConfirmAvailable(id))
+                if(_service.IsConfirmAvailable(orderId))
                 {
-                    _service.Confirm(id);
+                    _service.Confirm(orderId);
 
                     return Ok();
                 }
@@ -108,42 +107,32 @@ namespace EShop.App.Web.Controllers
             return Json(data);
         }
 
-        [HttpGet]
-        public ActionResult Edit(int id)
+        [HttpGet("Orders/{orderId}")]
+        public ActionResult Edit([FromRoute]int orderId)
         {
-            var order = _service.GetOrder(id);
-            if(order != null && !order.IsConfirmed)
+            var order = _service.GetOrder(orderId);
+            if(order != null)
             {
-                return View(_mapper.Map<OrderViewModel>(order));
+                if(!order.IsConfirmed)
+                    return View(_mapper.Map<OrderViewModel>(order));
+                return View("Info", (_mapper.Map<OrderViewModel>(order)));
             }
 
             return BadRequest();
         }
 
-        [HttpPatch]
-        public ActionResult Edit(OrderViewModel order)
+        [HttpPatch("Orders/{orderId}")]
+        public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
         {
-            var existOrder = _service.GetOrder(order.OrderId);
+            var existOrder = _service.GetOrder(orderId);
             if (existOrder != null && !existOrder.IsConfirmed)
             {
                 existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
                 _service.Update(_mapper.Map<OrderDTO>(existOrder));
-                return Accepted();
+                return Ok();
             }
             
             return BadRequest();
-        }
-
-        [HttpGet]
-        public ActionResult Info(int id)
-        {
-            var existOrder = _service.GetOrder(id);
-            if(existOrder != null)
-            {
-                return View(_mapper.Map<OrderViewModel>(existOrder));
-            }
-
-            return NotFound();
         }
     }
 }

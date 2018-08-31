@@ -21,7 +21,10 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        public ViewResult Index(int page = 1)
+        [HttpGet("")]
+        [HttpGet("Products")]
+        [HttpGet("Products/Pages/{page}")]
+        public ViewResult Index([FromRoute]int page = 1)
         {
             IEnumerable<ProductDTO> productDtos = _service.GetProducts();
             var Products = _mapper.Map<IEnumerable<ProductDTO>, IEnumerable<ProductViewModel>>(productDtos);
@@ -38,13 +41,13 @@ namespace EShop.App.Web.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpGet("Products/new")]
         public ViewResult AddProduct()
         {
             return View(new ProductViewModel());
         }
 
-        [HttpPost]
+        [HttpPost("Products/new")]
         public IActionResult AddProduct(ProductViewModel product)
         {
             if(ModelState.IsValid)
@@ -60,14 +63,14 @@ namespace EShop.App.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ViewResult Edit(int? id)
+        [HttpGet("Products/{id}")]
+        public ViewResult Edit([FromRoute]int id)
         {
             var product = _mapper.Map<ProductDTO, ProductViewModel>(_service.GetProduct(id));
             return View(product);
         }
 
-        [HttpPost]
+        [HttpPost("Products/{id}")]
         public IActionResult Edit(ProductViewModel product)
         {
             if(ModelState.IsValid)
@@ -86,11 +89,11 @@ namespace EShop.App.Web.Controllers
             return View(product);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
+        [HttpDelete("Products/{id}")]
+        public IActionResult Delete([FromRoute]int id)
         {
             _service.Delete(id);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         [HttpGet]

@@ -24,7 +24,7 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("Orders/{id}")]
+        [HttpGet]
         public ActionResult Index([FromRoute]int id)
         {
             var order = _orderService.GetOrder(id);
@@ -35,10 +35,10 @@ namespace EShop.App.Web.Controllers
             return NotFound();
         }
 
-        [HttpGet("Orders/{id}/Products")]
-        public ActionResult Create([FromRoute]int id)
+        [HttpGet("Orders/{orderId}/Products")]
+        public ActionResult Create([FromRoute]int orderId)
         {
-            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(id));
+            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(orderId));
             if (order != null)
             {
                 if(order.IsConfirmed)
@@ -63,7 +63,7 @@ namespace EShop.App.Web.Controllers
                 }
                 _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrderCreateModel));
 
-                return RedirectToAction("Edit", "Order", new { id = order.OrderId });
+                return RedirectToAction("Edit", "Order", new { orderId = order.OrderId });
             }
             return NotFound();
         }
@@ -87,9 +87,9 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpPatch("Orders/{orderId}/Products/{productOrderId}")]
-        public ActionResult Edit([FromRoute]int OrderId, [FromRoute]int productOrderId, [FromBody]NewOrderCount OrderCount)
+        public ActionResult Edit([FromRoute]int orderId, [FromRoute]int productOrderId, [FromBody]NewOrderCount OrderCount)
         {
-            var order = _orderService.GetOrder(OrderId);
+            var order = _orderService.GetOrder(orderId);
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
             if (order != null && productOrder != null)
             {
