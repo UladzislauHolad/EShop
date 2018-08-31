@@ -69,9 +69,10 @@
 
         function deleteConfirmed() {
             $.ajax({
-                url: "Product/Delete/" + id,
+                url: "Products/" + id,
                 type: "Delete",
                 success: function () {
+                    customAlert("success", "Success!", "Product is deleted!");
                     $("tr#" + id).remove();
                     $("#modal-delete-window").dialog("close");
                 }

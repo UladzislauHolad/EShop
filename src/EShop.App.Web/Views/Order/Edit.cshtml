@@ -118,7 +118,7 @@
         <div class="btn-group">
             @if (!Model.IsConfirmed)
             {
-                <a asp-controller="ProductOrder" asp-action="Create" class="btn btn-primary">
+                <a asp-controller="ProductOrder" asp-action="Create" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
                     Add Product To Order
                 </a>
             }
@@ -140,7 +140,7 @@
     $('#customer-form').submit(function () {
         var data = $("#customer-form").serialize();
         $.ajax({
-            url: "/Order/Edit",
+            url: "@Url.RouteUrl(new { controller = "Order", action = "Edit", orderId = Model.OrderId})",
             type: "Patch",
             data: data,
             success: function () {
@@ -168,18 +168,17 @@
         editBtn.attr('class', 'btn btn-warning disabled');
     }
 
-    function editProductOrder(productOrderId) {
-        var parent = $("#" + productOrderId);
+    function editProductOrder(prodOrderId) {
+        var parent = $("#" + prodOrderId);
         var count = parseInt(parent.find("#order-count").first().val());
-
         $.ajax({
-            url: "/Orders/" + @Model.OrderId + "/Products/" + productOrderId,
+            url: "/Orders/" + @Model.OrderId + "/Products/" + prodOrderId,
             type: 'PATCH',
             data: JSON.stringify({ OrderCount: count }),
             contentType: "application/json",
             accept: "json",
             success: function () {
-                disableEdit(productOrderId);
+                disableEdit(prodOrderId);
                 customAlert("success", "Success!", "Product is updated!");
             },
             error: function () {
