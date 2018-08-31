@@ -86,8 +86,12 @@
                 url: "Order/Delete/" + id,
                 type: "Delete",
                 success: function () {
+                    customAlert("success", "Success!", "Order is deleted!");
                     $("tr#" + id).remove();
                     $("#modal-delete-window").dialog("close");
+                },
+                error: function () {
+                    customAlert("error", "Error!", "Order is not deleted!");
                 }
             });
         }
@@ -125,7 +129,7 @@
                 type: "Patch",
                 error: function (response) {
                     $("#modal-confirm-window").dialog("close");
-                    alert(response.responseJSON.message);
+                    customAlert("error", "Error!", "This order have no products or \"not available\" products!");
                 },
                 success: function () {
                     location.reload();

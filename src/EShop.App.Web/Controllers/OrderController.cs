@@ -85,7 +85,7 @@ namespace EShop.App.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "This order have not available products" });
+                    return BadRequest();
                 }
             }
 
@@ -130,7 +130,7 @@ namespace EShop.App.Web.Controllers
                 _service.Update(_mapper.Map<OrderDTO>(existOrder));
                 return Accepted();
             }
-
+            
             return BadRequest();
         }
 

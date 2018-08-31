@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="form-group col-md-3">
                     <label asp-for="Customer.Phone" class="control-label"></label>
-                    <input asp-for="Customer.Phone" class="form-control" />
+                    <input asp-for="Customer.Phone" placeholder="1231231321" pattern="\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})" class="form-control" />
                     <span asp-validation-for="Customer.Phone" class="text-danger"></span>
                 </div>
                 <div class="form-group col-md-3">
@@ -74,38 +74,38 @@
         <tbody>
             @foreach (ProductOrderViewModel po in Model.ProductOrders)
             {
-            <tr id="@po.ProductOrderId">
-                <td id="name">@po.Name</td>
-                <td id="price">@po.Price</td>
-                @if (Model.IsConfirmed)
-                {
-                    <td>@po.OrderCount</td>
-                    <td>@(po.OrderCount * po.Price)</td>
-                }
-                else
-                {
-                    @if (po.IsNotAvailable)
+                <tr id="@po.ProductOrderId">
+                    <td id="name">@po.Name</td>
+                    <td id="price">@po.Price</td>
+                    @if (Model.IsConfirmed)
                     {
-                        <td style="color:red">Not Available</td>
-                        <td style="color:red">Not Available</td>
+                        <td>@po.OrderCount</td>
+                        <td>@(po.OrderCount * po.Price)</td>
                     }
                     else
                     {
-                        <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
-                        <td id="sum">@(po.OrderCount * po.Price)</td>
-                    }
+                        @if (po.IsNotAvailable)
+                        {
+                            <td style="color:red">Not Available</td>
+                            <td style="color:red">Not Available</td>
+                        }
+                        else
+                        {
+                            <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
+                            <td id="sum">@(po.OrderCount * po.Price)</td>
+                        }
 
-                    <td>
-                        <div class="btn-toolbar pull-right" role="toolbar">
-                            @if (!po.IsNotAvailable)
-                            {
-                                <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
-                            }
-                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
-                        </div>
-                    </td>
-                }
-            </tr>
+                        <td>
+                            <div class="btn-toolbar pull-right" role="toolbar">
+                                @if (!po.IsNotAvailable)
+                                {
+                                    <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                                }
+                                <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                            </div>
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>
@@ -144,10 +144,10 @@
             type: "Patch",
             data: data,
             success: function () {
-                alert("Customer is updated!");
+                customAlert("success", "Success!", "Customer is updated!");
             },
             error: function () {
-                alert("Error!");
+                customAlert("error", "Error!", "Customer is not updated!");
             }
         });
         return false;
@@ -180,9 +180,10 @@
             accept: "json",
             success: function () {
                 disableEdit(productOrderId);
+                customAlert("success", "Success!", "Product is updated!");
             },
             error: function () {
-                alert("Error");
+                customAlert("error", "Error!", "Product is not updated!");
             }
         });
     }
@@ -214,11 +215,12 @@
                 url: "/Orders/" + @Model.OrderId + "/Products/" + id,
                 type: "Delete",
                 success: function () {
+                    customAlert("success", "Success!", "Product is deleted!");
                     $("tr#" + id).remove();
                     $("#modal-delete-window").dialog("close");
                 },
                 error: function () {
-                    alert("Error");
+                    customAlert("error", "Error!", "Product is not deleted!");
                 }
 
             });
