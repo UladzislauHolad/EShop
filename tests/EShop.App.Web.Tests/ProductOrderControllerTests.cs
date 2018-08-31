@@ -109,7 +109,8 @@ namespace EShop.App.Web.Tests
 
             productOrderServiceMock.Verify(m => m.Create(It.Is<ProductOrderDTO>(po => po.OrderCount == 2)), Times.Once);
             Assert.True(result is RedirectToActionResult);
-            Assert.Equal("Index", (result as RedirectToActionResult).ActionName);
+            Assert.Equal("Edit", (result as RedirectToActionResult).ActionName);
+            Assert.Equal("Order", (result as RedirectToActionResult).ControllerName);
         }
 
         [Fact]
@@ -157,7 +158,7 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Delete_InvokeWithValidOrderId_JsonResult()
+        public void Delete_InvokeWithValidOrderId_OkResult()
         {
             var order = new OrderDTO { OrderId = 1};
             var productOrder = new ProductOrderDTO { ProductOrderId = 1 };
@@ -170,7 +171,7 @@ namespace EShop.App.Web.Tests
 
             var result = controller.Delete(1, 1);
 
-            Assert.True(result is JsonResult);
+            Assert.True(result is OkResult);
         }
 
         [Fact]

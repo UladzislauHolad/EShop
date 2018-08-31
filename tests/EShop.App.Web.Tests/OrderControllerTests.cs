@@ -52,14 +52,14 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Create_Invoke_RedirectToIndexView()
+        public void Create_Invoke_ViewResult()
         {
             var mock = new Mock<IOrderService>();
             var controller = new OrderController(mock.Object, GetMapper());
 
-            var result = controller.Create() as RedirectToActionResult;
+            var result = controller.Create();
 
-            Assert.Equal("Index", result.ActionName);
+            Assert.True(result is ViewResult);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Edit_InvokeWithIdOfConfirmedOrder_BadRequestResult()
+        public void Edit_InvokeWithIdOfConfirmedOrder_ViewResult()
         {
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { IsConfirmed = true });
@@ -85,7 +85,7 @@ namespace EShop.App.Web.Tests
             var result = controller.Edit(1);
 
             mock.Verify(m => m.GetOrder(1), Times.Once);
-            Assert.True(result is BadRequestResult);
+            Assert.True(result is ViewResult);
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace EShop.App.Web.Tests
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             var controller = new OrderController(mock.Object, GetMapper());
 
-            var result = controller.Edit(orderViewModel);
+            var result = controller.Edit(1, orderViewModel);
 
             mock.Verify(m => m.GetOrder(1), Times.Once);
             Assert.True(result is OkResult);
@@ -126,7 +126,7 @@ namespace EShop.App.Web.Tests
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             var controller = new OrderController(mock.Object, GetMapper());
 
-            var result = controller.Edit(orderViewModel);
+            var result = controller.Edit(1, orderViewModel);
 
             mock.Verify(m => m.GetOrder(1), Times.Once);
             Assert.True(result is BadRequestResult);
@@ -141,14 +141,14 @@ namespace EShop.App.Web.Tests
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             var controller = new OrderController(mock.Object, GetMapper());
 
-            var result = controller.Edit(orderViewModel);
+            var result = controller.Edit(1, orderViewModel);
 
             mock.Verify(m => m.GetOrder(1), Times.Once);
             Assert.True(result is BadRequestResult);
         }
 
         [Fact]
-        public void Delete_InvokeWithValidId_JsonResult()
+        public void Delete_InvokeWithValidId_OkResult()
         {
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO());
@@ -157,7 +157,7 @@ namespace EShop.App.Web.Tests
 
             var result = controller.Delete(1);
 
-            Assert.True(result is JsonResult);
+            Assert.True(result is OkResult);
         }
 
         [Fact]
