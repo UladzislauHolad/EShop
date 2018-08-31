@@ -8,6 +8,7 @@ using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EShop.App.Web.Controllers
 {
@@ -15,7 +16,7 @@ namespace EShop.App.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICategoryService _service;
-        public int PageSize = 3;
+        public int PageSize = 8;
 
         public CategoryController(ICategoryService service, IMapper mapper)
         {
@@ -24,6 +25,8 @@ namespace EShop.App.Web.Controllers
         }
 
         // GET: Category
+        [HttpGet("Categories")]
+        [HttpGet("Categories/Pages/{page}")]
         public ViewResult Index(int page = 1)
         {
             var categories = _mapper.Map<IEnumerable<CategoryDTO> ,IEnumerable<CategoryViewModel>>(_service.GetCategories());
@@ -39,13 +42,13 @@ namespace EShop.App.Web.Controllers
             });
         }
         // GET: Category/Create
-        [HttpGet]
+        [HttpGet("Categories/new")]
         public ViewResult Create()
         {
             return View(new CategoryViewModel());
         }
 
-        [HttpPost]
+        [HttpPost("Categories/new")]
         public IActionResult Create(CategoryViewModel category)
         {
             if (ModelState.IsValid)
@@ -57,13 +60,14 @@ namespace EShop.App.Web.Controllers
         }
 
             // GET: Category/Edit/5
-        public ViewResult Edit(int id)
+        [HttpGet("Categories/{id}")]
+        public ViewResult Edit([FromRoute]int id)
         {
             var category = _mapper.Map<CategoryViewModel>(_service.GetCategory(id));
             return View(category);
         }
 
-        [HttpPost]
+        [HttpPost("Categories/{id}")]
         public IActionResult Edit(CategoryViewModel category)
         {
             if (ModelState.IsValid)
@@ -74,14 +78,15 @@ namespace EShop.App.Web.Controllers
             return View();
         }
 
-        public ActionResult Delete(int id)
+        [HttpDelete("Categories/{id}")]
+        public ActionResult Delete([FromRoute]int id)
         {
             _service.Delete(id);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         [HttpGet]
-        public JsonResult Childs(int id)
+        public JsonResult Childs([FromRoute]int id)
         {
             var categories = _service.GetChildCategories(id);
             return Json(categories);
@@ -101,6 +106,30 @@ namespace EShop.App.Web.Controllers
             var categories = _service.GetCategories();
 
             return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
+        }
+
+        [HttpGet]
+        public PartialViewResult CategorySingleSelect()
+        {
+            var categories = _service.GetCategories();
+
+            return PartialView(_mapper.Map<IEnumerable<CategoryViewModel>>(categories));
+        }
+
+        [HttpGet]
+        public JsonResult CategoryJson()
+        {
+            var categories = _service.GetCategories()
+                .Select(c => new { c.CategoryId, c.Name }).ToList();
+            return Json(new SelectList(categories, "CategoryId", "Name"));
+        }
+
+        [HttpGet]
+        public JsonResult CategoryWithCountOfProducts()
+        {
+            var data = _service.GetCategoryNameWithCountOfProducts();
+
+            return Json(data);
         }
     }
 }

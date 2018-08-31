@@ -9,19 +9,20 @@
     <h3>Product List</h3>
     <table class="table table-striped">
         <thead>
-            <tr><th>Name</th><th>Price</th><th>Description</th><th></th></tr>
+            <tr><th>Name</th><th>Price</th><th>Description</th><th>Count</th><th></th></tr>
         </thead>
         <tbody>
             @foreach (EShop.App.Web.Models.ProductViewModel p in Model.Products)
             {
-                <tr>
+                <tr id=@p.ProductId>
                     <td>@p.Name</td>
                     <td>@p.Price</td>
                     <td>@p.Description</td>
+                    <td>@p.Count</td>
                     <td>
                         <div class="btn-toolbar pull-right" role="toolbar">
                             <div class="btn-group" role="group"><a class="btn btn-warning" asp-action="Edit" asp-route-id="@p.ProductId"><span class="glyphicon glyphicon-pencil"></span></a></div>
-                            <div class="btn-group" role="group"><a class="btn btn-danger" asp-action="Delete" asp-route-id="@p.ProductId"><span class="glyphicon glyphicon-trash"></span></a></div>
+                            <div class="btn-group" role="group"><a id=@p.ProductId class="btn btn-danger" onclick="confirmDelete(this.id)"><span class="glyphicon glyphicon-trash"></span></a></div>
                         </div>
                     </td>
                 </tr>
@@ -29,9 +30,9 @@
         </tbody>
     </table>
     <div page-model="@Model.PageInfo" page-action="Index"
-            page-classes-enabled="true"
-            page-class="btn" page-class-normal="btn-default"
-            page-class-selected="btn-primary" class="btn-group">
+         page-classes-enabled="true"
+         page-class="btn" page-class-normal="btn-default"
+         page-class-selected="btn-primary" class="btn-group">
     </div>
     <div class="text-center">
         <a asp-action="AddProduct" class="btn btn-primary">
@@ -39,5 +40,51 @@
         </a>
     </div>
 </div>
+
+<div id="modal-delete-window"></div>
+
+
+<script>
+    function confirmDelete(_id) {
+        var id = _id;
+        $("#modal-delete-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Delete",
+                    click: deleteConfirmed
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function deleteConfirmed() {
+            $.ajax({
+                url: "Products/" + id,
+                type: "Delete",
+                success: function () {
+                    customAlert("success", "Success!", "Product is deleted!");
+                    $("tr#" + id).remove();
+                    $("#modal-delete-window").dialog("close");
+                }
+            });
+        }
+
+        function cancel() {
+            $("#modal-delete-window").dialog("close");
+        }
+    }
+
+    
+</script>
     
 

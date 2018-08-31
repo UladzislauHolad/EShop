@@ -114,11 +114,10 @@ namespace EShop.App.Web.Tests
         public void Delete_DeleteProduct_ProductDeleted()
         {
             const int testId = 1;
-            var mock = new Mock<IRepository<Product>>();
+            var mock = new Mock<IProductService>();
             mock.Setup(m => m.Delete(testId));
-            var service = new ProductService(mock.Object);
             var mapper = GetMapper();
-            ProductController controller = new ProductController(service, mapper);
+            ProductController controller = new ProductController(mock.Object, mapper);
 
             controller.Delete(testId);
 
@@ -213,7 +212,7 @@ namespace EShop.App.Web.Tests
             return new Mapper(config);
         }
 
-        private IProductService GetService(IEnumerable<Product> products)
+        private IProductService GetService(IQueryable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
@@ -221,7 +220,7 @@ namespace EShop.App.Web.Tests
         }
 
 
-        private IEnumerable<Product> GetProducts()
+        private IQueryable<Product> GetProducts()
         {
             ProductCategory[] productCategorys = new ProductCategory[]
             {
@@ -241,7 +240,7 @@ namespace EShop.App.Web.Tests
                 new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories = productCategorys }
             };
 
-            return products;
+            return products.AsQueryable();
         }
     }
 }

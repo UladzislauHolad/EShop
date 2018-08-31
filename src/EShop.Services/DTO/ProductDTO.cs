@@ -9,8 +9,11 @@ namespace EShop.Services.DTO
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public int Count { get; set; }
+        public bool IsDeleted { get; set; }
 
         public ICollection<CategoryDTO> Categories { get; set; }
+        public ICollection<ProductOrderDTO> ProductOrders { get; set; }
 
         public bool Equals(ProductDTO other)
         {

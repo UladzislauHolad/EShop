@@ -41,9 +41,14 @@ namespace EShop.Data.Repositories
             return _context.Set<Category>().Find(id);
         }
 
-        public IEnumerable<Category> GetAll()
+        public IQueryable<Category> GetAll()
         {
             return _context.Set<Category>();
+        }
+
+        public void Save()
+        {
+            _context.SaveChanges();
         }
 
         public void Update(Category category)

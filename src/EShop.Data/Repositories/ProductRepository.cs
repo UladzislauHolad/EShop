@@ -19,10 +19,10 @@ namespace EShop.Data.Repositories
 
         public void Create(Product product)
         {
-            foreach (var category in product.ProductCategories)
-            {
-                category.ProductId = product.ProductId;
-            }
+            //foreach (var category in product.ProductCategories)
+            //{
+            //    category.ProductId = product.ProductId;
+            //}
             _context.Set<Product>().Add(product);
             _context.SaveChanges();
         }
@@ -47,10 +47,10 @@ namespace EShop.Data.Repositories
             return _context.Set<Product>()
                 .Include(p => p.ProductCategories)
                 .ThenInclude(p => p.Category)
-                .First(p => p.ProductId == id);
+                .SingleOrDefault(p => p.ProductId == id);
         }
 
-        public IEnumerable<Product> GetAll()
+        public IQueryable<Product> GetAll()
         {
             var prods = (_context.Set<Product>()
                 .Include(p => p.ProductCategories)
@@ -59,16 +59,20 @@ namespace EShop.Data.Repositories
             return prods;
         }
 
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
+
         public void Update(Product product)
         {
-
-            foreach (var category in product.ProductCategories)
-            {
-                category.ProductId = product.ProductId;
-            }
-            var oldCat = _context.Set<ProductCategory>().Where(pc => pc.ProductId == product.ProductId);
-            _context.Set<ProductCategory>().RemoveRange(oldCat);
-            _context.Set<Product>().Update(product);
+            var existCategories = _context.Set<ProductCategory>().Where(c => c.ProductId == product.ProductId);
+            var existedProduct = _context.Set<Product>().Single(p => p.ProductId == product.ProductId);
+            existedProduct.ProductCategories = product.ProductCategories.Except(existCategories).ToList();
+            existedProduct.Name = product.Name;
+            existedProduct.Price = product.Price;
+            existedProduct.Description = product.Description;
+            existedProduct.Count = product.Count;
             _context.SaveChanges();
         }
     }

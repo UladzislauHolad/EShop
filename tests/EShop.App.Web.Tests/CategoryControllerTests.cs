@@ -184,7 +184,7 @@ namespace EShop.App.Web.Tests
             Assert.True(result is PartialViewResult);
         }
 
-        private IEnumerable<Category> GetCategories()
+        private IQueryable<Category> GetCategories()
         {
             List<Category> categories = new List<Category>
             {
@@ -196,7 +196,7 @@ namespace EShop.App.Web.Tests
                 new Category { CategoryId = 6, Name = "Same6", ParentId = 1 }
             };
 
-            return categories;
+            return categories.AsQueryable();
         }
 
         private IMapper GetMapper()

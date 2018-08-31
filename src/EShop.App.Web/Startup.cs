@@ -32,12 +32,20 @@ namespace EShop.App.Web
         {
             services.AddOptions();
             services.AddDbContext<EShopContext>(options =>
-                options.UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+                options
+                .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+
             services.AddTransient<IDbContext, EShopContext>();
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
+            services.AddTransient<IRepository<Order>, OrderRepository>();
+            services.AddTransient<IRepository<ProductOrder>, ProductOrderRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IProductOrderService, ProductOrderService>();
+            services.AddTransient<ICustomerService, СustomerService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
                 .AddFluentValidation(fvc => 
@@ -50,39 +58,7 @@ namespace EShop.App.Web
         {
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "showCategories",
-                    template: "Categories/Page{page}",
-                    defaults: new { controller = "Category", action = "Index" });
-                routes.MapRoute(
-                    name: "createCategory",
-                    template: "Categories",
-                    defaults: new { controller = "Category", action = "Create" });
-                routes.MapRoute(
-                    name: "categorySelect",
-                    template: "Category/CategorySelect",
-                    defaults: new { controller = "Category", action = "CategorySelect" });
-                routes.MapRoute(
-                    name: "getChildCategories",
-                    template: "Childs/{id}",
-                    defaults: new { controller = "Category", action = "Childs" });
-                routes.MapRoute(
-                    name: "showProducts",
-                    template: "Products/Product{id}",
-                    defaults: new { controller = "Product", action = "Products" });
-                routes.MapRoute(
-                    name: "edit",
-                    template: "Products/Edit{id}",
-                    defaults: new { controller = "Product", action = "Edit" });
-                routes.MapRoute(
-                    name: "pagination",
-                    template: "Products/Page{page}",
-                    defaults: new { controller = "Product", action = "Index"});
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Product}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

@@ -6,6 +6,7 @@
     <div class="well">
         <h4 class=product-name>@product.Name</h4>
         <p class="price">@product.Price</p>
+        <p class="count">@product.Count</p>
         <div><p>@product.Description</p></div>
         @await Html.PartialAsync("Categories", product.Categories)
     </div>

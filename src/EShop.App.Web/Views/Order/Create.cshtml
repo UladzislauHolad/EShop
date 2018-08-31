@@ -1,0 +1,110 @@
+﻿@model OrderViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Create Order";
+}
+<form asp-action="Create" method="post">
+    <h3>Create Order</h3>
+    <hr />
+    <div class="col-md-4">
+        <label>Customer</label>
+        <select id="customer-select" name="CustomerId" class="form-control"></select>
+    </div>
+    <div class="col-md-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Customer.FirstName" class="control-label"></label>
+            <input id="first-name" asp-for="Customer.FirstName" class="form-control" type="text"/>
+            <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.LastName" class="control-label"></label>
+            <input id="last-name" asp-for="Customer.LastName" class="form-control" type="text"/>
+            <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Patronymic" class="control-label"></label>
+            <input id="patronymic" asp-for="Customer.Patronymic" class="form-control" type="text"/>
+            <span asp-validation-for="Customer.Patronymic" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Phone" class="control-label"></label>
+            <input id="phone" asp-for="Customer.Phone" class="form-control" placeholder="032 1234323" type="tel"/>
+            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Address" class="control-label"></label>
+            <input id="address" asp-for="Customer.Address" class="form-control" type="text"/>
+            <span asp-validation-for="Customer.Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Comment" class="control-label"></label>
+            <input id="comment" asp-for="Customer.Comment" class="form-control" type="text"/>
+            <span asp-validation-for="Customer.Comment" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>
+
+
+<script>
+     $(function() { 
+         var url = "/Customer/CustomersSelectList"; 
+        $.getJSON(url, function (data) { 
+            var items = ''; 
+            $("#customer-select").empty(); 
+            items += "<option value='0'>New Customer</option>"
+            $.each(data,function(i, row) { 
+                items += "<option value='" + row.value + "'>" + row.text + "</option>"; 
+            }); 
+            $("#customer-select").html(items);
+        }); 
+    });
+
+    $("#customer-select").change(function () {
+        var customerId = $("#customer-select").val();
+        if (customerId === "0") {
+            enableInput();
+        } else {
+            displayCustomerInfo(customerId);
+        }
+        
+    });
+
+    function enableInput() {
+        $("#first-name").attr("readonly", false);
+        $("#last-name").attr("readonly", false);
+        $("#patronymic").attr("readonly", false);
+        $("#phone").attr("readonly", false);
+        $("#address").attr("readonly", false);
+        $("#comment").attr("readonly", false);
+    }
+
+    function displayCustomerInfo(id) {
+        $.ajax({
+            type: "GET",
+            url: "/Customer/CustomerJson?id=" + id,
+            success: function (response) {
+                $("#first-name").val(response.firstName);
+                $("#first-name").attr("readonly", true);
+
+                $("#last-name").val(response.lastName);
+                $("#last-name").attr("readonly", true);
+
+                $("#patronymic").val(response.patronymic);
+                $("#patronymic").attr("readonly", true);
+
+                $("#phone").val(response.phone);
+                $("#phone").attr("readonly", true);
+
+                $("#address").val(response.address);
+                $("#address").attr("readonly", true);
+
+                $("#comment").val(response.comment);
+                $("#comment").attr("readonly", true);
+            }
+        });
+    }
+</script>

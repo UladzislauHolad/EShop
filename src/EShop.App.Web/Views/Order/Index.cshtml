@@ -1,0 +1,144 @@
+﻿@model IEnumerable<OrderViewModel>
+
+@{
+    ViewBag.Title = "OrderList";
+    Layout = "_Layout";
+}
+
+<div class="col-md-10">
+    <h3>Order List</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Id</th><th>Status</th><th>Date</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (OrderViewModel order in Model)
+            {
+            <tr id="@order.OrderId">
+                <td>@order.OrderId</td>
+                @if (order.IsConfirmed)
+                {
+                    <td style="color:green">Confirmed</td>
+                    <td>@order.Date</td>
+                    <td>
+                        <div class="btn-toolbar pull-right" role="toolbar">
+                            <div class="btn-group" role="group"><a class="btn btn-info" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                        </div>
+                    </td>
+                }
+                else
+                {
+                    <td style="color:red">Not Confirmed</td>
+                    <td></td>
+                    <td>
+                        <div class="btn-toolbar pull-right" role="toolbar">
+                            <div class="btn-group" role="group"><a class="btn btn-success" onclick="confirmOrder(@order.OrderId)">Confirm</a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-warning" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@order.OrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                        </div>
+                    </td>
+                }
+            </tr>
+            }
+        </tbody>
+    </table>
+    @*<div page-model="@Model.PageInfo" page-action="Index"
+             page-classes-enabled="true"
+             page-class="btn" page-class-normal="btn-default"
+             page-class-selected="btn-primary" class="btn-group">
+        </div>*@
+    <div class="text-center">
+        <a asp-action="Create" class="btn btn-primary">
+            Add New Order
+        </a>
+    </div>
+</div>
+
+
+<div id="modal-delete-window"></div>
+<div id="modal-confirm-window"></div>
+
+<script>
+    function confirmDelete(_id) {
+        var id = _id;
+        $("#modal-delete-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Delete",
+                    click: deleteConfirmed
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function deleteConfirmed() {
+            $.ajax({
+                url: "/Orders/" + id,
+                type: "Delete",
+                success: function () {
+                    customAlert("success", "Success!", "Order is deleted!");
+                    $("tr#" + id).remove();
+                    $("#modal-delete-window").dialog("close");
+                },
+                error: function () {
+                    customAlert("error", "Error!", "Order is not deleted!");
+                }
+            });
+        }
+
+        function cancel() {
+            $("#modal-delete-window").dialog("close");
+        }
+    }
+
+    function confirmOrder(_id) {
+        var id = _id;
+        $("#modal-confirm-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Confirm",
+                    click: confirm
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function confirm() {
+            $.ajax({
+                url: "Orders/api/" + id,
+                type: "Patch",
+                error: function (response) {
+                    $("#modal-confirm-window").dialog("close");
+                    customAlert("error", "Error!", "This order have no products or \"not available\" products!");
+                },
+                success: function () {
+                    location.reload();
+                }
+            });
+        }
+
+        function cancel() {
+            $("#modal-confirm-window").dialog("close");
+        }
+    }
+</script>

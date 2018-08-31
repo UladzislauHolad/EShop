@@ -49,3 +49,8 @@ li.tag, li.tag a, li.tag i.glyphicon {
     color: #fff;
     font-size: 70%
 }
+
+#chartdiv {
+    width: 100%;
+    height: 500px;
+}

@@ -16,14 +16,13 @@ namespace EShop.Services.Tests
         [Fact]
         public void GetProducts_MappingProductToProductDTO_ProductToProductDTOMapped()
         {
-            var products = GetProducts();
-            ProductService service = GetService(products);
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
-            var expected = mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(products);
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(repo => repo.GetAll()).Returns(new List<Product> { new Product() }.AsQueryable());
+            ProductService service = new ProductService(mock.Object);
 
             var result = service.GetProducts();
 
-            Assert.True(expected.SequenceEqual(result));
+            Assert.True(result is IEnumerable<ProductDTO>);
         }
 
         [Fact]
@@ -40,12 +39,11 @@ namespace EShop.Services.Tests
         public void GetProducts_CheckCountOfProductsInRepositoryAndFromService_CountsOfProductsAreMatch()
         {
             var products = GetProducts();
-            int expected = products.Count();
             ProductService service = GetService(products);
 
             int result = service.GetProducts().Count();
 
-            Assert.Equal(expected, result);
+            Assert.Equal(4, result);
         }
 
         [Fact]
@@ -53,12 +51,14 @@ namespace EShop.Services.Tests
         {
             const int id = 2;
             var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m => m.Delete(id));
+            mock.Setup(m => m.Get(id)).Returns(new Product { ProductId = 1 });
+            mock.Setup(m => m.Save());
             var service = new ProductService(mock.Object);
 
             service.Delete(id);
 
-            mock.Verify(m => m.Delete(id), Times.Once());
+            mock.Verify(m => m.Get(id), Times.Once);
+            mock.Verify(m => m.Save(), Times.Once);
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace EShop.Services.Tests
             var mapper = GetMapper();
 
             service.Add(mapper.Map<Product, ProductDTO>(product));
-            
+
             mock.Verify(m => m.Create(It.Is<Product>(p => p.Name == product.Name)), Times.Once());
         }
 
@@ -89,30 +89,79 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Update(It.Is<Product>(p => p.Name == product.Name)), Times.Once());
         }
 
-        private IEnumerable<Product> GetProducts()
+        [Fact]
+        public void GetCategoriesWithCountOfProducts_Invoke_ReturnsNameOfCategoriesAndCountOfProducts()
         {
+            var mock = new Mock<IRepository<Product>>();
+            mock.Setup(m => m.GetAll()).Returns(GetProducts());
+            var service = new ProductService(mock.Object);
+
+            var result = service.GetCategoriesWithCountOfProducts();
+
+            Assert.Equal(2, result.Count);
+        }
+
+        private IQueryable<Product> GetProducts()
+        {
+            var category1 = new Category { CategoryId = 1, Name = "C1", ParentId = 0 };
+            var category2 = new Category { CategoryId = 2, Name = "C2", ParentId = 0 };
             List<Product> products = new List<Product>
             {
-                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 },
-                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22 },
-                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23 },
-                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24 },
-                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25 }
+                new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductId = 1, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 1, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 2, Name = "P22", Description = "Des22", Price = 22,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductId = 2, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 2, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 3, Name = "P23", Description = "Des23", Price = 23,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductId = 3, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 3, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 4, Name = "P24", Description = "Des24", Price = 24, IsDeleted = true,
+                    ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductId = 4, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 4, CategoryId = 2, Category = category2 },
+                        }
+                    },
+                new Product { ProductId = 5, Name = "P25", Description = "Des25", Price = 25, ProductCategories =
+                        new List<ProductCategory>
+                        {
+                            new ProductCategory { ProductId = 5, CategoryId = 1, Category = category1 },
+                            new ProductCategory { ProductId = 5, CategoryId = 2, Category = category2 },
+                        }
+                    }
             };
 
-            return products;
+            return products.AsQueryable();
         }
 
         private IMapper GetMapper()
         {
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<ProductDTO, Product>();
                 cfg.CreateMap<Product, ProductDTO>();
             });
             return new Mapper(config);
         }
 
-        private ProductService GetService(IEnumerable<Product> products)
+        private ProductService GetService(IQueryable<Product> products)
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);

@@ -4,6 +4,7 @@ using EShop.Data.Interfaces;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EShop.Services.Services
 {
@@ -40,6 +41,14 @@ namespace EShop.Services.Services
             var mapper = GetMapper();
 
             return mapper.Map<CategoryDTO>(_repository.Get(id));
+        }
+
+        public object GetCategoryNameWithCountOfProducts()
+        {
+            var categories = _repository.GetAll();
+            var result = categories.Select(c => new { Name = c.Name, Count = c.ProductCategories.Count });
+
+            return result;
         }
 
         public IEnumerable<CategoryDTO> GetChildCategories(int id)
