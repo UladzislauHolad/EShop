@@ -59,7 +59,6 @@ namespace EShop.App.Web
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseMvcWithDefaultRoute();
-            app.UseMvc();
         }
     }
 }
