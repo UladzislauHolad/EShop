@@ -1,12 +1,14 @@
 ﻿using EShop.Data.EF.Interfaces;
 using EShop.Data.EF.ModelConfiguration;
 using EShop.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EShop.Data.EF
 {
-    public class EShopContext : DbContext, IDbContext
+    public class EShopContext : IdentityDbContext<User>, IDbContext
     {
+        //public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
@@ -14,9 +16,8 @@ namespace EShop.Data.EF
         public virtual DbSet<ProductOrder> ProductOrders { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
 
-        public EShopContext(DbContextOptions options) : base(options)
+        public EShopContext(DbContextOptions<EShopContext> options) : base(options)
         {
-            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

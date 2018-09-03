@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using FluentValidation.AspNetCore;
 using EShop.Data.EF.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace EShop.App.Web
 {
@@ -34,7 +35,8 @@ namespace EShop.App.Web
             services.AddDbContext<EShopContext>(options =>
                 options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
-
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<EShopContext>();
             services.AddTransient<IDbContext, EShopContext>();
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
@@ -56,6 +58,7 @@ namespace EShop.App.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
             app.UseMvcWithDefaultRoute();
