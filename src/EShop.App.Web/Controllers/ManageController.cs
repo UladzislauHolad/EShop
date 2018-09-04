@@ -87,9 +87,9 @@ namespace EShop.App.Web.Controllers
             Error
         }
 
-        private async Task<UserViewModel> GetCurrentUserAsync()
+        private async Task<UserDTO> GetCurrentUserAsync()
         {
-            return _mapper.Map<UserViewModel>(await _service.GetUserAsync(HttpContext.User));
+            return await _service.GetUserAsync(HttpContext.User);
         }
     }
 }
