@@ -46,7 +46,7 @@ namespace EShop.App.Web.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Product");
                     }
                 }
                 else
@@ -64,7 +64,7 @@ namespace EShop.App.Web.Controllers
         {
             // удаляем аутентификационные куки
             await _service.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Product");
         }
 
         private void AddErrorsFromResult(IdentityResult result)
