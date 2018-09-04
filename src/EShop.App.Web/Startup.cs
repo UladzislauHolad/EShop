@@ -13,6 +13,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using EShop.Data.EF.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace EShop.App.Web
 {
@@ -37,6 +38,8 @@ namespace EShop.App.Web
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<EShopContext>();
+            services.Configure<SecurityStampValidatorOptions>(opt =>
+                opt.ValidationInterval = TimeSpan.Zero);
             services.AddTransient<IDbContext, EShopContext>();
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
@@ -48,6 +51,7 @@ namespace EShop.App.Web
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IProductOrderService, ProductOrderService>();
             services.AddTransient<ICustomerService, СustomerService>();
+            services.AddTransient<IAccountService, AccountService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
                 .AddFluentValidation(fvc => 
