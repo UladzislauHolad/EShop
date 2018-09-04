@@ -84,16 +84,6 @@ namespace EShop.Services.Services
             return _userManager.UpdateAsync(mapper.Map<User>(user));
         }
 
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new UserDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
-        }
-
         public async Task<UserDTO> FindByEmailAsync(string email)
         {
             var mapper = GetMapper();
@@ -103,9 +93,10 @@ namespace EShop.Services.Services
 
         public async Task<IdentityResult> ResetPasswordAsync(string id, string code, string newPassword)
         {
-            var mapper = GetMapper();
-
             var existUser = await _userManager.FindByIdAsync(id);
+
+            if (existUser == null)
+                throw new NullReferenceException();
 
             return await _userManager.ResetPasswordAsync(existUser, code, newPassword);
         }
@@ -119,29 +110,42 @@ namespace EShop.Services.Services
 
         public async Task<IdentityResult> ChangePasswordAsync(string id, string oldPassword, string newPassword)
         {
-            var mapper = GetMapper();
-
             var existUser = await _userManager.FindByIdAsync(id);
+
+            if (existUser == null)
+                throw new NullReferenceException();
 
             return await _userManager.ChangePasswordAsync(existUser, oldPassword, newPassword);
         }
 
         public async Task SignInAsync(string id, bool isPersistent, string authenticationMethod = null)
         {
-            var mapper = GetMapper();
+             var existUser = await _userManager.FindByIdAsync(id);
 
-            var existUser = await _userManager.FindByIdAsync(id);
+            if (existUser == null)
+                throw new NullReferenceException();
 
             await _signInManager.SignInAsync(existUser, isPersistent);
         }
 
         public async Task<bool> HasPasswordAsync(string id)
         {
-            var mapper = GetMapper();
-
             var existUser = await _userManager.FindByIdAsync(id);
 
+            if (existUser == null)
+                throw new NullReferenceException();
+
             return await _userManager.HasPasswordAsync(existUser);
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new UserDTOProfile());
+            }).CreateMapper();
+
+            return mapper;
         }
     }
 }
