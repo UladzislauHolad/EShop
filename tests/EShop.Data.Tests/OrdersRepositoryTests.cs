@@ -229,6 +229,40 @@ namespace EShop.Data.Tests
             }
         }
 
+        [Fact]
+        public void Get_InvokeWithValidId_ReturnOrder()
+        {
+            var connection = new SqliteConnection("DataSource=:memory:");
+            connection.Open();
+
+            try
+            {
+                var options = new DbContextOptionsBuilder<EShopContext>()
+                    .UseSqlite(connection)
+                    .Options;
+                using (var context = new EShopContext(options))
+                {
+                    context.Database.EnsureCreated();
+                    context.Orders.AddRange(GetOrders());
+                    context.SaveChanges();
+                }
+                using (var context = new EShopContext(options))
+                {
+                    var repository = new OrderRepository(context);
+                    var result = repository.Get(1);
+
+                    Assert.True(result is Order);
+                    Assert.NotNull(result.ProductOrders);
+                    Assert.NotNull(result.ProductOrders.First().Product);
+                    Assert.NotNull(result.Customer);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         private IEnumerable<Order> GetOrders()
         {
             var product = new Product { ProductId = 1, Name = "P1", Description = "Des1", Count = 10 };
@@ -238,8 +272,8 @@ namespace EShop.Data.Tests
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 1, OrderId = 1, Product = product }
-                    }
-
+                    },
+                    Customer = new Customer()
                 },
                 new Order { OrderId = 2,
                     ProductOrders = new List<ProductOrder>

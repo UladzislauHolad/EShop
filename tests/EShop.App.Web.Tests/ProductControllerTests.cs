@@ -196,6 +196,18 @@ namespace EShop.App.Web.Tests
             Assert.True(result is ViewResult);
         }
 
+        [Fact]
+        public void ProductJson_InvokeWithValidId_JsonResult()
+        {
+            var mock = new Mock<IProductService>();
+            mock.Setup(m => m.GetProducts()).Returns(new List<ProductDTO>());
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+
+            var result = controller.ProductJson(1);
+
+            Assert.True(result is JsonResult);
+        }
+
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg => {

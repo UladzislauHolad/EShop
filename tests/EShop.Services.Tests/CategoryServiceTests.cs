@@ -112,6 +112,18 @@ namespace EShop.Services.Tests
             Assert.Equal("C1", result[0].Name);
         }
 
+        [Fact]
+        public void GetCategoryNameWithCountOfProducts_Invoke_NotNullResult()
+        {
+            var mock = new Mock<IRepository<Category>>();
+            mock.Setup(m => m.GetAll()).Returns(new List<Category>().AsQueryable());
+            var service = new CategoryService(mock.Object);
+
+            var result = service.GetCategoryNameWithCountOfProducts();
+
+            Assert.NotNull(result);
+        }
+
         private IQueryable<Category> GetCategories()
         {
             List<Category> categories = new List<Category>

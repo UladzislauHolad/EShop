@@ -212,6 +212,43 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Delete(1));
         }
 
+        [Fact]
+        public void GetOrder_InvokeWithValidId_ReturnOrderDTO()
+        {
+            int id = 1;
+            var repository = new Mock<IRepository<Order>>();
+            repository.Setup(m => m.Get(id)).Returns(new Order());
+            var service = new OrderService(repository.Object);
+
+            var result = service.GetOrder(id);
+
+            Assert.True(result is OrderDTO);
+        }
+
+        [Fact]
+        public void GetCountOfConfirmed_Invoke_NotNull()
+        {
+            var repository = new Mock<IRepository<Order>>();
+            repository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
+            var service = new OrderService(repository.Object);
+
+            var result = service.GetCountOfConfirmedProducts();
+
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void GetCountOfConfirmedOrdersByDate_Invoke_NotNull()
+        {
+            var repository = new Mock<IRepository<Order>>();
+            repository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
+            var service = new OrderService(repository.Object);
+
+            var result = service.GetCountOfConfirmedOrdersByDate();
+
+            Assert.NotNull(result);
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>

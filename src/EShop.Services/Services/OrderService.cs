@@ -23,7 +23,8 @@ namespace EShop.Services.Services
         public void Confirm(int id)
         {
             var order = _repository.Get(id);
-            if(order != null)
+
+            if (order != null)
             {
                 order.IsConfirmed = true;
                 order.Date = DateTime.Now;
@@ -41,12 +42,14 @@ namespace EShop.Services.Services
         public void Delete(int id)
         {
             var mapper = GetMapper();
+
             _repository.Delete(id);
         }
 
         public OrderDTO GetOrder(int id)
         {
             var mapper = GetMapper();
+
             return mapper.Map<OrderDTO>(_repository.Get(id));
         }
 
