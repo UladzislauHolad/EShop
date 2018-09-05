@@ -11,8 +11,8 @@ namespace EShop.Data.EF.ModelConfiguration
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
-            //builder.HasMany(o => o.ProductOrders)
-            //    .WithOne();
+            //builder.HasOne(o => o.PaymentMethod)
+            //    .WithMany(p => p.Orders);
         }
     }
 }

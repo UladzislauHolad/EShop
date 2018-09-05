@@ -14,6 +14,7 @@
     <Compile Remove="Migrations\20180820075022_AddCountToProduct.cs" />
     <Compile Remove="Migrations\20180820095138_AddOder.cs" />
     <Compile Remove="Migrations\20180903070947_Add Identity1.cs" />
+    <Compile Remove="Migrations\20180905084856_Add PaymentMethod.cs" />
   </ItemGroup>
 
   <ItemGroup>
