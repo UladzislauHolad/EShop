@@ -34,13 +34,13 @@
     <div class="navbar navbar-inverse" role="navigation">
         <a class="navbar-brand" asp-controller="Dashboard" asp-action="Index">E-SHOP</a>
         <ul class="nav navbar-nav">
-            <li><a asp-controller="Product" asp-action="Index">Products</a></li>
-            <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
-            <li><a asp-controller="Catalog" asp-action="Index">Catalog</a></li>
-            <li><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-            <li><a asp-controller="Order" asp-action="Index">Orders</a></li>
             @if (SignInManager.IsSignedIn(User))
             {
+                <li><a asp-controller="Product" asp-action="Index">Products</a></li>
+                <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
+                <li><a asp-controller="Catalog" asp-action="Index">Catalog</a></li>
+                <li><a asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                <li><a asp-controller="Order" asp-action="Index">Orders</a></li>
                 <li><a asp-controller="Admin" asp-action="Index">Users</a></li>
             }
         </ul>

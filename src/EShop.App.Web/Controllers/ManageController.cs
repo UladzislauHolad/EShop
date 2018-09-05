@@ -3,6 +3,7 @@ using EShop.App.Web.Models;
 using EShop.App.Web.Models.ManageViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
 {
+    [Authorize]
     public class ManageController : Controller
     {
         private readonly IAccountService _service;

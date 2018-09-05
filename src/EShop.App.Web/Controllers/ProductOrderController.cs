@@ -2,6 +2,7 @@
 using EShop.App.Web.Models;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
 {
+    [Authorize]
     public class ProductOrderController : Controller
     {
         private readonly IOrderService _orderService;

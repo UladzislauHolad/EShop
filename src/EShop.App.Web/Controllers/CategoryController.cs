@@ -6,12 +6,14 @@ using AutoMapper;
 using EShop.App.Web.Models;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EShop.App.Web.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly IMapper _mapper;

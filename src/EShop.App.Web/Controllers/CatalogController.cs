@@ -2,6 +2,7 @@
 using EShop.App.Web.Models;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
 {
+    [Authorize]
     public class CatalogController : Controller
     {
         private readonly IMapper _mapper;

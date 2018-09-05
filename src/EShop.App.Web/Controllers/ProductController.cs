@@ -2,6 +2,7 @@
 using EShop.App.Web.Models;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Linq;
 
 namespace EShop.App.Web.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private IProductService _service;
