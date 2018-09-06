@@ -126,14 +126,19 @@ namespace EShop.App.Web.Controllers
         [HttpPatch("Orders/{orderId}")]
         public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
         {
-            var existOrder = _service.GetOrder(orderId);
-            if (existOrder != null && existOrder.Status == "New")
+            if(ModelState.IsValid)
             {
-                existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
-                existOrder.PaymentMethod = null;
-                existOrder.PaymentMethodId = order.PaymentMethodId;
-                _service.Update(_mapper.Map<OrderDTO>(existOrder));
-                return Ok();
+                var existOrder = _service.GetOrder(orderId);
+                if (existOrder != null && existOrder.Status == "New")
+                {
+                    existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
+                    existOrder.PaymentMethod = null;
+                    existOrder.PaymentMethodId = order.PaymentMethodId;
+                    existOrder.DeliveryMethod = null;
+                    existOrder.DeliveryMethodId = order.DeliveryMethodId;
+                    _service.Update(_mapper.Map<OrderDTO>(existOrder));
+                    return Ok();
+                }
             }
             
             return BadRequest();

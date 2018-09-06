@@ -53,6 +53,12 @@
                 <div class="form-group col-md-3">
                     <label class="control-label">Payment Method</label>
                     <select id="payment-select" asp-for="PaymentMethodId" class="form-control"></select>
+                    <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Delivery Method</label>
+                    <select id="delivery-select" asp-for="DeliveryMethodId" class="form-control"></select>
+                    <span asp-validation-for="DeliveryMethodId" class="text-danger"></span>
                 </div>
             </div>
             <div class="text-center">
@@ -149,6 +155,24 @@
                 items += "<option value='0'>Not Exist</option>";
             }
             $("#payment-select").html(items);
+        });
+    });
+
+    $(function () {
+        var currentPayment = @Model.DeliveryMethodId;
+        var url = "/DeliveryMethod/api/Deliveries";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentPayment == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            if (data.length === 0) {
+                items += "<option value='0'>Not Exist</option>";
+            }
+            $("#delivery-select").html(items);
         });
     });
     function enableSubmit() {
