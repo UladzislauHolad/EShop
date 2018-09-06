@@ -8,8 +8,10 @@ namespace EShop.Services.DTO
     {
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
-        public bool IsConfirmed { get; set; }
+        public string Status { get; set; } = "New";
         public ICollection<ProductOrderDTO> ProductOrders { get; set; }
         public CustomerDTO Customer { get; set; }
+        public int PaymentMethodId { get; set; }
+        public PaymentMethodDTO PaymentMethod { get; set; }
     }
 }

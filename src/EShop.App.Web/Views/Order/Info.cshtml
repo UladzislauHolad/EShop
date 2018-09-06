@@ -10,14 +10,15 @@
         <h3>Customer</h3>
         @if (Model.Customer != null)
         {
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">First Name: @Model.Customer.FirstName</li>
-                <li class="list-group-item">Last Name: @Model.Customer.LastName</li>
-                <li class="list-group-item">Patronymic: @Model.Customer.Patronymic</li>
-                <li class="list-group-item">Phone: @Model.Customer.Phone</li>
-                <li class="list-group-item">Address: @Model.Customer.Address</li>
-                <li class="list-group-item">Comment: @Model.Customer.Comment</li>
-            </ul>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">First Name: @Model.Customer.FirstName</li>
+            <li class="list-group-item">Last Name: @Model.Customer.LastName</li>
+            <li class="list-group-item">Patronymic: @Model.Customer.Patronymic</li>
+            <li class="list-group-item">Phone: @Model.Customer.Phone</li>
+            <li class="list-group-item">Address: @Model.Customer.Address</li>
+            <li class="list-group-item">Comment: @Model.Customer.Comment</li>
+            <li class="list-group-item">Payment method: @(Model.PaymentMethod?.Name??"Not Exist")</li>
+        </ul>
         }
         else
         {
@@ -60,11 +61,6 @@
 
             </tbody>
         </table>
-        @*<div page-model="@Model.PageInfo" page-action="Index"
-                page-classes-enabled="true"
-                page-class="btn" page-class-normal="btn-default"
-                page-class-selected="btn-primary" class="btn-group">
-        </div>*@
         <div class="text-center">
             <div class="btn-group">
                 <a asp-controller="Order" asp-action="Index" class="btn btn-default">

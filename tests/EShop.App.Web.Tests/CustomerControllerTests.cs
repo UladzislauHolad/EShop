@@ -44,6 +44,49 @@ namespace EShop.App.Web.Tests
             Assert.True(result is BadRequestResult);
         }
 
+        [Fact]
+        public void CustomersSelectList_Invoke_JsonResult()
+        {
+            var service = new Mock<ICustomerService>();
+            service.Setup(m => m.GetCustomers()).Returns(new List<CustomerDTO>());
+            var mapper = GetMapper();
+            var controller = new CustomerController(service.Object, mapper);
+
+            var result = controller.CustomersSelectList();
+
+            Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void CustomerJson_InvokeWithValidId_JsonResult()
+        {
+            int id = 1;
+            var service = new Mock<ICustomerService>();
+            service.Setup(m => m.GetCustomer(id)).Returns(new CustomerDTO { CustomerId = 1 });
+            var mapper = GetMapper();
+            var controller = new CustomerController(service.Object, mapper);
+
+            var result = controller.CustomerJson(id);
+
+            Assert.True(result is JsonResult);
+            Assert.True((result as JsonResult).Value is CustomerDTO);
+        }
+
+        [Fact]
+        public void CustomerJson_InvokeWithNotValidId_NotFoundResult()
+        {
+            int id = 1;
+            CustomerDTO customer = null;
+            var service = new Mock<ICustomerService>();
+            service.Setup(m => m.GetCustomer(id)).Returns(customer);
+            var mapper = GetMapper();
+            var controller = new CustomerController(service.Object, mapper);
+
+            var result = controller.CustomerJson(id);
+
+            Assert.True(result is NotFoundResult);
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>

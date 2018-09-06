@@ -6,6 +6,7 @@ using EShop.Services.DTO;
 using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -59,23 +60,168 @@ namespace EShop.Services.Tests
             mock.Verify(m => m.Create(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once);
         }
 
+
+
         [Fact]
-        public void Confirm_ConfirmInvalidOrder_OrderNotConfirmed()
+        public void Pay_PayPaidOrder_ThrowInvalidOperationException()
         {
-            var order = new Order
+            var gotOrder = new Order
             {
-                OrderId = 1
+                OrderId = 1,
+                Status = "Paid",
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Paid"
             };
             var mapper = GetMapper();
             var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(order);
-            mock.Setup(repo => repo.Update(order));
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
             var service = new OrderService(mock.Object);
-            var orderDto = mapper.Map<Order, OrderDTO>(order);
+
+            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
+        }
+
+        [Fact]
+        public void Pay_PayNotConfirmedOrder_ThrowInvalidOperationException()
+        {
+            var gotOrder = new Order
+            {
+                OrderId = 1,
+                Status = "New",
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Paid"
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
+
+            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
+        }
+
+        [Fact]
+        public void Pay_PayOrderWithUnknownStatus_ThrowInvalidOperationException()
+        {
+            var gotOrder = new Order
+            {
+                OrderId = 1,
+                Status = "123",
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Paid"
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
+
+            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
+        }
+
+        [Fact]
+        public void Pay_PayConfirmedOrder_OrderIsPaid()
+        {
+            var gotOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Confirmed",
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Paid"
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
+
+            service.Pay(1);
+
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
+        }
+
+        [Fact]
+        public void Confirm_ConfirmCashPayment_OrderIsPaid()
+        {
+            var gotOrder = new Order
+            {
+                OrderId = 1,
+                PaymentMethod = new PaymentMethod
+                {
+                    Name = "Cash"
+                }
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Paid"
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
 
             service.Confirm(1);
 
-            mock.Verify(m => m.Update(It.IsAny<Order>()), Times.Once);
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
+        }
+
+        [Fact]
+        public void Confirm_ConfirmOnlinePayment_OrderIsConfirmed()
+        {
+            var gotOrder = new Order
+            {
+                OrderId = 1,
+                PaymentMethod = new PaymentMethod
+                {
+                    Name = "Online"
+                }
+            };
+            var updatedOrder = new Order
+            {
+                OrderId = 1,
+                Status = "Confirmed"
+            };
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
+
+            service.Confirm(1);
+
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
+        }
+
+        [Fact]
+        public void Confirm_ConfirmNotExistOrder_OrderIsNotUpdated()
+        {
+            Order gotOrder = null;
+            var mapper = GetMapper();
+            var mock = new Mock<IRepository<Order>>();
+            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(mock.Object);
+
+            service.Confirm(1);
+
+            mock.Verify(m => m.Update(It.IsAny<Order>()), Times.Never);
         }
 
         [Fact]

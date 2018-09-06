@@ -208,6 +208,46 @@ namespace EShop.App.Web.Tests
             Assert.True(result is JsonResult);
         }
 
+        [Fact]
+        public void ChartData_Invoke_JsonResult()
+        {
+            var mock = new Mock<IProductService>();
+            mock.Setup(m => m.GetCategoriesWithCountOfProducts()).Returns(new List<object>());
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+
+            var result = controller.ChartData();
+
+            Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void ProductSelect_InvokeWithId_PartialViewResult()
+        {
+            int id = 1;
+            var mock = new Mock<IProductService>();
+            mock.Setup(m => m.GetProducts()).Returns(new List<ProductDTO>());
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+
+            var result = controller.ProductSelect(id);
+
+            Assert.True(result is PartialViewResult);
+            Assert.True((result as PartialViewResult).Model is IEnumerable<ProductViewModel>);
+        }
+
+        [Fact]
+        public void Product_InvokeWithId_PartialViewResult()
+        {
+            int id = 1;
+            var mock = new Mock<IProductService>();
+            mock.Setup(m => m.GetProduct(id)).Returns(new ProductDTO());
+            ProductController controller = new ProductController(mock.Object, GetMapper());
+
+            var result = controller.Product(id);
+
+            Assert.True(result is PartialViewResult);
+            Assert.True((result as PartialViewResult).Model is ProductViewModel);
+        }
+
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg => {

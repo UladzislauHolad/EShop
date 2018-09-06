@@ -177,11 +177,50 @@ namespace EShop.App.Web.Tests
         public void ParentCategorySelect_Invoke_ReturnPartialView()
         {
             var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.GetCategories()).Returns(new List<CategoryDTO>());
             CategoryController controller = new CategoryController(mock.Object, GetMapper());
 
             var result = controller.ParentCategorySelect();
 
             Assert.True(result is PartialViewResult);
+            Assert.True((result as PartialViewResult).Model is IEnumerable<CategoryViewModel>);
+        }
+
+        [Fact]
+        public void CategorySingleSelect_Invoke_ReturnPartialView()
+        {
+            var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.GetCategories()).Returns(new List<CategoryDTO>());
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.CategorySingleSelect();
+
+            Assert.True(result is PartialViewResult);
+            Assert.True((result as PartialViewResult).Model is IEnumerable<CategoryViewModel>);
+        }
+
+        [Fact]
+        public void CategoryJson_Invoke_ReturnJsonResult()
+        {
+            var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.GetCategories()).Returns(new List<CategoryDTO>());
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.CategoryJson();
+
+            Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void CategoryWithCountOfProducts_Invoke_ReturnJsonResult()
+        {
+            var mock = new Mock<ICategoryService>();
+            mock.Setup(m => m.GetCategoryNameWithCountOfProducts()).Returns(new object());
+            CategoryController controller = new CategoryController(mock.Object, GetMapper());
+
+            var result = controller.CategoryWithCountOfProducts();
+
+            Assert.True(result is JsonResult);
         }
 
         private IQueryable<Category> GetCategories()

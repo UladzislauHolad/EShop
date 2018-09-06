@@ -18,7 +18,8 @@ namespace EShop.Data.Tests
         {
             var order = new Order
             {
-                OrderId = 1,
+                OrderId = 1,                
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -40,7 +41,7 @@ namespace EShop.Data.Tests
                     }
                 }
             };
-
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
@@ -52,6 +53,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.SaveChanges();
                 }
@@ -80,6 +82,7 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -101,6 +104,7 @@ namespace EShop.Data.Tests
                     }
                 }
             };
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
 
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
@@ -113,6 +117,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.SaveChanges();
                 }
@@ -141,6 +146,7 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -163,6 +169,8 @@ namespace EShop.Data.Tests
                     }
                 }
             };
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
+
 
             var productOrderForUpdate = new ProductOrder
             {
@@ -194,6 +202,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.SaveChanges();
                 }
@@ -388,7 +397,10 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1
             };
+
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
 
             var productOrder = new ProductOrder
             {
@@ -421,6 +433,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.Products.Add(product);
                     context.SaveChanges();
@@ -451,6 +464,7 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -473,7 +487,8 @@ namespace EShop.Data.Tests
                     }
                 }
             };
-
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
+            
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
@@ -485,6 +500,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.SaveChanges();
                 }

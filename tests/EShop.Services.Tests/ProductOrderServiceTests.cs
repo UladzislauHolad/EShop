@@ -269,6 +269,23 @@ namespace EShop.Services.Tests
             productOrderRepository.Verify(m => m.Create(It.IsAny<ProductOrder>()), Times.Once);
         }
 
+        [Fact]
+        public void GetProductOrder_InvokeWithValidId_ReturnProductOrderDTO()
+        {
+            int id = 1;
+            var productRepository = new Mock<IRepository<Product>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            var productOrderRepository = new Mock<IRepository<ProductOrder>>();
+            productOrderRepository.Setup(m => m.Get(id)).Returns(new ProductOrder { ProductOrderId = 1 });
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+
+            var result = service.GetProductOrder(id);
+
+            productOrderRepository.Verify(m => m.Get(id), Times.Once);
+            Assert.True(result is ProductOrderDTO);
+            Assert.Equal(id, result.ProductOrderId);
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>

@@ -43,7 +43,7 @@ namespace EShop.App.Web.Controllers
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(orderId));
             if (order != null)
             {
-                if(order.IsConfirmed)
+                if(order.Status != "New")
                 {
                     return BadRequest();
                 }
@@ -59,7 +59,7 @@ namespace EShop.App.Web.Controllers
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrderCreateModel.OrderId));
             if (order != null)
             {
-                if (order.IsConfirmed)
+                if (order.Status != "New")
                 {
                     return BadRequest();
                 }
@@ -77,7 +77,7 @@ namespace EShop.App.Web.Controllers
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
             if(productOrder != null && order != null)
             {
-                if (order.IsConfirmed)
+                if (order.Status != "New")
                 {
                     return BadRequest();
                 }
@@ -95,7 +95,7 @@ namespace EShop.App.Web.Controllers
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
             if (order != null && productOrder != null)
             {
-                if (order.IsConfirmed)
+                if (order.Status != "New")
                 {
                     return BadRequest();
                 }

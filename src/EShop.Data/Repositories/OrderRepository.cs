@@ -55,6 +55,7 @@ namespace EShop.Data.Repositories
         public Order Get(int id)
         {
             return _context.Set<Order>().AsNoTracking()
+                .Include(o => o.PaymentMethod)
                 .Include(o => o.Customer)
                 .Include(o => o.ProductOrders)
                 .ThenInclude(po => po.Product)
@@ -64,6 +65,7 @@ namespace EShop.Data.Repositories
         public IQueryable<Order> GetAll()
         {
             return _context.Set<Order>()
+                .Include(o => o.PaymentMethod)
                 .Include(o => o.Customer)
                 .Include(o => o.ProductOrders)
                 .ThenInclude(o => o.Product);

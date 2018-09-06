@@ -56,7 +56,7 @@ namespace EShop.App.Web.Controllers
             var order = _service.GetOrder(orderId);
             if(order != null)
             {
-                if (order.IsConfirmed)
+                if (order.Status != "New")
                 {
                     return BadRequest();
                 }
@@ -74,7 +74,7 @@ namespace EShop.App.Web.Controllers
             var order = _service.GetOrder(orderId);
             if(order != null)
             {
-                if(order.IsConfirmed)
+                if(order.Status != "New")
                 {
                     return BadRequest();
                 }
@@ -115,7 +115,7 @@ namespace EShop.App.Web.Controllers
             var order = _service.GetOrder(orderId);
             if(order != null)
             {
-                if(!order.IsConfirmed)
+                if(order.Status == "New")
                     return View(_mapper.Map<OrderViewModel>(order));
                 return View("Info", (_mapper.Map<OrderViewModel>(order)));
             }
@@ -127,14 +127,30 @@ namespace EShop.App.Web.Controllers
         public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
         {
             var existOrder = _service.GetOrder(orderId);
-            if (existOrder != null && !existOrder.IsConfirmed)
+            if (existOrder != null && existOrder.Status == "New")
             {
                 existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
+                existOrder.PaymentMethod = null;
+                existOrder.PaymentMethodId = order.PaymentMethodId;
                 _service.Update(_mapper.Map<OrderDTO>(existOrder));
                 return Ok();
             }
             
             return BadRequest();
+        }
+
+        [HttpPatch("Orders/api/Pay/{orderId}")]
+        public ActionResult Pay(int orderId)
+        {
+            try
+            {
+                _service.Pay(orderId);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

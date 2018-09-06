@@ -16,13 +16,19 @@
             {
             <tr id="@order.OrderId">
                 <td>@order.OrderId</td>
-                @if (order.IsConfirmed)
+                @if (order.Status != "New")
                 {
-                    <td style="color:green">Confirmed</td>
+                    <td style="color:green">@order.Status</td>
                     <td>@order.Date</td>
                     <td>
                         <div class="btn-toolbar pull-right" role="toolbar">
-                            <div class="btn-group" role="group"><a class="btn btn-info" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-info-sign"></span></a></div>
+                            <div class="btn-group" role="group">
+                                @if (order.Status == "Confirmed")
+                                {
+                                    <a class="btn btn-primary" onclick="confirmPay(@order.OrderId)"><span class="glyphicon glyphicon-ok"></span></a>
+                                }
+                                <a class="btn btn-info" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-info-sign"></span></a>
+                            </div>
                         </div>
                     </td>
                 }
@@ -42,11 +48,6 @@
             }
         </tbody>
     </table>
-    @*<div page-model="@Model.PageInfo" page-action="Index"
-             page-classes-enabled="true"
-             page-class="btn" page-class-normal="btn-default"
-             page-class-selected="btn-primary" class="btn-group">
-        </div>*@
     <div class="text-center">
         <a asp-action="Create" class="btn btn-primary">
             Add New Order
@@ -130,6 +131,47 @@
                 error: function (response) {
                     $("#modal-confirm-window").dialog("close");
                     customAlert("error", "Error!", "This order have no products or \"not available\" products!");
+                },
+                success: function () {
+                    location.reload();
+                }
+            });
+        }
+
+        function cancel() {
+            $("#modal-confirm-window").dialog("close");
+        }
+    }
+
+    function confirmPay(_id) {
+        var id = _id;
+        $("#modal-confirm-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Pay",
+                    click: pay
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function pay() {
+            $.ajax({
+                url: "Orders/api/Pay/" + id,
+                type: "Patch",
+                error: function (response) {
+                    $("#modal-confirm-window").dialog("close");
+                    customAlert("error", "Error!", response.responseText);
                 },
                 success: function () {
                     location.reload();

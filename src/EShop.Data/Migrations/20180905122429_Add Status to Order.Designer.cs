@@ -4,14 +4,16 @@ using EShop.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EShop.Data.Migrations
 {
     [DbContext(typeof(EShopContext))]
-    partial class EShopContextModelSnapshot : ModelSnapshot
+    [Migration("20180905122429_Add Status to Order")]
+    partial class AddStatustoOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace EShop.Data.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("PaymentMethodId");
+                    b.Property<int?>("PaymentMethodId");
 
                     b.Property<string>("Status");
 
@@ -328,8 +330,7 @@ namespace EShop.Data.Migrations
 
                     b.HasOne("EShop.Data.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany("Orders")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("PaymentMethodId");
                 });
 
             modelBuilder.Entity("EShop.Data.Entities.ProductCategory", b =>

@@ -8,11 +8,12 @@ namespace EShop.Data.Entities
     {
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
-        public bool IsConfirmed { get; set; }
+        public string Status { get; set; } = "New";
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
 
         public Customer Customer { get; set; }
 
+        public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
     }
 }

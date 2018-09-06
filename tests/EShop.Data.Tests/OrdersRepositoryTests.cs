@@ -17,12 +17,12 @@ namespace EShop.Data.Tests
         [Fact]
         public async Task GetAll_Invoke_OrdersReturned()
         {
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
             try
             {
-
                 var options = new DbContextOptionsBuilder<EShopContext>()
                     .UseSqlite(connection)
                     .Options;
@@ -31,6 +31,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.Set<PaymentMethod>().Add(payment);
                     context.Orders.AddRange(GetOrders());
                     context.SaveChanges();
                 }
@@ -55,8 +56,9 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1
             };
-            var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
@@ -70,7 +72,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
-                    context.Set<Product>().Add(product);
+                    context.Set<PaymentMethod>().Add(payment);
                     context.SaveChanges();
                     var repository = new OrderRepository(context);
                     repository.Create(order);
@@ -78,7 +80,7 @@ namespace EShop.Data.Tests
 
                 using (var context = new EShopContext(options))
                 {
-                    var result = context.Set<Order>().Find(order.OrderId);
+                    var result = context.Set<Order>().SingleOrDefault(o => o.OrderId == order.OrderId);
 
                     Assert.NotNull(result);
                 }
@@ -95,6 +97,7 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -125,6 +128,7 @@ namespace EShop.Data.Tests
                 Price = 1,
                 Count = 2
             };
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
 
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
@@ -137,7 +141,8 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
-                    context.Orders.Add(new Order { OrderId = 1});
+                    context.Set<PaymentMethod>().Add(payment);
+                    context.Orders.Add(new Order { OrderId = 1, PaymentMethodId = 1});
                     context.Products.Add(product);
                     context.SaveChanges();
                 }
@@ -170,6 +175,7 @@ namespace EShop.Data.Tests
             var order = new Order
             {
                 OrderId = 1,
+                PaymentMethodId = 1,
                 ProductOrders = new List<ProductOrder>
                 {
                     new ProductOrder
@@ -192,6 +198,7 @@ namespace EShop.Data.Tests
                     }
                 }
             };
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
 
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
@@ -204,6 +211,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.Add(order);
                     context.SaveChanges();
                 }
@@ -234,6 +242,8 @@ namespace EShop.Data.Tests
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
+            var payment = new PaymentMethod { PaymentMethodId = 1 };
+
 
             try
             {
@@ -243,6 +253,7 @@ namespace EShop.Data.Tests
                 using (var context = new EShopContext(options))
                 {
                     context.Database.EnsureCreated();
+                    context.PaymentMethods.Add(payment);
                     context.Orders.AddRange(GetOrders());
                     context.SaveChanges();
                 }
@@ -269,6 +280,7 @@ namespace EShop.Data.Tests
             List<Order> orders = new List<Order>
             {
                 new Order { OrderId = 1,
+                    PaymentMethodId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 1, OrderId = 1, Product = product }
@@ -276,24 +288,28 @@ namespace EShop.Data.Tests
                     Customer = new Customer()
                 },
                 new Order { OrderId = 2,
+                    PaymentMethodId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 2, OrderId = 2, Product = product }
                     }
                 },
                 new Order { OrderId = 3,
+                    PaymentMethodId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 3, OrderId = 3, Product = product }
                     }
                 },
                 new Order { OrderId = 4,
+                    PaymentMethodId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 4, OrderId = 4, Product = product }
                     }
                 },
                 new Order { OrderId = 5,
+                    PaymentMethodId = 1,
                     ProductOrders = new List<ProductOrder>
                     {
                         new ProductOrder { ProductOrderId = 5, OrderId = 5, Product = product }

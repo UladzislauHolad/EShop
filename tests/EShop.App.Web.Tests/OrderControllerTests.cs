@@ -63,10 +63,36 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
+        public void Create_InvokeWithNotValidModel_ViewResult()
+        {
+            var mock = new Mock<IOrderService>();
+            var controller = new OrderController(mock.Object, GetMapper());
+            controller.ModelState.AddModelError("","");
+
+            var result = controller.Create(new OrderViewModel());
+
+            Assert.True(result is ViewResult);
+        }
+
+        [Fact]
+        public void Create_InvokeWithValidModel_RedirectToActionResult()
+        {
+            var mapper = GetMapper();
+            var model = new OrderViewModel { Status = "1" };
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Create(It.Is<OrderDTO>(o => o.Status == model.Status)));
+            var controller = new OrderController(mock.Object, mapper);
+
+            var result = controller.Create(model);
+
+            Assert.True(result is RedirectToActionResult);
+        }
+
+        [Fact]
         public void Edit_InvokeWithValidId_ViewResult()
         {
             var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { IsConfirmed = false });
+            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { Status = "New" });
             var controller = new OrderController(mock.Object, GetMapper());
 
             var result = controller.Edit(1);
@@ -79,7 +105,7 @@ namespace EShop.App.Web.Tests
         public void Edit_InvokeWithIdOfConfirmedOrder_ViewResult()
         {
             var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { IsConfirmed = true });
+            mock.Setup(m => m.GetOrder(1)).Returns(new OrderDTO { Status = "Confirmed" });
             var controller = new OrderController(mock.Object, GetMapper());
 
             var result = controller.Edit(1);
@@ -105,7 +131,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Edit_InvokeWithValidOrder_OkResult()
         {
-            OrderDTO order = new OrderDTO { OrderId = 1, IsConfirmed = false };
+            OrderDTO order = new OrderDTO { OrderId = 1, Status = "New" };
             OrderViewModel orderViewModel = new OrderViewModel { OrderId = 1 };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
@@ -135,7 +161,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Edit_InvokeWithConfirmedOrder_BadRequest()
         {
-            OrderDTO order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            OrderDTO order = new OrderDTO { OrderId = 1, Status = "Confirmed" };
             OrderViewModel orderViewModel = new OrderViewModel { OrderId = 1 };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
@@ -177,7 +203,7 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Delete_DeleteConfirmedOrder_BadRequestResult()
         {
-            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var order = new OrderDTO { OrderId = 1, Status = "Confirmed" };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             mock.Setup(m => m.Delete(1));
@@ -192,7 +218,7 @@ namespace EShop.App.Web.Tests
         public void Confirm_ConfirmNotConfirmedOrder_OkResult()
         {
             var order = new OrderDTO { OrderId = 1 };
-            var orderForUpdate = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             mock.Setup(m => m.Confirm(1));
@@ -209,8 +235,8 @@ namespace EShop.App.Web.Tests
         [Fact]
         public void Confirm_ConfirmConfirmedOrder_BadRequestResult()
         {
-            var order = new OrderDTO { OrderId = 1, IsConfirmed = true };
-            var orderForUpdate = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var order = new OrderDTO { OrderId = 1, Status = "Confirmed" };
+            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             mock.Setup(m => m.Confirm(1));
@@ -225,7 +251,7 @@ namespace EShop.App.Web.Tests
         public void Confirm_ConfirmNotValidOrder_NotFoundResult()
         {
             OrderDTO order = null;
-            var orderForUpdate = new OrderDTO { OrderId = 1, IsConfirmed = true };
+            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
             var mock = new Mock<IOrderService>();
             mock.Setup(m => m.GetOrder(1)).Returns(order);
             mock.Setup(m => m.Update(orderForUpdate));
@@ -251,6 +277,43 @@ namespace EShop.App.Web.Tests
             }).CreateMapper();
 
             return mapper;
+        }
+
+        [Fact]
+        public void Pay_ServiceThrowWithException_BadRequestResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Pay(id)).Throws(new InvalidOperationException());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Pay(id);
+
+            Assert.True(result is BadRequestObjectResult);
+        }
+
+        [Fact]
+        public void GetConfirmedOrdersByDate_Invoke_JsonResult()
+        {
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetCountOfConfirmedOrdersByDate()).Returns(new object());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.GetConfirmedOrdersByDate();
+
+            Assert.True(result is JsonResult);
+        }
+
+        [Fact]
+        public void GetConfirmedProducts_Invoke_JsonResult()
+        {
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.GetCountOfConfirmedProducts()).Returns(new object());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.GetConfirmedProducts();
+
+            Assert.True(result is JsonResult);
         }
 
         private IQueryable<OrderDTO> GetOrders()

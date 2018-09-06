@@ -26,7 +26,14 @@ namespace EShop.Services.Services
 
             if (order != null)
             {
-                order.IsConfirmed = true;
+                if(order.PaymentMethod.Name == "Cash")
+                {
+                    order.Status = "Paid";
+                }
+                else
+                {
+                    order.Status = "Confirmed";
+                }
                 order.Date = DateTime.Now;
                 _repository.Update(order);
             }
@@ -90,6 +97,30 @@ namespace EShop.Services.Services
 
             return result;
         }
+
+        public void Pay(int id)
+        {
+            var order = _repository.Get(id);
+
+            if (order != null)
+            {
+                if (order.Status == "Paid")
+                {
+                    throw new InvalidOperationException("This order has already paid");
+                }
+                if(order.Status == "New")
+                {
+                    throw new InvalidOperationException("This order is not confirmed");
+                }
+                if(order.Status != "Confirmed")
+                {
+                    throw new InvalidOperationException("This order has unknown status");
+                }
+                order.Status = "Paid";
+                _repository.Update(order);
+            }
+        }
+
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>
@@ -97,6 +128,7 @@ namespace EShop.Services.Services
                 cfg.AddProfile(new OrderProfile());
                 cfg.AddProfile(new ProductOrderProfile());
                 cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new PaymentMethodDTOProfile());
             }).CreateMapper();
 
             return mapper;
@@ -105,7 +137,7 @@ namespace EShop.Services.Services
         public object GetCountOfConfirmedProducts()
         {
             var orders = _repository.GetAll();
-            var products = orders.Where(o => o.IsConfirmed)
+            var products = orders.Where(o => o.Status == "Confirmed")
                 .SelectMany(o => o.ProductOrders)
                 .GroupBy(pc => pc.Name)
                 .Select(g => new { Name = g.Key, Count = g.Select(p => p.OrderCount).Sum() });
@@ -116,7 +148,7 @@ namespace EShop.Services.Services
         public object GetCountOfConfirmedOrdersByDate()
         {
             var orders = _repository.GetAll()
-                .Where(o => o.IsConfirmed)
+                .Where(o => o.Status == "Paid")
                 .GroupBy(o => o.Date.Date)
                 .Select(g => new { Date = g.Key, Count = g.Count() });
             
