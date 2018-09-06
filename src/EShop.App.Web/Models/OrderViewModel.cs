@@ -1,4 +1,5 @@
-﻿using EShop.App.Web.Models.PaymentMethodViewModels;
+﻿using EShop.App.Web.Models.DeliveryMethodViewModels;
+using EShop.App.Web.Models.PaymentMethodViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace EShop.App.Web.Models
         public CustomerViewModel Customer { get; set; }
         public int PaymentMethodId { get; set; }
         public PaymentMethodViewModel PaymentMethod { get; set; }
+        public int DeliveryMethodId { get; set; }
+        public DeliveryMethodViewModel DeliveryMethod { get; set; }
     }
 }

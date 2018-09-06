@@ -47,6 +47,7 @@ namespace EShop.App.Web
             services.AddTransient<IRepository<ProductOrder>, ProductOrderRepository>();
             services.AddTransient<IRepository<Customer>, CustomerRepository>();
             services.AddTransient<IRepository<PaymentMethod>, PaymentMethodRepository>();
+            services.AddTransient<IRepository<DeliveryMethod>, DeliveryMethodRepository>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IOrderService, OrderService>();
@@ -54,6 +55,7 @@ namespace EShop.App.Web
             services.AddTransient<ICustomerService, СustomerService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
+            services.AddTransient<IDeliveryMethodService, DeliveryMethodService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc()
                 .AddFluentValidation(fvc => 

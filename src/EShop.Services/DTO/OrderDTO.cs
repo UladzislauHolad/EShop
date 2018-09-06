@@ -13,5 +13,7 @@ namespace EShop.Services.DTO
         public CustomerDTO Customer { get; set; }
         public int PaymentMethodId { get; set; }
         public PaymentMethodDTO PaymentMethod { get; set; }
+        public int? DeliveryMethodId { get; set; }
+        public DeliveryMethodDTO DeliveryMethod { get; set; }
     }
 }
