@@ -15,5 +15,8 @@ namespace EShop.Data.Entities
 
         public int PaymentMethodId { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+
+        public int? DeliveryMethodId { get; set; }
+        public DeliveryMethod DeliveryMethod { get; set; }
     }
 }

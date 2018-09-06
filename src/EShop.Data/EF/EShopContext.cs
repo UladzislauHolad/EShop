@@ -16,6 +16,7 @@ namespace EShop.Data.EF
         public virtual DbSet<ProductOrder> ProductOrders { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public virtual DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         public EShopContext(DbContextOptions<EShopContext> options) : base(options)
         {
@@ -26,7 +27,7 @@ namespace EShop.Data.EF
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            //modelBuilder.ApplyConfiguration(new ProductOrderConfiguration());
+            modelBuilder.ApplyConfiguration(new DeliveryMethodConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
         }
