@@ -157,5 +157,47 @@ namespace EShop.App.Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPatch("Orders/api/Pack/{orderId}")]
+        public ActionResult Pack(int orderId)
+        {
+            try
+            {
+                _service.Pack(orderId);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("Orders/api/Deliver/{orderId}")]
+        public ActionResult Deliver(int orderId)
+        {
+            try
+            {
+                _service.Deliver(orderId);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("Orders/api/Complete/{orderId}")]
+        public ActionResult Complete(int orderId)
+        {
+            try
+            {
+                _service.Complete(orderId);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

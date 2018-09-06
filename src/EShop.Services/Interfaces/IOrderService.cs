@@ -17,5 +17,8 @@ namespace EShop.Services.Interfaces
         object GetCountOfConfirmedProducts();
         object GetCountOfConfirmedOrdersByDate();
         void Pay(int id);
+        void Pack(int id);
+        void Deliver(int id);
+        void Complete(int id);
     }
 }

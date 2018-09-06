@@ -280,7 +280,7 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Pay_ServiceThrowWithException_BadRequestResult()
+        public void Pay_ServiceThrowException_BadRequestResult()
         {
             int id = 1;
             var mock = new Mock<IOrderService>();
@@ -288,6 +288,97 @@ namespace EShop.App.Web.Tests
             var controller = new OrderController(mock.Object, GetMapper());
 
             var result = controller.Pay(id);
+
+            Assert.True(result is BadRequestObjectResult);
+        }
+
+        [Fact]
+        public void Pay_ServiceNotThrowException_OkResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Pay(id));
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Pay(id);
+
+            Assert.True(result is OkResult);
+        }
+
+        [Fact]
+        public void Pack_ServiceThrowException_BadRequestResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Pack(id)).Throws(new InvalidOperationException());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Pack(id);
+
+            Assert.True(result is BadRequestObjectResult);
+        }
+
+        [Fact]
+        public void Pack_ServiceNotThrowException_OkResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Pack(id));
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Pack(id);
+
+            Assert.True(result is OkResult);
+        }
+
+        [Fact]
+        public void Deliver_ServiceThrowException_BadRequestResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Deliver(id)).Throws(new InvalidOperationException());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Deliver(id);
+
+            Assert.True(result is BadRequestObjectResult);
+        }
+
+        [Fact]
+        public void Deliver_ServiceNotThrowException_OkResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Deliver(id));
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Deliver(id);
+
+            Assert.True(result is OkResult);
+        }
+
+        [Fact]
+        public void Complete_ServiceNotThrowException_OkResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Complete(id));
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Complete(id);
+
+            Assert.True(result is OkResult);
+        }
+
+        [Fact]
+        public void Complete_ServiceThrowException_BadRequestObjectResult()
+        {
+            int id = 1;
+            var mock = new Mock<IOrderService>();
+            mock.Setup(m => m.Complete(id)).Throws(new InvalidOperationException());
+            var controller = new OrderController(mock.Object, GetMapper());
+
+            var result = controller.Complete(id);
 
             Assert.True(result is BadRequestObjectResult);
         }

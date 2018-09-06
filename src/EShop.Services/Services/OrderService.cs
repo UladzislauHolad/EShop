@@ -119,8 +119,72 @@ namespace EShop.Services.Services
                 order.Status = "Paid";
                 _repository.Update(order);
             }
+            else
+                throw new InvalidOperationException("This order is not exist");
         }
 
+        public void Pack(int id)
+        {
+            var order = _repository.Get(id);
+
+            if (order != null)
+            {
+                if (order.Status == "Packed")
+                {
+                    throw new InvalidOperationException("This order has already packed");
+                }
+                if (order.Status != "Paid")
+                {
+                    throw new InvalidOperationException("This order is not paid");
+                }
+                order.Status = "Packed";
+                _repository.Update(order);
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
+        }
+
+        public void Deliver(int id)
+        {
+            var order = _repository.Get(id);
+
+            if (order != null)
+            {
+                if (order.Status == "Delivered")
+                {
+                    throw new InvalidOperationException("This order has already delivered");
+                }
+                if (order.Status != "Packed")
+                {
+                    throw new InvalidOperationException("This order is not packed");
+                }
+                order.Status = "Delivered";
+                _repository.Update(order);
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
+        }
+
+        public void Complete(int id)
+        {
+            var order = _repository.Get(id);
+
+            if (order != null)
+            {
+                if (order.Status == "Completed")
+                {
+                    throw new InvalidOperationException("This order has already completed");
+                }
+                if (order.Status != "Delivered")
+                {
+                    throw new InvalidOperationException("This order is not delivered");
+                }
+                order.Status = "Completed";
+                _repository.Update(order);
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
+        }
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>

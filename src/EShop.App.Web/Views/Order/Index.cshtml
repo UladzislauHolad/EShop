@@ -25,7 +25,19 @@
                             <div class="btn-group" role="group">
                                 @if (order.Status == "Confirmed")
                                 {
-                                    <a class="btn btn-primary" onclick="confirmPay(@order.OrderId)"><span class="glyphicon glyphicon-ok"></span></a>
+                                    <a class="btn btn-primary" onclick='confirmAction("Pay", "Orders/api/Pay/", "patch", @order.OrderId)'>Pay</a>
+                                }
+                                else if (order.Status == "Paid")
+                                {
+                                    <a class="btn btn-primary" onclick='confirmAction("Pack", "Orders/api/Pack/", "patch", @order.OrderId)'>Pack</a>
+                                }
+                                else if (order.Status == "Packed" && order.DeliveryMethod.Name == "Сourier")
+                                {
+                                    <a class="btn btn-primary" onclick='confirmAction("Deliver", "Orders/api/Deliver/", "patch", @order.OrderId)'>Deliver</a>
+                                }
+                                else if (order.Status == "Delivered")
+                                {
+                                    <a class="btn btn-primary" onclick='confirmAction("Complete", "Orders/api/Complete/", "patch", @order.OrderId)'>Complete</a>
                                 }
                                 <a class="btn btn-info" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-info-sign"></span></a>
                             </div>
@@ -38,9 +50,9 @@
                     <td></td>
                     <td>
                         <div class="btn-toolbar pull-right" role="toolbar">
-                            <div class="btn-group" role="group"><a class="btn btn-success" onclick="confirmOrder(@order.OrderId)">Confirm</a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-success" onclick='confirmAction("Confirm", "Orders/api/", "patch", @order.OrderId)'>Confirm</a></div>
                             <div class="btn-group" role="group"><a class="btn btn-warning" asp-controller="Order" asp-action="Edit" asp-route-orderId="@order.OrderId"><span class="glyphicon glyphicon-pencil"></span></a></div>
-                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@order.OrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                            <div class="btn-group" role="group"><a class="btn btn-danger" onclick='confirmAction("Delete", "Orders/", "delete", @order.OrderId)'><span class="glyphicon glyphicon-trash"></span></a></div>
                         </div>
                     </td>
                 }
@@ -55,54 +67,10 @@
     </div>
 </div>
 
-
-<div id="modal-delete-window"></div>
 <div id="modal-confirm-window"></div>
 
 <script>
-    function confirmDelete(_id) {
-        var id = _id;
-        $("#modal-delete-window").dialog({
-            modal: true,
-            title: "Are you sure?",
-            maxHeight: 300,
-            maxWidth: 500,
-            minWidth: 250,
-            minHeight: 100,
-            draggable: false,
-            buttons: [
-                {
-                    text: "Delete",
-                    click: deleteConfirmed
-                },
-                {
-                    text: "Cancel",
-                    click: cancel
-                }
-            ]
-        });
-
-        function deleteConfirmed() {
-            $.ajax({
-                url: "/Orders/" + id,
-                type: "Delete",
-                success: function () {
-                    customAlert("success", "Success!", "Order is deleted!");
-                    $("tr#" + id).remove();
-                    $("#modal-delete-window").dialog("close");
-                },
-                error: function () {
-                    customAlert("error", "Error!", "Order is not deleted!");
-                }
-            });
-        }
-
-        function cancel() {
-            $("#modal-delete-window").dialog("close");
-        }
-    }
-
-    function confirmOrder(_id) {
+    function confirmAction(actionName, url, httpType, _id) {
         var id = _id;
         $("#modal-confirm-window").dialog({
             modal: true,
@@ -114,8 +82,8 @@
             draggable: false,
             buttons: [
                 {
-                    text: "Confirm",
-                    click: confirm
+                    text: actionName,
+                    click: action
                 },
                 {
                     text: "Cancel",
@@ -124,51 +92,10 @@
             ]
         });
 
-        function confirm() {
+        function action() {
             $.ajax({
-                url: "Orders/api/" + id,
-                type: "Patch",
-                error: function (response) {
-                    $("#modal-confirm-window").dialog("close");
-                    customAlert("error", "Error!", "This order have no products or \"not available\" products!");
-                },
-                success: function () {
-                    location.reload();
-                }
-            });
-        }
-
-        function cancel() {
-            $("#modal-confirm-window").dialog("close");
-        }
-    }
-
-    function confirmPay(_id) {
-        var id = _id;
-        $("#modal-confirm-window").dialog({
-            modal: true,
-            title: "Are you sure?",
-            maxHeight: 300,
-            maxWidth: 500,
-            minWidth: 250,
-            minHeight: 100,
-            draggable: false,
-            buttons: [
-                {
-                    text: "Pay",
-                    click: pay
-                },
-                {
-                    text: "Cancel",
-                    click: cancel
-                }
-            ]
-        });
-
-        function pay() {
-            $.ajax({
-                url: "Orders/api/Pay/" + id,
-                type: "Patch",
+                url: url + id,
+                type: httpType,
                 error: function (response) {
                     $("#modal-confirm-window").dialog("close");
                     customAlert("error", "Error!", response.responseText);
