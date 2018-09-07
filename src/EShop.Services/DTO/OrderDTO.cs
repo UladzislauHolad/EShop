@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EShop.Services.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -15,5 +16,6 @@ namespace EShop.Services.DTO
         public PaymentMethodDTO PaymentMethod { get; set; }
         public int? DeliveryMethodId { get; set; }
         public DeliveryMethodDTO DeliveryMethod { get; set; }
+        public Commands Command { get; set; }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using EShop.Services.DTO;
+using EShop.Services.Infrastructure;
+using EShop.Services.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,13 +14,8 @@ namespace EShop.Services.Interfaces
         OrderDTO GetOrder(int id);
         void Update(OrderDTO orderDTO);
         void Delete(int id);
-        void Confirm(int id);
-        bool IsConfirmAvailable(int id);
         object GetCountOfConfirmedProducts();
         object GetCountOfConfirmedOrdersByDate();
-        void Pay(int id);
-        void Pack(int id);
-        void Deliver(int id);
-        void Complete(int id);
+        void ChangeState(int id);
     }
 }

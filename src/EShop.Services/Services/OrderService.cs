@@ -2,6 +2,8 @@
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure;
+using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using EShop.Services.Profiles;
 using System;
@@ -18,25 +20,6 @@ namespace EShop.Services.Services
         public OrderService(IRepository<Order> repository)
         {
             _repository = repository;
-        }
-
-        public void Confirm(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if(order.PaymentMethod.Name == "Cash")
-                {
-                    order.Status = "Paid";
-                }
-                else
-                {
-                    order.Status = "Confirmed";
-                }
-                order.Date = DateTime.Now;
-                _repository.Update(order);
-            }
         }
 
         public void Create(OrderDTO orderDTO)
@@ -64,7 +47,25 @@ namespace EShop.Services.Services
         {
             var mapper = GetMapper();
 
-            return mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            var orders = mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            var nextActionSetter = new NextActionState();
+
+            foreach (var order in orders)
+            {
+                if (IsConfirmAvailable(order))
+                {
+                    Enum.TryParse(order.Status, out StatusStates currentState);
+                    Enum.TryParse(order.PaymentMethod.Name, out PaymentMethods paymentMethod);
+                    Enum.TryParse(order.DeliveryMethod.Name, out DeliveryMethods deliveryMethod);
+                    order.Command = nextActionSetter.GetNext(currentState, paymentMethod, deliveryMethod);
+                }
+                else
+                {
+                    order.Command = Commands.Nothing;
+                }
+            }
+
+            return orders;
         }
 
         public void Update(OrderDTO orderDTO)
@@ -74,117 +75,27 @@ namespace EShop.Services.Services
             _repository.Update(mapper.Map<Order>(orderDTO));
         }
 
-        public bool IsConfirmAvailable(int id)
+        private bool IsConfirmAvailable(OrderDTO order)
         {
             bool result = true;
-            var order = _repository.Get(id);
-            if(order != null)
+           
+            if(order.ProductOrders != null)
             {
-                if(order.ProductOrders != null)
-                {
-                    bool haveDeletedOrder = order.ProductOrders.Any(po => po.Product.IsDeleted == true);
-                    bool haveNoProductOrders = order.ProductOrders.Count == 0;
-                    if (haveDeletedOrder || haveNoProductOrders)
-                    {
-                        result = false;
-                    }
-                }
-                else
+                bool haveDeletedOrder = order.ProductOrders.Any(po => po.Product.IsDeleted == true);
+                bool haveNoProductOrders = order.ProductOrders.Count == 0;
+                if (haveDeletedOrder || haveNoProductOrders)
                 {
                     result = false;
                 }
+            }
+            else
+            {
+                result = false;
             }
 
             return result;
         }
 
-        public void Pay(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if (order.Status == "Paid")
-                {
-                    throw new InvalidOperationException("This order has already paid");
-                }
-                if(order.Status == "New")
-                {
-                    throw new InvalidOperationException("This order is not confirmed");
-                }
-                if(order.Status != "Confirmed")
-                {
-                    throw new InvalidOperationException("This order has unknown status");
-                }
-                order.Status = "Paid";
-                _repository.Update(order);
-            }
-            else
-                throw new InvalidOperationException("This order is not exist");
-        }
-
-        public void Pack(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if (order.Status == "Packed")
-                {
-                    throw new InvalidOperationException("This order has already packed");
-                }
-                if (order.Status != "Paid")
-                {
-                    throw new InvalidOperationException("This order is not paid");
-                }
-                order.Status = "Packed";
-                _repository.Update(order);
-            }
-            else
-                throw new InvalidOperationException("This order is not exist");
-        }
-
-        public void Deliver(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if (order.Status == "Delivered")
-                {
-                    throw new InvalidOperationException("This order has already delivered");
-                }
-                if (order.Status != "Packed")
-                {
-                    throw new InvalidOperationException("This order is not packed");
-                }
-                order.Status = "Delivered";
-                _repository.Update(order);
-            }
-            else
-                throw new InvalidOperationException("This order is not exist");
-        }
-
-        public void Complete(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if (order.Status == "Completed")
-                {
-                    throw new InvalidOperationException("This order has already completed");
-                }
-                if (order.Status != "Delivered")
-                {
-                    throw new InvalidOperationException("This order is not delivered");
-                }
-                order.Status = "Completed";
-                _repository.Update(order);
-            }
-            else
-                throw new InvalidOperationException("This order is not exist");
-        }
         private IMapper GetMapper()
         {
             var mapper = new MapperConfiguration(cfg =>
@@ -198,14 +109,14 @@ namespace EShop.Services.Services
             return mapper;
         }
 
-        public object GetCountOfConfirmedProducts()
+        public object GetCountOfConfirmedProducts()//критерий передавать в паараметре
         {
             var orders = _repository.GetAll();
             var products = orders.Where(o => o.Status == "Confirmed")
                 .SelectMany(o => o.ProductOrders)
                 .GroupBy(pc => pc.Name)
                 .Select(g => new { Name = g.Key, Count = g.Select(p => p.OrderCount).Sum() });
-
+            //поменять object
             return products;
         }
 
@@ -217,6 +128,31 @@ namespace EShop.Services.Services
                 .Select(g => new { Date = g.Key, Count = g.Count() });
             
             return orders;
+        }
+
+        public void ChangeState(int id)
+        {
+            var order = _repository.Get(id);
+            if(order != null)
+            {
+                Enum.TryParse(order.Status, out StatusStates statusState);
+                Enum.TryParse(order.PaymentMethod.Name, out PaymentMethods paymentMethod);
+                Enum.TryParse(order.DeliveryMethod.Name, out DeliveryMethods deliveryMethod);
+                NextActionState actionState = new NextActionState();
+                StatusState status = new StatusState(statusState);
+                try
+                {
+                    Commands nextAction = actionState.GetNext(statusState, paymentMethod, deliveryMethod);
+                    order.Status = status.GetNext(nextAction).ToString();
+                    _repository.Update(order);
+                }
+                catch(InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
         }
     }
 }

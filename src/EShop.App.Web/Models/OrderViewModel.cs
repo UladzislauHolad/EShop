@@ -1,5 +1,7 @@
 ﻿using EShop.App.Web.Models.DeliveryMethodViewModels;
+using EShop.App.Web.Models.OrderViewModels;
 using EShop.App.Web.Models.PaymentMethodViewModels;
+using EShop.Services.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +20,7 @@ namespace EShop.App.Web.Models
         public PaymentMethodViewModel PaymentMethod { get; set; }
         public int DeliveryMethodId { get; set; }
         public DeliveryMethodViewModel DeliveryMethod { get; set; }
+        public Commands Command { get; set; }
+        public ButtonConfiguration ButtonConfiguration { get; set; }
     }
 }

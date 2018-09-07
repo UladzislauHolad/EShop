@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.OrderViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -28,7 +29,8 @@ namespace EShop.App.Web.Controllers
         {
             var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders()
                 .OrderByDescending(o => o.OrderId));
-
+            SetButtonConfiguration(orders);
+            
             return View(orders);
         }
 
@@ -63,31 +65,6 @@ namespace EShop.App.Web.Controllers
                 _service.Delete(orderId);
 
                 return Ok();
-            }
-
-            return NotFound();
-        }
-
-        [HttpPatch("Orders/api/{orderId}")]
-        public ActionResult Confirm(int orderId)
-        {
-            var order = _service.GetOrder(orderId);
-            if(order != null)
-            {
-                if(order.Status != "New")
-                {
-                    return BadRequest();
-                }
-                if(_service.IsConfirmAvailable(orderId))
-                {
-                    _service.Confirm(orderId);
-
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
             }
 
             return NotFound();
@@ -144,12 +121,12 @@ namespace EShop.App.Web.Controllers
             return BadRequest();
         }
 
-        [HttpPatch("Orders/api/Pay/{orderId}")]
-        public ActionResult Pay(int orderId)
+        [HttpPatch("Orders/api/{orderId}")]
+        public ActionResult ChangeState(int orderId)
         {
             try
             {
-                _service.Pay(orderId);
+                _service.ChangeState(orderId);
                 return Ok();
             }
             catch (InvalidOperationException ex)
@@ -158,45 +135,13 @@ namespace EShop.App.Web.Controllers
             }
         }
 
-        [HttpPatch("Orders/api/Pack/{orderId}")]
-        public ActionResult Pack(int orderId)
+        private void SetButtonConfiguration(IEnumerable<OrderViewModel> orders)
         {
-            try
-            {
-                _service.Pack(orderId);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+            ButtonConfigurator configurator = new ButtonConfigurator();
 
-        [HttpPatch("Orders/api/Deliver/{orderId}")]
-        public ActionResult Deliver(int orderId)
-        {
-            try
+            foreach (var order in orders)
             {
-                _service.Deliver(orderId);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPatch("Orders/api/Complete/{orderId}")]
-        public ActionResult Complete(int orderId)
-        {
-            try
-            {
-                _service.Complete(orderId);
-                return Ok();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
+                order.ButtonConfiguration = configurator.GetConfiguration(order.Command);
             }
         }
     }

@@ -215,175 +215,6 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Confirm_ConfirmNotConfirmedOrder_OkResult()
-        {
-            var order = new OrderDTO { OrderId = 1 };
-            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Confirm(1));
-            mock.Setup(m => m.IsConfirmAvailable(1)).Returns(true);
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Confirm(1);
-
-            mock.Verify(m => m.Confirm(1), Times.Once);
-            mock.Verify(m => m.IsConfirmAvailable(1), Times.Once);
-            Assert.True(result is OkResult);
-        }
-
-        [Fact]
-        public void Confirm_ConfirmConfirmedOrder_BadRequestResult()
-        {
-            var order = new OrderDTO { OrderId = 1, Status = "Confirmed" };
-            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Confirm(1));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Confirm(1);
-
-            Assert.True(result is BadRequestResult);
-        }
-
-        [Fact]
-        public void Confirm_ConfirmNotValidOrder_NotFoundResult()
-        {
-            OrderDTO order = null;
-            var orderForUpdate = new OrderDTO { OrderId = 1, Status = "Confirmed" };
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Update(orderForUpdate));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Confirm(1);
-
-            Assert.True(result is NotFoundResult);
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<OrderViewModel, OrderDTO>();
-                cfg.CreateMap<OrderDTO, OrderViewModel>();
-
-                cfg.CreateMap<ProductOrderDTO, ProductOrderViewModel>();
-                cfg.CreateMap<ProductOrderViewModel, ProductOrderDTO>();
-
-                cfg.CreateMap<ProductDTO, ProductViewModel>();
-                cfg.CreateMap<ProductViewModel, ProductDTO>();
-            }).CreateMapper();
-
-            return mapper;
-        }
-
-        [Fact]
-        public void Pay_ServiceThrowException_BadRequestResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Pay(id)).Throws(new InvalidOperationException());
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Pay(id);
-
-            Assert.True(result is BadRequestObjectResult);
-        }
-
-        [Fact]
-        public void Pay_ServiceNotThrowException_OkResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Pay(id));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Pay(id);
-
-            Assert.True(result is OkResult);
-        }
-
-        [Fact]
-        public void Pack_ServiceThrowException_BadRequestResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Pack(id)).Throws(new InvalidOperationException());
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Pack(id);
-
-            Assert.True(result is BadRequestObjectResult);
-        }
-
-        [Fact]
-        public void Pack_ServiceNotThrowException_OkResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Pack(id));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Pack(id);
-
-            Assert.True(result is OkResult);
-        }
-
-        [Fact]
-        public void Deliver_ServiceThrowException_BadRequestResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Deliver(id)).Throws(new InvalidOperationException());
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Deliver(id);
-
-            Assert.True(result is BadRequestObjectResult);
-        }
-
-        [Fact]
-        public void Deliver_ServiceNotThrowException_OkResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Deliver(id));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Deliver(id);
-
-            Assert.True(result is OkResult);
-        }
-
-        [Fact]
-        public void Complete_ServiceNotThrowException_OkResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Complete(id));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Complete(id);
-
-            Assert.True(result is OkResult);
-        }
-
-        [Fact]
-        public void Complete_ServiceThrowException_BadRequestObjectResult()
-        {
-            int id = 1;
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.Complete(id)).Throws(new InvalidOperationException());
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Complete(id);
-
-            Assert.True(result is BadRequestObjectResult);
-        }
-
-        [Fact]
         public void GetConfirmedOrdersByDate_Invoke_JsonResult()
         {
             var mock = new Mock<IOrderService>();
@@ -445,6 +276,23 @@ namespace EShop.App.Web.Tests
             };
 
             return orders.AsQueryable();
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<OrderViewModel, OrderDTO>();
+                cfg.CreateMap<OrderDTO, OrderViewModel>();
+
+                cfg.CreateMap<ProductOrderDTO, ProductOrderViewModel>();
+                cfg.CreateMap<ProductOrderViewModel, ProductOrderDTO>();
+
+                cfg.CreateMap<ProductDTO, ProductViewModel>();
+                cfg.CreateMap<ProductViewModel, ProductDTO>();
+            }).CreateMapper();
+
+            return mapper;
         }
     }
 }
