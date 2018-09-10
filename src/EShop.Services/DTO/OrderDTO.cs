@@ -17,5 +17,6 @@ namespace EShop.Services.DTO
         public int? DeliveryMethodId { get; set; }
         public DeliveryMethodDTO DeliveryMethod { get; set; }
         public Commands Command { get; set; }
+        public ICollection<OrderStatusChangeDTO> OrderStatusChanges { get; set; }
     }
 }

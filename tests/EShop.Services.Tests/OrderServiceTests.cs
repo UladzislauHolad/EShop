@@ -115,15 +115,23 @@ namespace EShop.Services.Tests
         }
 
         [Fact]
-        public void Delete_InvokeWithValidId_OrderDeleted()
+        public void Delete_InvokeWithValidId_OrderUpdateStatusToDeleted()
         {
+            var oldOrder = new Order
+            {
+                OrderId = 1,
+                Status = "New",
+                OrderStatusChanges = new List<OrderStatusChange>()
+            };
+
             var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Delete(1));
+            mock.Setup(repo => repo.Get(oldOrder.OrderId)).Returns(oldOrder);
+            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
             var service = new OrderService(mock.Object, GetMapper());
 
-            service.Delete(1);
+            service.Delete(oldOrder.OrderId);
 
-            mock.Verify(m => m.Delete(1));
+            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == "Deleted")));
         }
 
         [Fact]
@@ -216,7 +224,7 @@ namespace EShop.Services.Tests
             {
                 cfg.AddProfile(new OrderProfile());
                 cfg.AddProfile(new ProductOrderProfile());
-                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductDTOProfile());
                 cfg.AddProfile(new PaymentMethodDTOProfile());
             }).CreateMapper();
 

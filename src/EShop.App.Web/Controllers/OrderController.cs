@@ -55,19 +55,15 @@ namespace EShop.App.Web.Controllers
         [HttpDelete("Orders/{orderId}")]
         public ActionResult Delete([FromRoute]int orderId)
         {
-            var order = _service.GetOrder(orderId);
-            if(order != null)
+            try
             {
-                if (order.Status != "New")
-                {
-                    return BadRequest();
-                }
                 _service.Delete(orderId);
-
                 return Ok();
             }
-
-            return NotFound();
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]

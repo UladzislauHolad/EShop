@@ -26,12 +26,31 @@ namespace EShop.Services.Services
 
         public void Create(OrderDTO orderDTO)
         {
-            _repository.Create(_mapper.Map<Order>(orderDTO));
+            var order = _mapper.Map<Order>(orderDTO);
+            AddStatusChanges(order, StatusStates.New.ToString());
+            _repository.Create(order);
         }
 
         public void Delete(int id)
         {
-            _repository.Delete(id);
+            var order = _repository.Get(id);
+            if (order != null)
+            {
+                Enum.TryParse(order.Status, out StatusStates statusState);
+                StatusState status = new StatusState(statusState);
+                try
+                {
+                    order.Status = status.GetNext(Commands.Delete).ToString();
+                    AddStatusChanges(order, order.Status);
+                    _repository.Update(order);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
         }
 
         public OrderDTO GetOrder(int id)
@@ -41,7 +60,7 @@ namespace EShop.Services.Services
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll().Where(o => o.Status != StatusStates.Deleted.ToString()));
             var nextActionSetter = new NextActionState();
 
             foreach (var order in orders)
@@ -65,6 +84,13 @@ namespace EShop.Services.Services
         public void Update(OrderDTO orderDTO)
         {
             _repository.Update(_mapper.Map<Order>(orderDTO));
+        }
+
+        private void AddStatusChanges(Order order, string status)
+        {
+            var date = DateTime.Now;
+            order.Date = date;
+            order.OrderStatusChanges.Add(new OrderStatusChange { Status = status, Date = date });
         }
 
         private bool IsConfirmAvailable(OrderDTO order)
@@ -123,6 +149,7 @@ namespace EShop.Services.Services
                 {
                     Commands nextAction = actionState.GetNext(statusState, paymentMethod, deliveryMethod);
                     order.Status = status.GetNext(nextAction).ToString();
+                    AddStatusChanges(order, order.Status);
                     _repository.Update(order);
                 }
                 catch(InvalidOperationException ex)

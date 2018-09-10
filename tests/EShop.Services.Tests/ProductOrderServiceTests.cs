@@ -290,7 +290,7 @@ namespace EShop.Services.Tests
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductDTOProfile());
                 cfg.AddProfile(new ProductOrderCreateViewModelProfile());
             }).CreateMapper();
 

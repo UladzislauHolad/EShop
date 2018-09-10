@@ -55,6 +55,7 @@ namespace EShop.Data.Repositories
         public Order Get(int id)
         {
             return _context.Set<Order>().AsNoTracking()
+                .Include(o => o.OrderStatusChanges)
                 .Include(o => o.DeliveryMethod)
                 .Include(o => o.PaymentMethod)
                 .Include(o => o.Customer)

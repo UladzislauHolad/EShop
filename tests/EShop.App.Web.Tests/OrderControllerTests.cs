@@ -187,31 +187,15 @@ namespace EShop.App.Web.Tests
         }
 
         [Fact]
-        public void Delete_InvokeWithNotValidId_NotFoundResult()
+        public void Delete_ServiceThrowException_BadRequestObjectResult()
         {
-            OrderDTO order = null;
             var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Delete(1));
+            mock.Setup(m => m.Delete(1)).Throws(new InvalidOperationException());
             var controller = new OrderController(mock.Object, GetMapper());
 
             var result = controller.Delete(1);
 
-            Assert.True(result is NotFoundResult);
-        }
-
-        [Fact]
-        public void Delete_DeleteConfirmedOrder_BadRequestResult()
-        {
-            var order = new OrderDTO { OrderId = 1, Status = "Confirmed" };
-            var mock = new Mock<IOrderService>();
-            mock.Setup(m => m.GetOrder(1)).Returns(order);
-            mock.Setup(m => m.Delete(1));
-            var controller = new OrderController(mock.Object, GetMapper());
-
-            var result = controller.Delete(1);
-
-            Assert.True(result is BadRequestResult);
+            Assert.True(result is BadRequestObjectResult);
         }
 
         [Fact]

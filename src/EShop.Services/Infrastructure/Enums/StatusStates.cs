@@ -11,6 +11,7 @@ namespace EShop.Services.Infrastructure.Enums
         Paid,
         Packed,
         OnDelivering,
-        Completed
+        Completed,
+        Deleted
     }
 }

@@ -11,6 +11,7 @@ namespace EShop.Services.Infrastructure.Enums
         Pack,
         Deliver,
         Complete,
+        Delete,
         Nothing
     }
 }

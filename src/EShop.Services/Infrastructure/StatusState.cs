@@ -39,6 +39,7 @@ namespace EShop.Services.Infrastructure
             {
                 { new StateTransition(StatusStates.New, Commands.Confirm), StatusStates.Confirmed },
                 { new StateTransition(StatusStates.New, Commands.Pay), StatusStates.Paid },
+                { new StateTransition(StatusStates.New, Commands.Delete), StatusStates.Deleted },
                 { new StateTransition(StatusStates.Confirmed, Commands.Pay), StatusStates.Paid },
                 { new StateTransition(StatusStates.Paid, Commands.Pack), StatusStates.Packed },
                 { new StateTransition(StatusStates.Packed, Commands.Complete), StatusStates.Completed },
