@@ -85,46 +85,73 @@
         });
     });
 
-    $('#selling-timeline').jqChart({
-        title: { text: 'Orders' },
-        tooltips: { type: 'shared' },
-        animation: { duration: 1 },
-        border: {
-            visible: true,
-            padding: 20,
-            lineWidth: 0
-        },
-        dataSource: {
-            ajax: {
-                type: "GET",
-                url: "/Order/GetConfirmedOrdersByDate/",
-                data: "",
-                dataType: 'json'
-            }
-        },
-        axes: [
-            {
-                location: 'bottom',
-                type: 'dateTime',
-                labels: {
-                    stringFormat: 'mm/dd/yy'
-                },
-                interval: 1,
-                intervalType: 'days'
-            }
-        ],
-        series: [
-            {
-                type: 'line',
-                title: 'Orders count',
-                strokeStyle: '#418CF0',
-                lineWidth: 2,
-                xValuesField: {
-                    name: 'date',
-                    type: 'dateTime' // string, numeric, dateTime
-                },
-                yValuesField: 'count'
-            }
-        ]
+
+    $.getJSON("/Dashboard/Line", function (data) {
+
+
+        drawLineChart(data);
+        //var b = [];
+        //b[0] = { "date": new Date(2018, 5, 1).toLocaleDateString(), "count": 5 };
+
+        //drawLineChart(b);
+        
     });
+
+    function drawLineChart(chartData) {
+            $('#selling-timeline').jqChart({
+            title: { text: 'Orders' },
+            tooltips: { type: 'shared' },
+            animation: { duration: 1 },
+            border: {
+                visible: true,
+                padding: 20,
+                lineWidth: 0
+            },
+            axes: [
+                {
+                    location: 'bottom',
+                    type: 'dateTime',
+                    labels: {
+                        stringFormat: 'dd/mm/yy'
+                    },
+                    interval: 1,
+                    intervalType: 'days'
+                }
+            ],
+            series: [
+                {
+                    type: 'line',
+                    title: 'New',
+                    strokeStyle: '#418CF0',
+                    lineWidth: 2,
+                    data: chartData.new,
+                    xValuesField: {
+                        name: 'date',
+                        type: 'dateTime' // string, numeric, dateTime
+                    },
+                    yValuesField:
+                    {
+                        name: 'count',
+                        type: 'numeric'
+                    }
+                },
+                {
+                    type: 'line',
+                    title: 'Confirmed',
+                    strokeStyle: '#418CF0',
+                    lineWidth: 2,
+                    data: chartData.confirmed,
+                    xValuesField: {
+                        name: 'date',
+                        type: 'dateTime' // string, numeric, dateTime
+                    },
+                    yValuesField:
+                    {
+                        name: 'count',
+                        type: 'numeric'
+                    }
+                }
+            ]
+        });
+    }
 </script>
