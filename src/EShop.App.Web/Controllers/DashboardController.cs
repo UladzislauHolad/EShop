@@ -32,8 +32,18 @@ namespace EShop.App.Web.Controllers
             var data = new LineChartInfoViewModel
             {
                 New = _service.GetInfoByStatus(StatusStates.New),
-                Confirmed = _service.GetInfoByStatus(StatusStates.Confirmed)
+                Confirmed = _service.GetInfoByStatus(StatusStates.Confirmed),
+                Paid = _service.GetInfoByStatus(StatusStates.Paid),
+                Completed = _service.GetInfoByStatus(StatusStates.Completed)
             };
+
+
+            //var dic = new Dictionary<string, int>
+            //{
+            //    { date.ToShortDateString(), 30 },
+            //    { date.AddDays(2).ToShortDateString(), 3 },
+            //    { date.AddDays(3).ToShortDateString(), 12 }
+            //}.ToList<KeyValuePair<string,int>>();
 
             return Json(data);
         }

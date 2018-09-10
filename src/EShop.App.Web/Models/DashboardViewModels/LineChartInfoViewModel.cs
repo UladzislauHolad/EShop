@@ -10,5 +10,7 @@ namespace EShop.App.Web.Models.DashboardViewModels
     {
         public IEnumerable<OrderStatusChartInfoDTO> New { get; set; }
         public IEnumerable<OrderStatusChartInfoDTO> Confirmed { get; set; }
+        public IEnumerable<OrderStatusChartInfoDTO> Paid { get; set; }
+        public IEnumerable<OrderStatusChartInfoDTO> Completed { get; set; }
     }
 }

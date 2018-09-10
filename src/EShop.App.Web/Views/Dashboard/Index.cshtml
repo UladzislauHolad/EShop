@@ -88,70 +88,89 @@
 
     $.getJSON("/Dashboard/Line", function (data) {
 
-
+        data.new = data.new.map(function (arg) {
+            return [arg.date, arg.count];
+        });
+        data.confirmed = data.confirmed.map(function (arg) {
+            return [arg.date, arg.count];
+        });
+        data.paid = data.paid.map(function (arg) {
+            return [arg.date, arg.count];
+        });
+        data.completed = data.completed.map(function (arg) {
+            return [arg.date, arg.count];
+        });
         drawLineChart(data);
-        //var b = [];
-        //b[0] = { "date": new Date(2018, 5, 1).toLocaleDateString(), "count": 5 };
-
-        //drawLineChart(b);
-        
     });
 
     function drawLineChart(chartData) {
             $('#selling-timeline').jqChart({
-            title: { text: 'Orders' },
-            tooltips: { type: 'shared' },
-            animation: { duration: 1 },
-            border: {
-                visible: true,
-                padding: 20,
-                lineWidth: 0
-            },
-            axes: [
-                {
-                    location: 'bottom',
-                    type: 'dateTime',
-                    labels: {
-                        stringFormat: 'dd/mm/yy'
-                    },
-                    interval: 1,
-                    intervalType: 'days'
-                }
-            ],
-            series: [
-                {
-                    type: 'line',
-                    title: 'New',
-                    strokeStyle: '#418CF0',
-                    lineWidth: 2,
-                    data: chartData.new,
-                    xValuesField: {
+                title: 'Chart Title',
+                legend: { title: 'Legend' },
+                border: { strokeStyle: '#6ba851' },
+                animation: { duration: 0.5 },
+                tooltips: { type: 'shared' },
+                axes: [
+                    {
                         name: 'date',
-                        type: 'dateTime' // string, numeric, dateTime
+                        location: 'bottom',
+                        type: 'dateTime',
+                        intervalType: "days",
+                        visible: true,
+                        interval: 1,
+                        labels: {
+                            stringFormat: 'mm/dd/yy'
+                        }
                     },
-                    yValuesField:
                     {
                         name: 'count',
-                        type: 'numeric'
+                        location: 'left',
+                        type: 'numeric',
+                        interval: 1
                     }
-                },
-                {
-                    type: 'line',
-                    title: 'Confirmed',
-                    strokeStyle: '#418CF0',
-                    lineWidth: 2,
-                    data: chartData.confirmed,
-                    xValuesField: {
-                        name: 'date',
-                        type: 'dateTime' // string, numeric, dateTime
-                    },
-                    yValuesField:
+                ],
+                series: [
                     {
-                        name: 'count',
-                        type: 'numeric'
+                        type: 'line',
+                        title: 'New',
+                        lineWidth: 2,
+                        data: chartData.new,
+                        axisX: 'date',
+                        axisY: 'count',
+                        yValuesType: 'numeric',
+                        xValuesType: 'dateTime'
+                    },
+                    {
+                        type: 'line',
+                        title: 'Confirmed',
+                        lineWidth: 2,
+                        data: chartData.confirmed,
+                        axisX: 'date',
+                        axisY: 'count',
+                        yValuesType: 'numeric',
+                        xValuesType: 'dateTime'
+                    },
+                    {
+                        type: 'line',
+                        title: 'Paid',
+                        lineWidth: 2,
+                        data: chartData.paid,
+                        axisX: 'date',
+                        axisY: 'count',
+                        yValuesType: 'numeric',
+                        xValuesType: 'dateTime'
+                    },
+                    {
+                        type: 'line',
+                        title: 'Completed',
+                        lineWidth: 2,
+                        data: chartData.completed,
+                        axisX: 'date',
+                        axisY: 'count',
+                        yValuesType: 'numeric',
+                        xValuesType: 'dateTime'
                     }
-                }
-            ]
+                ]
         });
     }
 </script>
