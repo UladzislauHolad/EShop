@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using EShop.App.Web.Infrastructure;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
+using EShop.Services.Profiles;
 
 namespace EShop.App.Web.Tests
 {
@@ -65,7 +66,7 @@ namespace EShop.App.Web.Tests
             const int testId = 1;
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Get(testId)).Returns(new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 });
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
             var mapper = GetMapper();
             ProductController controller = new ProductController(service, mapper);
 
@@ -89,7 +90,7 @@ namespace EShop.App.Web.Tests
             var product = mapper.Map<Product>(mapper.Map<ProductDTO>(productVM));
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Update(product));
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
             ProductController controller = new ProductController(service, mapper);
 
             controller.Edit(productVM);
@@ -161,7 +162,7 @@ namespace EShop.App.Web.Tests
             var products = GetProducts();
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.GetAll()).Returns(products);
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
             var mapper = GetMapper();
             ProductController controller = new ProductController(service, mapper);
 
@@ -251,15 +252,8 @@ namespace EShop.App.Web.Tests
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<ProductDTO, ProductViewModel>();
-                cfg.CreateMap<ProductViewModel, ProductDTO>();
-
-                cfg.CreateMap<Product, ProductViewModel>()
-                    .ForMember(dest => dest.Categories,
-                        opt => opt.MapFrom(src => src.ProductCategories));
-                cfg.CreateMap<ProductDTO, Product>()
-                    .ForMember(dest => dest.ProductCategories,
-                        opt => opt.MapFrom(src => src.Categories));
+                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductDTOProfile());
             });
             return new Mapper(config);
         }
@@ -268,7 +262,7 @@ namespace EShop.App.Web.Tests
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
-            return new ProductService(mock.Object);
+            return new ProductService(mock.Object, GetMapper());
         }
 
 

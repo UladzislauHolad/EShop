@@ -13,27 +13,17 @@ namespace EShop.Services.Services
     public class DeliveryMethodService : IDeliveryMethodService
     {
         private readonly IRepository<DeliveryMethod> _repository;
+        private readonly IMapper _mapper;
 
-        public DeliveryMethodService(IRepository<DeliveryMethod> repository)
+        public DeliveryMethodService(IRepository<DeliveryMethod> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<DeliveryMethodDTO> GetDeliveryMethods()
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<IEnumerable<DeliveryMethodDTO>>(_repository.GetAll().ToList());
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new DeliveryMethodDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
+            return _mapper.Map<IEnumerable<DeliveryMethodDTO>>(_repository.GetAll().ToList());
         }
     }
 }

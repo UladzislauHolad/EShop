@@ -18,27 +18,25 @@ namespace EShop.Services.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IMapper _mapper;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mapper = mapper;
         }
 
         public IEnumerable<UserDTO> GetUsers()
         {
-            var mapper = GetMapper();
-
             var userDTOs = _userManager.Users.AsNoTracking().ToList();
 
-            return mapper.Map<IEnumerable<UserDTO>>(userDTOs);
+            return _mapper.Map<IEnumerable<UserDTO>>(userDTOs);
         }
 
         public async Task<IdentityResult> CreateUserAsync(UserDTO user, string password)
         {
-            var mapper = GetMapper();
-
-            var result = await _userManager.CreateAsync(mapper.Map<User>(user), password);
+            var result = await _userManager.CreateAsync(_mapper.Map<User>(user), password);
 
             return result;
         }
@@ -60,9 +58,7 @@ namespace EShop.Services.Services
 
         public async Task<UserDTO> FindByIdAsync(string id)
         {
-            var mapper = GetMapper();
-
-            var user = mapper.Map<UserDTO>(await _userManager.FindByIdAsync(id));
+            var user = _mapper.Map<UserDTO>(await _userManager.FindByIdAsync(id));
 
             return user;
         }
@@ -78,17 +74,13 @@ namespace EShop.Services.Services
         }
 
         public Task<IdentityResult> UpdateUserAsync(UserDTO user)
-        {
-            var mapper = GetMapper();
-
-            return _userManager.UpdateAsync(mapper.Map<User>(user));
+        { 
+            return _userManager.UpdateAsync(_mapper.Map<User>(user));
         }
 
         public async Task<UserDTO> FindByEmailAsync(string email)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<UserDTO>(await _userManager.FindByEmailAsync(email));
+            return _mapper.Map<UserDTO>(await _userManager.FindByEmailAsync(email));
         }
 
         public async Task<IdentityResult> ResetPasswordAsync(string id, string code, string newPassword)
@@ -103,9 +95,7 @@ namespace EShop.Services.Services
 
         public async Task<UserDTO> GetUserAsync(ClaimsPrincipal principal)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<UserDTO>(await _userManager.GetUserAsync(principal));
+            return _mapper.Map<UserDTO>(await _userManager.GetUserAsync(principal));
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(string id, string oldPassword, string newPassword)
@@ -120,7 +110,7 @@ namespace EShop.Services.Services
 
         public async Task SignInAsync(string id, bool isPersistent, string authenticationMethod = null)
         {
-             var existUser = await _userManager.FindByIdAsync(id);
+            var existUser = await _userManager.FindByIdAsync(id);
 
             if (existUser == null)
                 throw new NullReferenceException();
@@ -136,16 +126,6 @@ namespace EShop.Services.Services
                 throw new NullReferenceException();
 
             return await _userManager.HasPasswordAsync(existUser);
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new UserDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
         }
     }
 }

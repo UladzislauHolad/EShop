@@ -8,6 +8,7 @@ using EShop.Services.Services;
 using AutoMapper;
 using EShop.Services.DTO;
 using System;
+using EShop.Services.Profiles;
 
 namespace EShop.Services.Tests
 {
@@ -20,7 +21,7 @@ namespace EShop.Services.Tests
             int expected = categories.Count();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
-            CategoryService service = new CategoryService(mock.Object);
+            CategoryService service = new CategoryService(mock.Object, GetMapper());
 
             int result = service.GetCategories().Count();
 
@@ -33,7 +34,7 @@ namespace EShop.Services.Tests
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
-            CategoryService service = new CategoryService(mock.Object);
+            CategoryService service = new CategoryService(mock.Object, GetMapper());
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
             var expected = mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(categories);
 
@@ -48,7 +49,7 @@ namespace EShop.Services.Tests
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
-            CategoryService service = new CategoryService(mock.Object);
+            CategoryService service = new CategoryService(mock.Object, GetMapper());
 
             var result = service.GetCategories();
 
@@ -61,7 +62,7 @@ namespace EShop.Services.Tests
             var category = new Category { CategoryId = 1, Name = "P21", ParentId = 1 };
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.Create(category));
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
 
             service.Create(mapper.Map<Category, CategoryDTO>(category));
@@ -75,7 +76,7 @@ namespace EShop.Services.Tests
             int id = 2;
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.Delete(id));
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
 
             service.Delete(id);
 
@@ -88,7 +89,7 @@ namespace EShop.Services.Tests
             var category = new Category { CategoryId = 1, Name = "P21", ParentId = 1 };
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.Update(category));
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
 
             service.Update(mapper.Map<Category, CategoryDTO>(category));
@@ -104,7 +105,7 @@ namespace EShop.Services.Tests
             const int id = 1;
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.Find(It.IsAny<Func<Category, bool>>())).Returns(GetCategories());
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Category, CategoryDTO>()).CreateMapper();
 
             var result = service.GetChildCategories(id).ToArray();
@@ -117,7 +118,7 @@ namespace EShop.Services.Tests
         {
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.GetAll()).Returns(new List<Category>().AsQueryable());
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
 
             var result = service.GetCategoryNameWithCountOfProducts();
 
@@ -136,6 +137,16 @@ namespace EShop.Services.Tests
             };
 
             return categories.AsQueryable();
+        }
+
+        private IMapper GetMapper()
+        {
+            var _mapper = new MapperConfiguration((cfg) =>
+            {
+                cfg.AddProfile(new CategoryDTOProfile());
+            }).CreateMapper();
+
+            return _mapper;
         }
     }
 }

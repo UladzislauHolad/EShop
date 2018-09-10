@@ -41,7 +41,7 @@ namespace EShop.Services.Tests
             var orderRepository = new Mock<IRepository<Order>>();
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(repo => repo.Get(1)).Returns(productOrder);
-            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object, GetMapper());
 
             service.Delete(1);
 
@@ -107,7 +107,7 @@ namespace EShop.Services.Tests
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(repo => repo.Update(productOrder));
             productOrderRepository.Setup(repo => repo.Get(1)).Returns(existedProductOrder);
-            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object, GetMapper());
 
             service.Update(mapper.Map<ProductOrderDTO>(productOrder));
 
@@ -200,7 +200,7 @@ namespace EShop.Services.Tests
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(repo => repo.Find(It.IsAny<Func<ProductOrder, bool>>())).Returns(productOrderList);
             productOrderRepository.Setup(repo => repo.Update(productOrder));
-            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object, GetMapper());
 
             service.Create(newProductOrderDto);
 
@@ -259,7 +259,7 @@ namespace EShop.Services.Tests
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(repo => repo.Find(It.IsAny<Func<ProductOrder, bool>>())).Returns(productOrderList);
             productOrderRepository.Setup(repo => repo.Create(productOrder));
-            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object, GetMapper());
 
             service.Create(newProductOrderDto);
 
@@ -277,7 +277,7 @@ namespace EShop.Services.Tests
             var orderRepository = new Mock<IRepository<Order>>();
             var productOrderRepository = new Mock<IRepository<ProductOrder>>();
             productOrderRepository.Setup(m => m.Get(id)).Returns(new ProductOrder { ProductOrderId = 1 });
-            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object);
+            var service = new ProductOrderService(productRepository.Object, orderRepository.Object, productOrderRepository.Object, GetMapper());
 
             var result = service.GetProductOrder(id);
 
@@ -290,7 +290,6 @@ namespace EShop.Services.Tests
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                //cfg.AddProfile(new ProductOrderProfile());
                 cfg.AddProfile(new ProductProfile());
                 cfg.AddProfile(new ProductOrderCreateViewModelProfile());
             }).CreateMapper();

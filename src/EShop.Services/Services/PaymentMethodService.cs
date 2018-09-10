@@ -14,29 +14,19 @@ namespace EShop.Services.Services
     public class PaymentMethodService : IPaymentMethodService
     {
         IRepository<PaymentMethod> _repository;
+        IMapper _mapper;
 
-        public PaymentMethodService(IRepository<PaymentMethod> repository)
+        public PaymentMethodService(IRepository<PaymentMethod> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public IEnumerable<PaymentMethodDTO> GetPaymentMethods()
         {
-            var mapper = GetMapper();
-
             var paymentMethods = _repository.GetAll().ToList();
 
-            return mapper.Map<IEnumerable<PaymentMethodDTO>>(paymentMethods);
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new PaymentMethodDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
+            return _mapper.Map<IEnumerable<PaymentMethodDTO>>(paymentMethods);
         }
     }
 }

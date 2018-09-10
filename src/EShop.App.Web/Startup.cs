@@ -14,6 +14,7 @@ using FluentValidation.AspNetCore;
 using EShop.Data.EF.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Reflection;
 
 namespace EShop.App.Web
 {
@@ -56,7 +57,7 @@ namespace EShop.App.Web
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IPaymentMethodService, PaymentMethodService>();
             services.AddTransient<IDeliveryMethodService, DeliveryMethodService>();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Startup).Assembly, typeof(Services.Profiles.CustomerDTOProfile).Assembly);
             services.AddMvc()
                 .AddFluentValidation(fvc => 
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());

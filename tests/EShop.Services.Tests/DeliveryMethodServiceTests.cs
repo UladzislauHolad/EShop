@@ -1,6 +1,8 @@
-﻿using EShop.Data.Entities;
+﻿using AutoMapper;
+using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
 using System;
@@ -18,11 +20,21 @@ namespace EShop.Services.Tests
         {
             var repository = new Mock<IRepository<DeliveryMethod>>();
             repository.Setup(m => m.GetAll()).Returns(new List<DeliveryMethod>().AsQueryable());
-            var service = new DeliveryMethodService(repository.Object);
+            var service = new DeliveryMethodService(repository.Object, GetMapper());
 
             var result = service.GetDeliveryMethods();
 
             Assert.True(result is IEnumerable<DeliveryMethodDTO>);
+        }
+
+        private IMapper GetMapper()
+        {
+            var _mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new DeliveryMethodDTOProfile());
+            }).CreateMapper();
+
+            return _mapper;
         }
     }
 }

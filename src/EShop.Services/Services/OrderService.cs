@@ -16,38 +16,32 @@ namespace EShop.Services.Services
     public class OrderService : IOrderService
     {
         IRepository<Order> _repository;
+        IMapper _mapper;
 
-        public OrderService(IRepository<Order> repository)
+        public OrderService(IRepository<Order> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public void Create(OrderDTO orderDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Create(mapper.Map<Order>(orderDTO));
+            _repository.Create(_mapper.Map<Order>(orderDTO));
         }
 
         public void Delete(int id)
         {
-            var mapper = GetMapper();
-
             _repository.Delete(id);
         }
 
         public OrderDTO GetOrder(int id)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<OrderDTO>(_repository.Get(id));
+            return _mapper.Map<OrderDTO>(_repository.Get(id));
         }
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            var mapper = GetMapper();
-
-            var orders = mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
             var nextActionSetter = new NextActionState();
 
             foreach (var order in orders)
@@ -70,9 +64,7 @@ namespace EShop.Services.Services
 
         public void Update(OrderDTO orderDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Update(mapper.Map<Order>(orderDTO));
+            _repository.Update(_mapper.Map<Order>(orderDTO));
         }
 
         private bool IsConfirmAvailable(OrderDTO order)
@@ -94,19 +86,6 @@ namespace EShop.Services.Services
             }
 
             return result;
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new OrderProfile());
-                cfg.AddProfile(new ProductOrderProfile());
-                cfg.AddProfile(new ProductProfile());
-                cfg.AddProfile(new PaymentMethodDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
         }
 
         public object GetCountOfConfirmedProducts()//критерий передавать в паараметре

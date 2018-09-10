@@ -13,17 +13,17 @@ namespace EShop.Services.Services
     public class СustomerService : ICustomerService
     {
         IRepository<Customer> _repository;
+        IMapper _mapper;
 
-        public СustomerService(IRepository<Customer> repository)
+        public СustomerService(IRepository<Customer> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public void Create(CustomerDTO customerDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Create(mapper.Map<Customer>(customerDTO));
+            _repository.Create(_mapper.Map<Customer>(customerDTO));
         }
 
         public void Delete(int id)
@@ -33,32 +33,17 @@ namespace EShop.Services.Services
 
         public CustomerDTO GetCustomer(int id)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<CustomerDTO>(_repository.Get(id));
+            return _mapper.Map<CustomerDTO>(_repository.Get(id));
         }
 
         public IEnumerable<CustomerDTO> GetCustomers()
         {
-            var mapper = GetMapper();
-            
-            return mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<Customer>, IEnumerable<CustomerDTO>>(_repository.GetAll());
         }
 
         public void Update(CustomerDTO customerDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Update(mapper.Map<Customer>(customerDTO));
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-                cfg.AddProfile(new CustomerDTOProfile())
-            ).CreateMapper();
-
-            return mapper;
+            _repository.Update(_mapper.Map<Customer>(customerDTO));
         }
     }
 }
