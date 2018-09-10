@@ -18,5 +18,8 @@ namespace EShop.Data.Entities
 
         public int? DeliveryMethodId { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
+
+        public virtual ICollection<OrderStatusChange> OrderStatusChanges { get; set; }
+
     }
 }
