@@ -149,24 +149,6 @@ namespace EShop.App.Web.Controllers
             return View(order);
         }
 
-        //[HttpGet("Orders/new")]
-        //public ActionResult Modify()
-        //{
-        //    return View(new OrderViewModel());
-        //}
-
-        //[HttpPost("Orders/new")]
-        //public ActionResult Modify(OrderViewModel order)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        order.Status = "New";
-        //        _service.Create(_mapper.Map<OrderDTO>(order));
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(order);
-        //}
         [HttpPatch("Orders/{orderId}")]
         public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
         {

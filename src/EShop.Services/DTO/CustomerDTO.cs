@@ -12,7 +12,6 @@ namespace EShop.Services.DTO
         public string Patronymic { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
-        public string Comment { get; set; }
 
         public virtual ICollection<OrderDTO> Orders { get; set; }
     }

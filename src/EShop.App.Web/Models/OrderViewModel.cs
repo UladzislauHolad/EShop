@@ -14,6 +14,8 @@ namespace EShop.App.Web.Models
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public string Status { get; set; } = "OnCreating";
+        public string Comment { get; set; }
+
         public List<ProductOrderViewModel> ProductOrders { get; set; }
         public CustomerViewModel Customer { get; set; }
         public int PaymentMethodId { get; set; }
