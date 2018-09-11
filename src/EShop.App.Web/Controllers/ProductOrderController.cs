@@ -37,6 +37,23 @@ namespace EShop.App.Web.Controllers
             return NotFound();
         }
 
+
+        [HttpGet("Orders/test/{orderId}/Products")]
+        public JsonResult Products([FromRoute]int orderId)
+        {
+            var order = _orderService.GetOrder(orderId);
+            if (order != null)
+            {
+                var result = _mapper.Map<IEnumerable<ProductOrderViewModel>>(order.ProductOrders);
+                foreach (var item in result)
+                {
+                    item.Product = null;
+                }
+                return Json(result);
+            }
+            return Json(null);////////////////////////////////////////////////////////////////////////////////////////////?
+        }
+
         [HttpGet("Orders/{orderId}/Products")]
         public ActionResult Create([FromRoute]int orderId)
         {

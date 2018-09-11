@@ -6,6 +6,7 @@ namespace EShop.Services.Infrastructure.Enums
 {
     public enum StatusStates
     {
+        OnCreating,
         New,
         Confirmed,
         Paid,

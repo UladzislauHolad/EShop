@@ -2,6 +2,7 @@
 using EShop.App.Web.Models;
 using EShop.App.Web.Models.OrderViewModels;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,10 @@ namespace EShop.App.Web.Controllers
         [HttpGet("Orders/new")]
         public ActionResult Create()
         {
-            return View(new OrderViewModel());
+            var orderToView = new OrderViewModel();
+            Enum.TryParse(orderToView.Status, out StatusStates status);
+            orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+            return View("Modify", orderToView);
         }
 
         [HttpPost("Orders/new")]
@@ -45,11 +49,12 @@ namespace EShop.App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                order.Status = "New";
                 _service.Create(_mapper.Map<OrderDTO>(order));
                 return RedirectToAction("Index");
             }
 
-            return View(order);
+            return View("Modify", order);
         }
 
         [HttpDelete("Orders/{orderId}")]
@@ -82,20 +87,86 @@ namespace EShop.App.Web.Controllers
             return Json(data);
         }
 
-        [HttpGet("Orders/{orderId}")]
+        //[HttpGet("Orders/{orderId}")]
         public ActionResult Edit([FromRoute]int orderId)
         {
             var order = _service.GetOrder(orderId);
             if(order != null)
             {
                 if(order.Status == "New")
-                    return View(_mapper.Map<OrderViewModel>(order));
+                {
+                    var orderToView = _mapper.Map<OrderViewModel>(order);
+                    Enum.TryParse(orderToView.Status, out StatusStates status);
+                    orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+                    return View(orderToView);
+                }
                 return View("Info", (_mapper.Map<OrderViewModel>(order)));
             }
 
             return BadRequest();
         }
 
+        [HttpGet("Orders/{orderId}")]
+        public ActionResult Modify([FromRoute]int orderId)
+        {
+            var order = _service.GetOrder(orderId);
+            if (order != null)
+            {
+                if (order.Status == "New")
+                {
+                    var orderToView = _mapper.Map<OrderViewModel>(order);
+                    Enum.TryParse(orderToView.Status, out StatusStates status);
+                    orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+                    return View(orderToView);
+                }
+                return View("Info", (_mapper.Map<OrderViewModel>(order)));
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost("Orders/{orderId}")]
+        public ActionResult Modify([FromRoute]int orderId, OrderViewModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                var existOrder = _service.GetOrder(orderId);
+                if (existOrder != null && existOrder.Status == "New")
+                {
+                    existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
+                    existOrder.PaymentMethod = null;
+                    existOrder.PaymentMethodId = order.PaymentMethodId;
+                    existOrder.DeliveryMethod = null;
+                    existOrder.DeliveryMethodId = order.DeliveryMethodId;
+                    _service.Update(_mapper.Map<OrderDTO>(existOrder));
+                    return RedirectToAction("Modify", new { orderId = orderId });
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            return View(order);
+        }
+
+        //[HttpGet("Orders/new")]
+        //public ActionResult Modify()
+        //{
+        //    return View(new OrderViewModel());
+        //}
+
+        //[HttpPost("Orders/new")]
+        //public ActionResult Modify(OrderViewModel order)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        order.Status = "New";
+        //        _service.Create(_mapper.Map<OrderDTO>(order));
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View(order);
+        //}
         [HttpPatch("Orders/{orderId}")]
         public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
         {

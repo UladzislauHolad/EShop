@@ -13,7 +13,7 @@ namespace EShop.App.Web.Models
     {
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
-        public string Status { get; set; } = "New";
+        public string Status { get; set; } = "OnCreating";
         public List<ProductOrderViewModel> ProductOrders { get; set; }
         public CustomerViewModel Customer { get; set; }
         public int PaymentMethodId { get; set; }
@@ -22,5 +22,6 @@ namespace EShop.App.Web.Models
         public DeliveryMethodViewModel DeliveryMethod { get; set; }
         public Commands Command { get; set; }
         public ButtonConfiguration ButtonConfiguration { get; set; }
+        public FormConfiguration FormConfiguration { get; set; }
     }
 }
