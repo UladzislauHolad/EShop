@@ -20,5 +20,7 @@ namespace EShop.Services.DTO
         public DeliveryMethodDTO DeliveryMethod { get; set; }
         public Commands Command { get; set; }
         public ICollection<OrderStatusChangeDTO> OrderStatusChanges { get; set; }
+        public int? PickupPointId { get; set; }
+        public PickupPointDTO PickupPoint { get; set; }
     }
 }

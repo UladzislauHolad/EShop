@@ -59,6 +59,11 @@
                     <select id="delivery-select" asp-for="DeliveryMethodId" class="form-control"></select>
                     <span asp-validation-for="DeliveryMethodId" class="text-danger"></span>
                 </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Pickup Point</label>
+                    <select id="point-select" asp-for="PickupPointId" class="form-control"></select>
+                    <span asp-validation-for="PickupPointId" class="text-danger"></span>
+                </div>
             </div>
             <div class="text-center">
                 <br />
@@ -145,7 +150,7 @@
 
 <script>
     $(function () {
-        var currentPayment = @Model.PaymentMethodId;
+        var currentPayment = @(Model.PaymentMethodId);
         var url = "/PaymentMethod/api/Payments";
         $.getJSON(url, function (data) {
             var items = '';
@@ -194,6 +199,24 @@
                 items += `<option value=${row.value}${selected}>${row.text}</option>`;
             });
             $("#customer-select").html(items);
+        });
+    });
+
+   $(function () {
+        var currentPoint = @Model.PickupPointId;
+        var url = "/PickupPoint/PickupPoints";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentPoint == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            if (data.length === 0) {
+                items += "<option value='0'>Not Exist</option>";
+            }
+            $("#point-select").html(items);
         });
     });
 

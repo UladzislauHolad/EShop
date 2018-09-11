@@ -1,6 +1,7 @@
 ﻿using EShop.App.Web.Models.DeliveryMethodViewModels;
 using EShop.App.Web.Models.OrderViewModels;
 using EShop.App.Web.Models.PaymentMethodViewModels;
+using EShop.App.Web.Models.PickupPointViewModels;
 using EShop.Services.Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,8 @@ namespace EShop.App.Web.Models
         public PaymentMethodViewModel PaymentMethod { get; set; }
         public int DeliveryMethodId { get; set; }
         public DeliveryMethodViewModel DeliveryMethod { get; set; }
+        public int PickupPointId { get; set; }
+        public PickupPointViewModel PickupPoint { get; set; }
         public Commands Command { get; set; }
         public ButtonConfiguration ButtonConfiguration { get; set; }
         public FormConfiguration FormConfiguration { get; set; }
