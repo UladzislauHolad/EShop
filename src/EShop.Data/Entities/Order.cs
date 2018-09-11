@@ -22,5 +22,8 @@ namespace EShop.Data.Entities
         public DeliveryMethod DeliveryMethod { get; set; }
 
         public virtual ICollection<OrderStatusChange> OrderStatusChanges { get; set; }
+
+        public int? PickupPointId { get; set; }
+        public PickupPoint PickupPoint { get; set; }
     }
 }
