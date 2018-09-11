@@ -15,25 +15,30 @@ namespace EShop.Services.Services
 {
     public class OrderService : IOrderService
     {
-        IRepository<Order> _repository;
+        IRepository<Order> _orderRepository;
+        IRepository<Customer> _customerRepository;
         IMapper _mapper;
 
-        public OrderService(IRepository<Order> repository, IMapper mapper)
+        public OrderService(IRepository<Order> orderRepository, IRepository<Customer> customerRepository, IMapper mapper)
         {
-            _repository = repository;
+            _orderRepository = orderRepository;
+            _customerRepository = customerRepository;
             _mapper = mapper;
         }
 
         public void Create(OrderDTO orderDTO)
         {
+            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.Customer.CustomerId));
+            if (!existCustomer.Equals(orderDTO.Customer))
+                orderDTO.Customer.CustomerId = 0;
             var order = _mapper.Map<Order>(orderDTO);
             AddStatusChanges(order, StatusStates.New.ToString());
-            _repository.Create(order);
+            _orderRepository.Create(order);
         }
 
         public void Delete(int id)
         {
-            var order = _repository.Get(id);
+            var order = _orderRepository.Get(id);
             if (order != null)
             {
                 Enum.TryParse(order.Status, out StatusStates statusState);
@@ -42,7 +47,7 @@ namespace EShop.Services.Services
                 {
                     order.Status = status.GetNext(Commands.Delete).ToString();
                     AddStatusChanges(order, order.Status);
-                    _repository.Update(order);
+                    _orderRepository.Update(order);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -55,12 +60,12 @@ namespace EShop.Services.Services
 
         public OrderDTO GetOrder(int id)
         {
-            return _mapper.Map<OrderDTO>(_repository.Get(id));
+            return _mapper.Map<OrderDTO>(_orderRepository.Get(id));
         }
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll().Where(o => o.Status != StatusStates.Deleted.ToString()));
+            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_orderRepository.GetAll().Where(o => o.Status != StatusStates.Deleted.ToString()));
             var nextActionSetter = new NextActionState();
 
             foreach (var order in orders)
@@ -83,7 +88,14 @@ namespace EShop.Services.Services
 
         public void Update(OrderDTO orderDTO)
         {
-            _repository.Update(_mapper.Map<Order>(orderDTO));
+            var existOrder = _orderRepository.Get(orderDTO.OrderId);
+            if(existOrder != null)
+            {
+                var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.Customer.CustomerId));
+                if (!existCustomer.Equals(orderDTO.Customer))
+                    orderDTO.Customer.CustomerId = 0;
+                _orderRepository.Update(_mapper.Map<Order>(orderDTO));
+            }
         }
 
         private void AddStatusChanges(Order order, string status)
@@ -116,7 +128,7 @@ namespace EShop.Services.Services
 
         public object GetCountOfConfirmedProducts()//критерий передавать в паараметре
         {
-            var orders = _repository.GetAll();
+            var orders = _orderRepository.GetAll();
             var products = orders.Where(o => o.Status == "Confirmed")
                 .SelectMany(o => o.ProductOrders)
                 .GroupBy(pc => pc.Name)
@@ -127,7 +139,7 @@ namespace EShop.Services.Services
 
         public object GetCountOfConfirmedOrdersByDate()
         {
-            var orders = _repository.GetAll()
+            var orders = _orderRepository.GetAll()
                 .Where(o => o.Status == "Paid")
                 .GroupBy(o => o.Date.Date)
                 .Select(g => new { Date = g.Key, Count = g.Count() });
@@ -137,7 +149,7 @@ namespace EShop.Services.Services
 
         public void ChangeState(int id)
         {
-            var order = _repository.Get(id);
+            var order = _orderRepository.Get(id);
             if(order != null)
             {
                 Enum.TryParse(order.Status, out StatusStates statusState);
@@ -150,7 +162,7 @@ namespace EShop.Services.Services
                     Commands nextAction = actionState.GetNext(statusState, paymentMethod, deliveryMethod);
                     order.Status = status.GetNext(nextAction).ToString();
                     AddStatusChanges(order, order.Status);
-                    _repository.Update(order);
+                    _orderRepository.Update(order);
                 }
                 catch(InvalidOperationException ex)
                 {
