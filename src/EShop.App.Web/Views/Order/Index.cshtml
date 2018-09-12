@@ -9,13 +9,14 @@
     <h3>Order List</h3>
     <table class="table table-striped">
         <thead>
-            <tr><th>Id</th><th>Status</th><th>Date</th><th></th></tr>
+            <tr><th>Id</th><th>Customer</th><th>Status</th><th>Date</th><th></th></tr>
         </thead>
         <tbody>
             @foreach (OrderViewModel order in Model)
             {
             <tr id="@order.OrderId">
                 <td>@order.OrderId</td>
+                <td>@order.Customer.FirstName @order.Customer.LastName @order.Customer.Patronymic</td>
                 @if (order.Status != "New")
                 {
                     <td style="color:green">@order.Status</td>
