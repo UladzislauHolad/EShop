@@ -120,7 +120,8 @@
                         interval: 1,
                         labels: {
                             stringFormat: 'mm/dd/yy'
-                        }
+                        },
+                        skipEmptyDays: true
                     },
                     {
                         name: 'count',
@@ -129,6 +130,11 @@
                         interval: 1
                     }
                 ],
+                crosshairs: {
+                    enabled: true,
+                    hLine: { strokeStyle: '#cc0a0c' },
+                    vLine: { strokeStyle: '#cc0a0c' }
+                },
                 series: [
                     {
                         type: 'line',

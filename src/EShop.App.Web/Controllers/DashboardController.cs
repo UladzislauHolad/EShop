@@ -37,14 +37,6 @@ namespace EShop.App.Web.Controllers
                 Completed = _service.GetInfoByStatus(StatusStates.Completed)
             };
 
-
-            //var dic = new Dictionary<string, int>
-            //{
-            //    { date.ToShortDateString(), 30 },
-            //    { date.AddDays(2).ToShortDateString(), 3 },
-            //    { date.AddDays(3).ToShortDateString(), 12 }
-            //}.ToList<KeyValuePair<string,int>>();
-
             return Json(data);
         }
     }
