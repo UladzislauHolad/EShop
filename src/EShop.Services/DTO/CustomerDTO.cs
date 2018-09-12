@@ -27,8 +27,7 @@ namespace EShop.Services.DTO
                    LastName == other.LastName &&
                    Patronymic == other.Patronymic &&
                    Phone == other.Phone &&
-                   Address == other.Address &&
-                   EqualityComparer<ICollection<OrderDTO>>.Default.Equals(Orders, other.Orders);
+                   Address == other.Address;
         }
 
         public static bool operator ==(CustomerDTO dTO1, CustomerDTO dTO2)

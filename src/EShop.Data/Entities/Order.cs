@@ -13,6 +13,7 @@ namespace EShop.Data.Entities
 
         public virtual ICollection<ProductOrder> ProductOrders { get; set; }
 
+        public int CustomerId { get; set; }
         public Customer Customer { get; set; }
 
         public int PaymentMethodId { get; set; }

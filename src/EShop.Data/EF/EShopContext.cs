@@ -18,6 +18,7 @@ namespace EShop.Data.EF
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<DeliveryMethod> DeliveryMethods { get; set; }
         public virtual DbSet<OrderStatusChange> OrderStatusChanges { get; set; }
+        public virtual DbSet<PickupPoint> PickupPoints { get; set; }
 
         public EShopContext(DbContextOptions<EShopContext> options) : base(options)
         {
@@ -31,6 +32,7 @@ namespace EShop.Data.EF
             modelBuilder.ApplyConfiguration(new DeliveryMethodConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new PaymentMethodConfiguration());
+            modelBuilder.ApplyConfiguration(new PickupPointConfiguration());
             modelBuilder.ApplyConfiguration(new OrderStatusChangeConfiguration());
         }
    }

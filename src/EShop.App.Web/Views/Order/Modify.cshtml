@@ -10,10 +10,11 @@
         <form id="customer-form" asp-action="@Model.FormConfiguration.Action" asp-route-orderId="@Model.OrderId" method=@(Model.FormConfiguration.Method)>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="OrderId" class="form-control" type="hidden" />
+            <input asp-for="Status" class="form-control" type="hidden" />
             <div class="row">
                 <div class="col-md-3">
                     <label>Customer</label>
-                    <select id="customer-select" name="Customer.CustomerId" class="form-control"></select>
+                    <select id="customer-select" name="CustomerId" class="form-control"></select>
                 </div>
                 <div class="form-group col-md-3">
                     <label asp-for="Customer.FirstName" class="control-label"></label>
@@ -59,9 +60,9 @@
                     <select id="delivery-select" asp-for="DeliveryMethodId" class="form-control"></select>
                     <span asp-validation-for="DeliveryMethodId" class="text-danger"></span>
                 </div>
-                <div class="form-group col-md-3">
+                <div id="points-div" class="form-group col-md-3" hidden>
                     <label class="control-label">Pickup Point</label>
-                    <select id="point-select" asp-for="PickupPointId" class="form-control"></select>
+                    <select id="points-select" asp-for="PickupPointId" class="form-control"></select>
                     <span asp-validation-for="PickupPointId" class="text-danger"></span>
                 </div>
             </div>
@@ -182,6 +183,7 @@
                 items += "<option value='0'>Not Exist</option>";
             }
             $("#delivery-select").html(items);
+            checkDelivery();
         });
     });
 
@@ -202,7 +204,7 @@
         });
     });
 
-   $(function () {
+    function showPoints() {
         var currentPoint = @Model.PickupPointId;
         var url = "/PickupPoint/PickupPoints";
         $.getJSON(url, function (data) {
@@ -216,28 +218,34 @@
             if (data.length === 0) {
                 items += "<option value='0'>Not Exist</option>";
             }
-            $("#point-select").html(items);
+            $("#points-div").show();
+            $("#points-select").html(items);
         });
-    });
+    };
+
+    function hidePoints() {
+        $("#points-div").hide();
+        $("#points-select").html("");
+    }
 
     $("#customer-select").change(function () {
         var customerId = $("#customer-select").val();
-        if (customerId === "0") {
-            enableInput();
-        } else {
-            displayCustomerInfo(customerId);
-        }
-
+        
+        displayCustomerInfo(customerId);
     });
 
-    //function enableInput() {
-    //    $("#first-name").attr("readonly", false);
-    //    $("#last-name").attr("readonly", false);
-    //    $("#patronymic").attr("readonly", false);
-    //    $("#phone").attr("readonly", false);
-    //    $("#address").attr("readonly", false);
-    //    $("#comment").attr("readonly", false);
-    //}
+    $("#delivery-select").change(function () {
+        checkDelivery();
+    });
+
+    function checkDelivery() {
+        var delivery = $("#delivery-select option:selected").text();
+        if (delivery === "Pickup") {
+            showPoints();
+        } else {
+            hidePoints();
+        }
+    }
 
     function displayCustomerInfo(id) {
         $.ajax({
@@ -245,22 +253,16 @@
             url: "/Customer/CustomerJson?id=" + id,
             success: function (response) {
                 $("#first-name").val(response.firstName);
-                //$("#first-name").attr("readonly", true);
 
                 $("#last-name").val(response.lastName);
-                //$("#last-name").attr("readonly", true);
 
                 $("#patronymic").val(response.patronymic);
-                //$("#patronymic").attr("readonly", true);
 
                 $("#phone").val(response.phone);
-                //$("#phone").attr("readonly", true);
 
                 $("#address").val(response.address);
-                //$("#address").attr("readonly", true);
 
                 $("#comment").val(response.comment);
-                //$("#comment").attr("readonly", true);
             }
         });
     }

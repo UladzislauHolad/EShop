@@ -28,9 +28,16 @@ namespace EShop.Services.Services
 
         public void Create(OrderDTO orderDTO)
         {
-            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.Customer.CustomerId));
+            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
+
             if (!existCustomer.Equals(orderDTO.Customer))
-                orderDTO.Customer.CustomerId = 0;
+                orderDTO.CustomerId = 0;
+            else
+                orderDTO.Customer = null;
+
+            if (orderDTO.PickupPointId == 0)
+                orderDTO.PickupPointId = null;
+
             var order = _mapper.Map<Order>(orderDTO);
             AddStatusChanges(order, StatusStates.New.ToString());
             _orderRepository.Create(order);
@@ -91,9 +98,16 @@ namespace EShop.Services.Services
             var existOrder = _orderRepository.Get(orderDTO.OrderId);
             if(existOrder != null)
             {
-                var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.Customer.CustomerId));
+                var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
+
                 if (!existCustomer.Equals(orderDTO.Customer))
-                    orderDTO.Customer.CustomerId = 0;
+                    orderDTO.CustomerId = 0;
+                else
+                    orderDTO.Customer = null;
+
+                if (orderDTO.PickupPointId == 0)
+                    orderDTO.PickupPointId = null;
+
                 _orderRepository.Update(_mapper.Map<Order>(orderDTO));
             }
         }
