@@ -26,13 +26,48 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("Orders")]
-        public ViewResult Index()
+        public ViewResult Index(string sortOrder)
         {
-            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders()
-                .OrderByDescending(o => o.OrderId));
+            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders());
+            switch(sortOrder)
+            {
+                case "id_desc":
+                    orders = orders.OrderByDescending(o => o.OrderId);
+                    break;
+                case "customer":
+                    orders = orders.OrderBy(o => o.Customer, new CustomerComparer());
+                    break;
+                case "customer_desc":
+                    orders = orders.OrderByDescending(o => o.Customer, new CustomerComparer());
+                    break;
+                case "status":
+                    orders = orders.OrderBy(o => o.Status);
+                    break;
+                case "status_desc":
+                    orders = orders.OrderByDescending(o => o.Status);
+                    break;
+                case "date":
+                    orders = orders.OrderBy(o => o.Date);
+                    break;
+                case "date_desc":
+                    orders = orders.OrderByDescending(o => o.Date);
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.OrderId);
+                    break;
+            }
+
             SetButtonConfiguration(orders);
+            var orderList = new OrderListViewModel
+            {
+                Orders = orders,
+                IdSort = string.IsNullOrEmpty(sortOrder) ? "id_desc" : "",
+                CustomerSort = sortOrder == "customer" ? "customer_desc" : "customer",
+                StatusSort = sortOrder == "status" ? "status_desc" : "status",
+                DateSort = sortOrder == "date" ? "date_desc" : "date"
+            };
             
-            return View(orders);
+            return View(orderList);
         }
 
         [HttpGet("Orders/new")]

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrderViewModel>
+﻿@model OrderListViewModel
 
 @{
     ViewBag.Title = "OrderList";
@@ -9,10 +9,15 @@
     <h3>Order List</h3>
     <table class="table table-striped">
         <thead>
-            <tr><th>Id</th><th>Customer</th><th>Status</th><th>Date</th><th></th></tr>
+            <tr>
+            <th><a asp-action="Index" asp-route-sortOrder="@Model.IdSort">Id</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@Model.CustomerSort">Customer</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@Model.StatusSort">Status</a></th>
+            <th><a asp-action="Index" asp-route-sortOrder="@Model.DateSort">Date</a></th>
+            <th></th></tr>
         </thead>
         <tbody>
-            @foreach (OrderViewModel order in Model)
+            @foreach (OrderViewModel order in Model.Orders)
             {
                 <tr id="@order.OrderId">
                     <td>@order.OrderId</td>
@@ -64,9 +69,7 @@
         </a>
     </div>
 </div>
-<div class="pull-left">
-    @await  Component.InvokeAsync("Pager", new { pagingList = Model})
-</div>
+
 
 <div id="modal-confirm-window"></div>
 
