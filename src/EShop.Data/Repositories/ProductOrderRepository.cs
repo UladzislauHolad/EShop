@@ -44,7 +44,7 @@ namespace EShop.Data.Repositories
 
         public IQueryable<ProductOrder> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Set<ProductOrder>();
         }
 
         public void Save()
@@ -56,53 +56,6 @@ namespace EShop.Data.Repositories
         {
             _context.Set<ProductOrder>().Update(productOrder);
             _context.SaveChanges();
-            //ProductOrder existedProductOrder = _context.Set<ProductOrder>()
-            //    .Include(po => po.Product)
-            //    .SingleOrDefault(po => po.ProductOrderId == productOrder.ProductOrderId);
-
-            //if (existedProductOrder != null)
-            //{
-            //    var oldProduct = existedProductOrder.Product;
-
-            //    if (oldProduct.ProductId == productOrder.ProductId)
-            //    {
-            //        int newCountForOldProduct = oldProduct.Count + existedProductOrder.OrderCount - productOrder.OrderCount;
-            //        oldProduct.Count = newCountForOldProduct;
-
-            //        existedProductOrder.Product = oldProduct;
-            //        existedProductOrder.ProductId = productOrder.ProductId;
-            //        existedProductOrder.Name = productOrder.Name;
-            //        existedProductOrder.Description = productOrder.Description;
-            //        existedProductOrder.Price = productOrder.Price;
-            //        existedProductOrder.OrderCount = productOrder.OrderCount;
-            //        existedProductOrder.Count = productOrder.Count;
-
-            //        _context.SaveChanges();
-            //    }
-            //    else
-            //    {
-            //        var newProduct = _context.Set<Product>().SingleOrDefault(p => p.ProductId == productOrder.ProductId);
-
-            //        if (newProduct != null)
-            //        {
-            //            int newCountForOldProduct = oldProduct.Count + existedProductOrder.OrderCount;
-            //            oldProduct.Count = newCountForOldProduct;
-
-            //            int newCountForNewProduct = newProduct.Count - productOrder.OrderCount;
-            //            newProduct.Count = newCountForNewProduct;
-
-            //            existedProductOrder.Product = newProduct;
-            //            existedProductOrder.ProductId = productOrder.ProductId;
-            //            existedProductOrder.Name = productOrder.Name;
-            //            existedProductOrder.Description = productOrder.Description;
-            //            existedProductOrder.Price = productOrder.Price;
-            //            existedProductOrder.OrderCount = productOrder.OrderCount;
-            //            existedProductOrder.Count = productOrder.Count;
-
-            //            _context.SaveChanges();
-            //        }
-            //    }
-            //}
         }
     }
 }

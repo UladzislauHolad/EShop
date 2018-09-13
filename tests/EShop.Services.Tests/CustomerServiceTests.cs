@@ -1,6 +1,8 @@
-﻿using EShop.Data.Entities;
+﻿using AutoMapper;
+using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
 using System;
@@ -24,7 +26,7 @@ namespace EShop.Services.Tests
 
             var repository = new Mock<IRepository<Customer>>();
             repository.Setup(repo => repo.GetAll()).Returns(customers.AsQueryable());
-            var service = new СustomerService(repository.Object);
+            var service = new СustomerService(repository.Object, GetMapper());
 
             var result = service.GetCustomers();
 
@@ -39,7 +41,7 @@ namespace EShop.Services.Tests
             var customerDTO = new CustomerDTO { FirstName = "Cust1" };
             var repository = new Mock<IRepository<Customer>>();
             repository.Setup(repo => repo.Create(customer));
-            var service = new СustomerService(repository.Object);
+            var service = new СustomerService(repository.Object, GetMapper());
 
             service.Create(customerDTO);
 
@@ -52,7 +54,7 @@ namespace EShop.Services.Tests
             var customer = new Customer { CustomerId = 1, FirstName = "Cust1" };
             var repository = new Mock<IRepository<Customer>>();
             repository.Setup(repo => repo.Get(1)).Returns(customer);
-            var service = new СustomerService(repository.Object);
+            var service = new СustomerService(repository.Object, GetMapper());
 
             var result = service.GetCustomer(1);
 
@@ -67,7 +69,7 @@ namespace EShop.Services.Tests
             var customerDTO = new CustomerDTO { CustomerId = 1, FirstName = "Cust1" };
             var repository = new Mock<IRepository<Customer>>();
             repository.Setup(repo => repo.Update(customer));
-            var service = new СustomerService(repository.Object);
+            var service = new СustomerService(repository.Object, GetMapper());
 
             service.Update(customerDTO);
 
@@ -79,11 +81,20 @@ namespace EShop.Services.Tests
         {
             var repository = new Mock<IRepository<Customer>>();
             repository.Setup(repo => repo.Delete(1));
-            var service = new СustomerService(repository.Object);
+            var service = new СustomerService(repository.Object, GetMapper());
 
             service.Delete(1);
 
             repository.Verify(m => m.Delete(1), Times.Once);
+        }
+
+        private IMapper GetMapper()
+        {
+            var mapper = new MapperConfiguration(cfg =>
+                cfg.AddProfile(new CustomerDTOProfile())
+            ).CreateMapper();
+
+            return mapper;
         }
     }
 }

@@ -5,6 +5,7 @@ using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -26,7 +27,7 @@ namespace EShop.App.Web.Tests
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
-            CategoryController controller = new CategoryController(new CategoryService(mock.Object), GetMapper());
+            CategoryController controller = new CategoryController(new CategoryService(mock.Object, GetMapper()), GetMapper());
             controller.PageSize = 3;
 
             var result = (controller.Index(page).ViewData.Model as CategoryListViewModel).Categories.ToArray();
@@ -41,7 +42,7 @@ namespace EShop.App.Web.Tests
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.GetAll()).Returns(categories);
-            CategoryController controller = new CategoryController(new CategoryService(mock.Object), GetMapper());
+            CategoryController controller = new CategoryController(new CategoryService(mock.Object, GetMapper()), GetMapper());
             controller.PageSize = 3;
 
             var result = controller.Index(2).ViewData.Model as CategoryListViewModel;
@@ -60,7 +61,7 @@ namespace EShop.App.Web.Tests
             var categories = GetCategories();
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.Get(testId)).Returns(new Category { CategoryId = 1, Name = "Same1", ParentId = 0 });
-            CategoryController controller = new CategoryController(new CategoryService(mock.Object), GetMapper());
+            CategoryController controller = new CategoryController(new CategoryService(mock.Object, GetMapper()), GetMapper());
 
             var result = controller.Edit(testId).ViewData.Model as CategoryViewModel;
 
@@ -75,7 +76,7 @@ namespace EShop.App.Web.Tests
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(repo => repo.Update(testCategory));
             var mapper = GetMapper();
-            CategoryController controller = new CategoryController(new CategoryService(mock.Object), mapper);
+            CategoryController controller = new CategoryController(new CategoryService(mock.Object, GetMapper()), mapper);
             
             controller.Edit(mapper.Map<CategoryViewModel>(testCategory));
 
@@ -101,7 +102,7 @@ namespace EShop.App.Web.Tests
             const int testId = 1;
             var mock = new Mock<IRepository<Category>>();
             mock.Setup(m => m.Delete(testId));
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = GetMapper();
             CategoryController controller = new CategoryController(service, mapper);
 
@@ -114,7 +115,7 @@ namespace EShop.App.Web.Tests
         public void Create_ReturnView_ViewWithModelIsReturned()
         {
             var mock = new Mock<IRepository<Category>>();
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = GetMapper();
             CategoryController controller = new CategoryController(service, mapper);
 
@@ -141,7 +142,7 @@ namespace EShop.App.Web.Tests
         {
             CategoryViewModel testCategory = new CategoryViewModel { CategoryId = 1, Name = "Same1", ParentId = 0 };
             var mock = new Mock<IRepository<Category>>();
-            var service = new CategoryService(mock.Object);
+            var service = new CategoryService(mock.Object, GetMapper());
             var mapper = GetMapper();
             CategoryController controller = new CategoryController(service, mapper);
 
@@ -242,8 +243,7 @@ namespace EShop.App.Web.Tests
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Category, CategoryDTO>();
-                cfg.CreateMap<CategoryDTO, Category>();
+                cfg.AddProfile(new CategoryDTOProfile());
             });
 
             return new Mapper(config);

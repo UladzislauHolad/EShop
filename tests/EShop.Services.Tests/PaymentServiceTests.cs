@@ -1,6 +1,8 @@
-﻿using EShop.Data.Entities;
+﻿using AutoMapper;
+using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
 using System;
@@ -18,12 +20,22 @@ namespace EShop.Services.Tests
         {
             var repository = new Mock<IRepository<PaymentMethod>>();
             repository.Setup(m => m.GetAll()).Returns(new List<PaymentMethod>().AsQueryable());
-            var service = new PaymentMethodService(repository.Object);
+            var service = new PaymentMethodService(repository.Object, GetMapper());
 
             var result = service.GetPaymentMethods();
 
             repository.Verify(m => m.GetAll(), Times.Once);
             Assert.True(result is IEnumerable<PaymentMethodDTO>);
+        }
+
+        private IMapper GetMapper()
+        {
+            var _mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new PaymentMethodDTOProfile());
+            }).CreateMapper();
+
+            return _mapper;
         }
     }
 }

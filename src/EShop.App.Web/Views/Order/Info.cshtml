@@ -16,8 +16,9 @@
             <li class="list-group-item">Patronymic: @Model.Customer.Patronymic</li>
             <li class="list-group-item">Phone: @Model.Customer.Phone</li>
             <li class="list-group-item">Address: @Model.Customer.Address</li>
-            <li class="list-group-item">Comment: @Model.Customer.Comment</li>
-            <li class="list-group-item">Payment method: @(Model.PaymentMethod?.Name??"Not Exist")</li>
+            <li class="list-group-item">Comment: @Model.Comment</li>
+            <li class="list-group-item">Payment method: @(Model.PaymentMethod?.Name ?? "Not Exist")</li>
+            <li class="list-group-item">Delivery method: @(Model.DeliveryMethod?.Name ?? "Not Exist")</li>
         </ul>
         }
         else

@@ -2,6 +2,7 @@
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
 using System;
@@ -18,7 +19,7 @@ namespace EShop.Services.Tests
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(new List<Product> { new Product() }.AsQueryable());
-            ProductService service = new ProductService(mock.Object);
+            ProductService service = new ProductService(mock.Object, GetMapper());
 
             var result = service.GetProducts();
 
@@ -53,7 +54,7 @@ namespace EShop.Services.Tests
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Get(id)).Returns(new Product { ProductId = 1 });
             mock.Setup(m => m.Save());
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
 
             service.Delete(id);
 
@@ -67,7 +68,7 @@ namespace EShop.Services.Tests
             var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Create(product));
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
             var mapper = GetMapper();
 
             service.Add(mapper.Map<Product, ProductDTO>(product));
@@ -81,7 +82,7 @@ namespace EShop.Services.Tests
             var product = new Product { ProductId = 1, Name = "P21", Description = "Des21", Price = 21 };
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.Update(product));
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
             var mapper = GetMapper();
 
             service.Update(mapper.Map<Product, ProductDTO>(product));
@@ -94,7 +95,7 @@ namespace EShop.Services.Tests
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(m => m.GetAll()).Returns(GetProducts());
-            var service = new ProductService(mock.Object);
+            var service = new ProductService(mock.Object, GetMapper());
 
             var result = service.GetCategoriesWithCountOfProducts();
 
@@ -155,8 +156,7 @@ namespace EShop.Services.Tests
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<ProductDTO, Product>();
-                cfg.CreateMap<Product, ProductDTO>();
+                cfg.AddProfile(new ProductDTOProfile());
             });
             return new Mapper(config);
         }
@@ -165,7 +165,7 @@ namespace EShop.Services.Tests
         {
             var mock = new Mock<IRepository<Product>>();
             mock.Setup(repo => repo.GetAll()).Returns(products);
-            return new ProductService(mock.Object);
+            return new ProductService(mock.Object, GetMapper());
         }
     }
 }

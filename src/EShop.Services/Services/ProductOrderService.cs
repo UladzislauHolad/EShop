@@ -16,20 +16,21 @@ namespace EShop.Services.Services
         IRepository<Product> _productRepository;
         IRepository<Order> _orderRepository;
         IRepository<ProductOrder> _productOrderRepository;
+        IMapper _mapper;
 
         public ProductOrderService(IRepository<Product> productRepository,
             IRepository<Order> orderRepository, 
-            IRepository<ProductOrder> productOrderRepository)
+            IRepository<ProductOrder> productOrderRepository,
+            IMapper mapper)
         {
             _productRepository = productRepository;
             _orderRepository = orderRepository;
             _productOrderRepository = productOrderRepository;
+            _mapper = mapper;
         }
 
         public void Create(ProductOrderDTO productOrderDTO)
         {
-            var mapper = GetMapper();
-
             var product = _productRepository.Get(productOrderDTO.ProductId);
             if(product != null)
             {
@@ -58,7 +59,7 @@ namespace EShop.Services.Services
                         product.Count -= productOrderDTO.OrderCount;
 
                         _productRepository.Save();
-                        _productOrderRepository.Create(mapper.Map<ProductOrder>(productOrderDTO));
+                        _productOrderRepository.Create(_mapper.Map<ProductOrder>(productOrderDTO));
                     }
                 }
             }
@@ -76,14 +77,11 @@ namespace EShop.Services.Services
 
         public ProductOrderDTO GetProductOrder(int id)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<ProductOrderDTO>(_productOrderRepository.Get(id));
+            return _mapper.Map<ProductOrderDTO>(_productOrderRepository.Get(id));
         }
 
         public void Update(ProductOrderDTO productOrderDTO)
         {
-            var mapper = GetMapper();
             var productOrder = _productOrderRepository.Get(productOrderDTO.ProductOrderId);
             var product = _productRepository.Get(productOrderDTO.ProductId);
             if(productOrder != null)
@@ -96,17 +94,6 @@ namespace EShop.Services.Services
                 productOrder.OrderCount = productOrderDTO.OrderCount;
                 _productOrderRepository.Update(productOrder);
             }
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new ProductOrderProfile());
-                cfg.AddProfile(new ProductProfile());
-            }).CreateMapper();
-
-            return mapper;
         }
     }
 }

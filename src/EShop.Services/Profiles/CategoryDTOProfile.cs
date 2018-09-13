@@ -7,12 +7,12 @@ using System.Text;
 
 namespace EShop.Services.Profiles
 {
-    public class ProductProfile : Profile
+    public class CategoryDTOProfile : Profile
     {
-        public ProductProfile()
+        public CategoryDTOProfile()
         {
-            CreateMap<Product, ProductDTO>();
-            CreateMap<ProductDTO, Product>();
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryDTO, Category>();
         }
     }
 }

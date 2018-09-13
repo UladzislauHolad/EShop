@@ -42,8 +42,6 @@ namespace EShop.Data.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<string>("Comment");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
@@ -57,17 +55,36 @@ namespace EShop.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("EShop.Data.Entities.DeliveryMethod", b =>
+                {
+                    b.Property<int>("DeliveryMethodId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("DeliveryMethodId");
+
+                    b.ToTable("DeliveryMethods");
+                });
+
             modelBuilder.Entity("EShop.Data.Entities.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomerId");
+                    b.Property<string>("Comment");
+
+                    b.Property<int>("CustomerId");
 
                     b.Property<DateTime>("Date");
 
+                    b.Property<int?>("DeliveryMethodId");
+
                     b.Property<int>("PaymentMethodId");
+
+                    b.Property<int?>("PickupPointId");
 
                     b.Property<string>("Status");
 
@@ -75,9 +92,32 @@ namespace EShop.Data.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("DeliveryMethodId");
+
                     b.HasIndex("PaymentMethodId");
 
+                    b.HasIndex("PickupPointId");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("EShop.Data.Entities.OrderStatusChange", b =>
+                {
+                    b.Property<int>("OrderStatusChangeId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("OrderId");
+
+                    b.Property<string>("Status");
+
+                    b.HasKey("OrderStatusChangeId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderStatusChanges");
                 });
 
             modelBuilder.Entity("EShop.Data.Entities.PaymentMethod", b =>
@@ -91,6 +131,21 @@ namespace EShop.Data.Migrations
                     b.HasKey("PaymentMethodId");
 
                     b.ToTable("PaymentMethods");
+                });
+
+            modelBuilder.Entity("EShop.Data.Entities.PickupPoint", b =>
+                {
+                    b.Property<int>("PickupPointId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("PickupPointId");
+
+                    b.ToTable("PickupPoints");
                 });
 
             modelBuilder.Entity("EShop.Data.Entities.Product", b =>
@@ -324,11 +379,30 @@ namespace EShop.Data.Migrations
                 {
                     b.HasOne("EShop.Data.Entities.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EShop.Data.Entities.DeliveryMethod", "DeliveryMethod")
+                        .WithMany("Orders")
+                        .HasForeignKey("DeliveryMethodId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("EShop.Data.Entities.PaymentMethod", "PaymentMethod")
                         .WithMany("Orders")
                         .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EShop.Data.Entities.PickupPoint", "PickupPoint")
+                        .WithMany("Orders")
+                        .HasForeignKey("PickupPointId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("EShop.Data.Entities.OrderStatusChange", b =>
+                {
+                    b.HasOne("EShop.Data.Entities.Order", "Order")
+                        .WithMany("OrderStatusChanges")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

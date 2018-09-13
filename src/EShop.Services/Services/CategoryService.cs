@@ -11,17 +11,17 @@ namespace EShop.Services.Services
     public class CategoryService : ICategoryService
     {
         IRepository<Category> _repository;
+        IMapper _mapper;
 
-        public CategoryService(IRepository<Category> repository)
+        public CategoryService(IRepository<Category> repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public void Create(CategoryDTO categoryDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Create(mapper.Map<CategoryDTO, Category>(categoryDTO));
+            _repository.Create(_mapper.Map<CategoryDTO, Category>(categoryDTO));
         }
 
         public void Delete(int id)
@@ -31,16 +31,12 @@ namespace EShop.Services.Services
 
         public IEnumerable<CategoryDTO> GetCategories()
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(_repository.GetAll());
+            return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(_repository.GetAll());
         }
 
         public CategoryDTO GetCategory(int id)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<CategoryDTO>(_repository.Get(id));
+            return _mapper.Map<CategoryDTO>(_repository.Get(id));
         }
 
         public object GetCategoryNameWithCountOfProducts()
@@ -53,30 +49,14 @@ namespace EShop.Services.Services
 
         public IEnumerable<CategoryDTO> GetChildCategories(int id)
         {
-            var mapper = GetMapper();
-
             var categories = _repository.Find(c => c.ParentId == id);
 
-            return mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(categories);
+            return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(categories);
         }
 
         public void Update(CategoryDTO categoryDTO)
         {
-            var mapper = GetMapper();
-
-            _repository.Update(mapper.Map<CategoryDTO, Category>(categoryDTO));
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration((cfg) =>
-                {
-                    cfg.CreateMap<Category, CategoryDTO>();
-                    cfg.CreateMap<CategoryDTO, Category>();
-                }
-            ).CreateMapper();
-
-            return mapper;
+            _repository.Update(_mapper.Map<CategoryDTO, Category>(categoryDTO));
         }
     }
 }

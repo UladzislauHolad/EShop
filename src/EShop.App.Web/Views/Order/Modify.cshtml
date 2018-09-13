@@ -1,0 +1,346 @@
+﻿@model OrderViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Modify Order";
+}
+<div class="row">
+    <div class="col-md-10">
+        <h3>Customer</h3>
+        <form id="customer-form" asp-action="@Model.FormConfiguration.Action" asp-route-orderId="@Model.OrderId" method=@(Model.FormConfiguration.Method)>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="OrderId" class="form-control" type="hidden" />
+            <input asp-for="Status" class="form-control" type="hidden" />
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Customer</label>
+                    <select id="customer-select" name="CustomerId" class="form-control"></select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.FirstName" class="control-label"></label>
+                    <input id="first-name" asp-for="Customer.FirstName" class="form-control" />
+                    <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.LastName" class="control-label"></label>
+                    <input id="last-name" asp-for="Customer.LastName" class="form-control" />
+                    <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Patronymic" class="control-label"></label>
+                    <input id="patronymic" asp-for="Customer.Patronymic" class="form-control" />
+                    <span asp-validation-for="Customer.Patronymic" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-offset-3 col-md-3">
+                    <label asp-for="Customer.Phone" class="control-label"></label>
+                    <input id="phone" asp-for="Customer.Phone" placeholder="1231231321" pattern="\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})" class="form-control" />
+                    <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Address" class="control-label"></label>
+                    <input id="address" asp-for="Customer.Address" class="form-control" />
+                    <span asp-validation-for="Customer.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Comment" class="control-label"></label>
+                    <input id="comment" asp-for="Comment" class="form-control" />
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-offset-3 col-md-3">
+                    <label class="control-label">Payment Method</label>
+                    <select id="payment-select" asp-for="PaymentMethodId" class="form-control"></select>
+                    <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Delivery Method</label>
+                    <select id="delivery-select" asp-for="DeliveryMethodId" class="form-control"></select>
+                    <span asp-validation-for="DeliveryMethodId" class="text-danger"></span>
+                </div>
+                <div id="points-div" class="form-group col-md-3" hidden>
+                    <label class="control-label">Pickup Point</label>
+                    <select id="points-select" asp-for="PickupPointId" class="form-control"></select>
+                    <span asp-validation-for="PickupPointId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="text-center">
+                <br />
+                <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                <a asp-controller="Order" asp-action="Index" class="btn btn-default">
+                    Back To Order List
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Status != "OnCreating")
+{
+    <div class="row">
+        <h3>Product List</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>OrderCount</th>
+                    <th>Sum</th>
+                    @if (Model.Status == "New")
+                    {
+                        <th></th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProductOrderViewModel po in Model.ProductOrders)
+                {
+                    <tr id="@po.ProductOrderId">
+                        <td id="name">@po.Name</td>
+                        <td id="price">@po.Price</td>
+                        @if (Model.Status != "New")
+                        {
+                            <td>@po.OrderCount</td>
+                            <td>@(po.OrderCount * po.Price)</td>
+                        }
+                        else
+                        {
+                            @if (po.IsNotAvailable)
+                            {
+                                <td style="color:red">Not Available</td>
+                                <td style="color:red">Not Available</td>
+                            }
+                            else
+                            {
+                                <td><input id="order-count" value="@po.OrderCount" type="number" min="1" max="@(po.OrderCount + po.Product.Count)" onchange="activeEdit(@po.ProductOrderId)" /></td>
+                                <td id="sum">@(po.OrderCount * po.Price)</td>
+                            }
+
+                            <td>
+                                <div class="btn-toolbar pull-right" role="toolbar">
+                                    @if (!po.IsNotAvailable)
+                                    {
+                                        <div class="btn-group" role="group"><a id="edit-btn" class="btn btn-warning disabled" onclick="editProductOrder(@po.ProductOrderId)"><span class="glyphicon glyphicon-pencil"></span></a></div>
+                                    }
+                                    <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
+                                </div>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-center">
+            <div class="btn-group">
+                @if (Model.Status == "New")
+                {
+                    <a asp-controller="ProductOrder" asp-action="Create" asp-route-orderId="@Model.OrderId" class="btn btn-primary">
+                        Add Product To Order
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div id="modal-delete-window"></div>
+
+<script>
+    $(function () {
+        var currentPayment = @(Model.PaymentMethodId);
+        var url = "/PaymentMethod/api/Payments";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentPayment == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            if (data.length === 0) {
+                items += "<option value='0'>Not Exist</option>";
+            }
+            $("#payment-select").html(items);
+        });
+    });
+
+    $(function () {
+        var currentPayment = @Model.DeliveryMethodId;
+        var url = "/DeliveryMethod/api/Deliveries";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentPayment == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            if (data.length === 0) {
+                items += "<option value='0'>Not Exist</option>";
+            }
+            $("#delivery-select").html(items);
+            checkDelivery();
+        });
+    });
+
+    $(function () {
+        var currentCustomer = @(Model.Customer?.CustomerId??0);
+        var url = "/Customer/CustomersSelectList";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $("#customer-select").empty();
+            items += "<option value='0'>New Customer</option>";
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentCustomer == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            $("#customer-select").html(items);
+        });
+    });
+
+    function showPoints() {
+        var currentPoint = @Model.PickupPointId;
+        var url = "/PickupPoint/PickupPoints";
+        $.getJSON(url, function (data) {
+            var items = '';
+            $.each(data, function (i, row) {
+                let selected = '';
+                if (currentPoint == row.value)
+                    selected = ' selected ';
+                items += `<option value=${row.value}${selected}>${row.text}</option>`;
+            });
+            if (data.length === 0) {
+                items += "<option value='0'>Not Exist</option>";
+            }
+            $("#points-div").show();
+            $("#points-select").html(items);
+        });
+    };
+
+    function hidePoints() {
+        $("#points-div").hide();
+        $("#points-select").html("");
+    }
+
+    $("#customer-select").change(function () {
+        var customerId = $("#customer-select").val();
+        
+        displayCustomerInfo(customerId);
+    });
+
+    $("#delivery-select").change(function () {
+        checkDelivery();
+    });
+
+    function checkDelivery() {
+        var delivery = $("#delivery-select option:selected").text();
+        if (delivery === "Pickup") {
+            showPoints();
+        } else {
+            hidePoints();
+        }
+    }
+
+    function displayCustomerInfo(id) {
+        $.ajax({
+            type: "GET",
+            url: "/Customer/CustomerJson?id=" + id,
+            success: function (response) {
+                $("#first-name").val(response.firstName);
+
+                $("#last-name").val(response.lastName);
+
+                $("#patronymic").val(response.patronymic);
+
+                $("#phone").val(response.phone);
+
+                $("#address").val(response.address);
+
+                $("#comment").val(response.comment);
+            }
+        });
+    }
+
+        function activeEdit(id) {
+        var parent = $("#" + id);
+        var editBtn = parent.find("#edit-btn").first();
+        editBtn.attr('class', 'btn btn-warning');
+        var count = parseInt(parent.find("#order-count").first().val());
+        var price = parseInt(parent.find("#price").first().text());
+        parent.find("#sum").first().text(count * price);
+    }
+
+    function disableEdit(id) {
+        var parent = $("#" + id);
+        var editBtn = parent.find("#edit-btn").first();
+        editBtn.attr('class', 'btn btn-warning disabled');
+    }
+
+    function editProductOrder(prodOrderId) {
+        var parent = $("#" + prodOrderId);
+        var count = parseInt(parent.find("#order-count").first().val());
+        $.ajax({
+            url: "/Orders/" + @Model.OrderId + "/Products/" + prodOrderId,
+            type: 'PATCH',
+            data: JSON.stringify({ OrderCount: count }),
+            contentType: "application/json",
+            accept: "json",
+            success: function () {
+                disableEdit(prodOrderId);
+                customAlert("success", "Success!", "Product is updated!");
+            },
+            error: function () {
+                customAlert("error", "Error!", "Product is not updated!");
+            }
+        });
+    }
+
+    function confirmDelete(_id) {
+        var id = _id;
+        $("#modal-delete-window").dialog({
+            modal: true,
+            title: "Are you sure?",
+            maxHeight: 300,
+            maxWidth: 500,
+            minWidth: 250,
+            minHeight: 100,
+            draggable: false,
+            buttons: [
+                {
+                    text: "Delete",
+                    click: deleteConfirmed
+                },
+                {
+                    text: "Cancel",
+                    click: cancel
+                }
+            ]
+        });
+
+        function deleteConfirmed() {
+            $.ajax({
+                url: "/Orders/" + @Model.OrderId + "/Products/" + id,
+                type: "Delete",
+                success: function () {
+                    customAlert("success", "Success!", "Product is deleted!");
+                    $("tr#" + id).remove();
+                    $("#modal-delete-window").dialog("close");
+                },
+                error: function () {
+                    customAlert("error", "Error!", "Product is not deleted!");
+                }
+
+            });
+        }
+
+        function cancel() {
+            $("#modal-delete-window").dialog("close");
+        }
+    }
+</script>

@@ -2,6 +2,8 @@
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure;
+using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using EShop.Services.Profiles;
 using System;
@@ -13,146 +15,176 @@ namespace EShop.Services.Services
 {
     public class OrderService : IOrderService
     {
-        IRepository<Order> _repository;
+        IRepository<Order> _orderRepository;
+        IRepository<Customer> _customerRepository;
+        IMapper _mapper;
 
-        public OrderService(IRepository<Order> repository)
+        public OrderService(IRepository<Order> orderRepository, IRepository<Customer> customerRepository, IMapper mapper)
         {
-            _repository = repository;
-        }
-
-        public void Confirm(int id)
-        {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if(order.PaymentMethod.Name == "Cash")
-                {
-                    order.Status = "Paid";
-                }
-                else
-                {
-                    order.Status = "Confirmed";
-                }
-                order.Date = DateTime.Now;
-                _repository.Update(order);
-            }
+            _orderRepository = orderRepository;
+            _customerRepository = customerRepository;
+            _mapper = mapper;
         }
 
         public void Create(OrderDTO orderDTO)
         {
-            var mapper = GetMapper();
+            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
 
-            _repository.Create(mapper.Map<Order>(orderDTO));
+            if (!existCustomer.Equals(orderDTO.Customer))
+                orderDTO.CustomerId = 0;
+            else
+                orderDTO.Customer = null;
+
+            if (orderDTO.PickupPointId == 0)
+                orderDTO.PickupPointId = null;
+
+            var order = _mapper.Map<Order>(orderDTO);
+            AddStatusChanges(order, StatusStates.New.ToString());
+            _orderRepository.Create(order);
         }
 
         public void Delete(int id)
         {
-            var mapper = GetMapper();
-
-            _repository.Delete(id);
+            var order = _orderRepository.Get(id);
+            if (order != null)
+            {
+                Enum.TryParse(order.Status, out StatusStates statusState);
+                StatusState status = new StatusState(statusState);
+                try
+                {
+                    order.Status = status.GetNext(Commands.Delete).ToString();
+                    AddStatusChanges(order, order.Status);
+                    _orderRepository.Update(order);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
         }
 
         public OrderDTO GetOrder(int id)
         {
-            var mapper = GetMapper();
-
-            return mapper.Map<OrderDTO>(_repository.Get(id));
+            return _mapper.Map<OrderDTO>(_orderRepository.Get(id));
         }
 
         public IEnumerable<OrderDTO> GetOrders()
         {
-            var mapper = GetMapper();
+            var orders = _mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_orderRepository.GetAll().Where(o => o.Status != StatusStates.Deleted.ToString()));
+            var nextActionSetter = new NextActionState();
 
-            return mapper.Map<IEnumerable<Order>, List<OrderDTO>>(_repository.GetAll());
+            foreach (var order in orders)
+            {
+                if (IsConfirmAvailable(order))
+                {
+                    Enum.TryParse(order.Status, out StatusStates currentState);
+                    Enum.TryParse(order.PaymentMethod.Name, out PaymentMethods paymentMethod);
+                    Enum.TryParse(order.DeliveryMethod.Name, out DeliveryMethods deliveryMethod);
+                    order.Command = nextActionSetter.GetNext(currentState, paymentMethod, deliveryMethod);
+                }
+                else
+                {
+                    order.Command = Commands.Nothing;
+                }
+            }
+
+            return orders;
         }
 
         public void Update(OrderDTO orderDTO)
         {
-            var mapper = GetMapper();
+            var existOrder = _orderRepository.Get(orderDTO.OrderId);
+            if(existOrder != null)
+            {
+                var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
 
-            _repository.Update(mapper.Map<Order>(orderDTO));
+                if (!existCustomer.Equals(orderDTO.Customer))
+                    orderDTO.CustomerId = 0;
+                else
+                    orderDTO.Customer = null;
+
+                if (orderDTO.PickupPointId == 0)
+                    orderDTO.PickupPointId = null;
+
+                _orderRepository.Update(_mapper.Map<Order>(orderDTO));
+            }
         }
 
-        public bool IsConfirmAvailable(int id)
+        private void AddStatusChanges(Order order, string status)
+        {
+            var date = DateTime.Now;
+            order.Date = date;
+            order.OrderStatusChanges.Add(new OrderStatusChange { Status = status, Date = date });
+        }
+
+        private bool IsConfirmAvailable(OrderDTO order)
         {
             bool result = true;
-            var order = _repository.Get(id);
-            if(order != null)
+           
+            if(order.ProductOrders != null)
             {
-                if(order.ProductOrders != null)
-                {
-                    bool haveDeletedOrder = order.ProductOrders.Any(po => po.Product.IsDeleted == true);
-                    bool haveNoProductOrders = order.ProductOrders.Count == 0;
-                    if (haveDeletedOrder || haveNoProductOrders)
-                    {
-                        result = false;
-                    }
-                }
-                else
+                bool haveDeletedOrder = order.ProductOrders.Any(po => po.Product.IsDeleted == true);
+                bool haveNoProductOrders = order.ProductOrders.Count == 0;
+                if (haveDeletedOrder || haveNoProductOrders)
                 {
                     result = false;
                 }
+            }
+            else
+            {
+                result = false;
             }
 
             return result;
         }
 
-        public void Pay(int id)
+        public object GetCountOfConfirmedProducts()//критерий передавать в паараметре
         {
-            var order = _repository.Get(id);
-
-            if (order != null)
-            {
-                if (order.Status == "Paid")
-                {
-                    throw new InvalidOperationException("This order has already paid");
-                }
-                if(order.Status == "New")
-                {
-                    throw new InvalidOperationException("This order is not confirmed");
-                }
-                if(order.Status != "Confirmed")
-                {
-                    throw new InvalidOperationException("This order has unknown status");
-                }
-                order.Status = "Paid";
-                _repository.Update(order);
-            }
-        }
-
-        private IMapper GetMapper()
-        {
-            var mapper = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new OrderProfile());
-                cfg.AddProfile(new ProductOrderProfile());
-                cfg.AddProfile(new ProductProfile());
-                cfg.AddProfile(new PaymentMethodDTOProfile());
-            }).CreateMapper();
-
-            return mapper;
-        }
-
-        public object GetCountOfConfirmedProducts()
-        {
-            var orders = _repository.GetAll();
+            var orders = _orderRepository.GetAll();
             var products = orders.Where(o => o.Status == "Confirmed")
                 .SelectMany(o => o.ProductOrders)
                 .GroupBy(pc => pc.Name)
                 .Select(g => new { Name = g.Key, Count = g.Select(p => p.OrderCount).Sum() });
-
+            //поменять object
             return products;
         }
 
         public object GetCountOfConfirmedOrdersByDate()
         {
-            var orders = _repository.GetAll()
+            var orders = _orderRepository.GetAll()
                 .Where(o => o.Status == "Paid")
                 .GroupBy(o => o.Date.Date)
                 .Select(g => new { Date = g.Key, Count = g.Count() });
             
             return orders;
+        }
+
+        public void ChangeState(int id)
+        {
+            var order = _orderRepository.Get(id);
+            if(order != null)
+            {
+                Enum.TryParse(order.Status, out StatusStates statusState);
+                Enum.TryParse(order.PaymentMethod.Name, out PaymentMethods paymentMethod);
+                Enum.TryParse(order.DeliveryMethod.Name, out DeliveryMethods deliveryMethod);
+                NextActionState actionState = new NextActionState();
+                StatusState status = new StatusState(statusState);
+                try
+                {
+                    Commands nextAction = actionState.GetNext(statusState, paymentMethod, deliveryMethod);
+                    order.Status = status.GetNext(nextAction).ToString();
+                    AddStatusChanges(order, order.Status);
+                    _orderRepository.Update(order);
+                }
+                catch(InvalidOperationException ex)
+                {
+                    throw ex;
+                }
+            }
+            else
+                throw new InvalidOperationException("This order is not exist");
         }
     }
 }

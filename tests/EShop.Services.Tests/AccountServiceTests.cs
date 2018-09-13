@@ -1,5 +1,7 @@
-﻿using EShop.Data.Entities;
+﻿using AutoMapper;
+using EShop.Data.Entities;
 using EShop.Services.DTO;
+using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +23,7 @@ namespace EShop.Services.Tests
             var mgr = MockUserManager<User>();
             mgr.Setup(m => m.Users).Returns(new List<User>().AsQueryable());
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = service.GetUsers();
 
@@ -48,7 +50,7 @@ namespace EShop.Services.Tests
                 It.Is<User>(u => u.UserName == userDTO.UserName && u.Email == userDTO.Email), password))
                 .Returns(Task.FromResult(IdentityResult.Success));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.CreateUserAsync(userDTO, password);
 
@@ -70,7 +72,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.DeleteUserAsync(id);
 
@@ -87,7 +89,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.DeleteUserAsync(id);
 
@@ -106,7 +108,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.FindByIdAsync(id);
 
@@ -123,7 +125,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.FindByIdAsync(id);
 
@@ -146,7 +148,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.UpdateAsync(It.Is<User>(u => u.Id == id))).
                 Returns(Task.FromResult(IdentityResult.Success));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.UpdateUserAsync(userDTO);
 
@@ -166,7 +168,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByEmailAsync(email)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.FindByEmailAsync(email);
 
@@ -183,7 +185,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByEmailAsync(email)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.FindByEmailAsync(email);
 
@@ -202,7 +204,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.HasPasswordAsync(id);
 
@@ -218,7 +220,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             await Assert.ThrowsAsync<NullReferenceException>(async () => { await service.HasPasswordAsync(id); });
         }
@@ -233,7 +235,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id)).
                 Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             await Assert.ThrowsAsync<NullReferenceException>(async () => 
             {
@@ -256,7 +258,7 @@ namespace EShop.Services.Tests
             var smgr = MockSignInManager(mgr.Object);
             smgr.Setup(m => m.SignInAsync(It.Is<User>(u => u.Id == user.Id), isPersistent, null))
                 .Returns(Task.FromResult(IdentityResult.Success));
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = service.SignInAsync(id, isPersistent).GetAwaiter().IsCompleted;
 
@@ -274,7 +276,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id))
                 .Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             await Assert.ThrowsAsync<NullReferenceException>(async () =>
             {
@@ -299,7 +301,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.ChangePasswordAsync(It.Is<User>(u => u.Id == user.Id), oldPassword, newPassword))
                 .Returns(Task.FromResult(IdentityResult.Success));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.ChangePasswordAsync(id, oldPassword, newPassword);
 
@@ -315,7 +317,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.GetUserAsync(claims))
                 .Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.GetUserAsync(claims);
 
@@ -332,7 +334,7 @@ namespace EShop.Services.Tests
             var smgr = MockSignInManager(mgr.Object);
             smgr.Setup(m => m.PasswordSignInAsync(userName, password, isPersistent, false))
                 .Returns(Task.FromResult(SignInResult.Success));
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.PasswordSignInAsync(userName, password, isPersistent, false);
 
@@ -346,7 +348,7 @@ namespace EShop.Services.Tests
             var smgr = MockSignInManager(mgr.Object);
             smgr.Setup(m => m.SignOutAsync())
                 .Returns(Task.CompletedTask);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = service.SignOutAsync().IsCompletedSuccessfully;
 
@@ -364,7 +366,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.FindByIdAsync(id))
                 .Returns(Task.FromResult(user));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             await Assert.ThrowsAsync<NullReferenceException>(async () =>
             {
@@ -389,7 +391,7 @@ namespace EShop.Services.Tests
             mgr.Setup(m => m.ResetPasswordAsync(It.Is<User>(u => u.Id == user.Id), code, newPassword))
                 .Returns(Task.FromResult(IdentityResult.Success));
             var smgr = MockSignInManager(mgr.Object);
-            var service = new AccountService(mgr.Object, smgr.Object);
+            var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
             var result = await service.ResetPasswordAsync(id, code, newPassword);
 
@@ -413,6 +415,16 @@ namespace EShop.Services.Tests
                 new Mock<IUserClaimsPrincipalFactory<TUser>>().Object, 
                 null, null, null);
             return mgr;
+        }
+
+        private IMapper GetMapper()
+        {
+            var _mapper = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new UserDTOProfile());
+            }).CreateMapper();
+
+            return _mapper;
         }
     }
 }

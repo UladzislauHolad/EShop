@@ -3,6 +3,8 @@ using AutoMapper;
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure;
+using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Profiles;
 using EShop.Services.Services;
 using Moq;
@@ -15,29 +17,43 @@ namespace EShop.Services.Tests
 {
     public class OrderServiceTests
     {
-        [Fact]
-        public void GetOrders_Invoke_ReturnOrdersCollection()
-        {
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.GetAll()).Returns(GetOrders());
-            var service = new OrderService(mock.Object);
+        //[Fact]
+        //public void GetOrders_Invoke_ReturnOrdersCollection()
+        //{
+        //    var mock = new Mock<IRepository<Order>>();
+        //    mock.Setup(repo => repo.GetAll()).Returns(new List<Order> {
+        //        new Order
+        //        {
+        //            OrderId = 1,
+        //            Status = StatusStates.New.ToString(),
+        //            DeliveryMethod = new DeliveryMethod
+        //            {
+        //                Name = DeliveryMethods.Courier.ToString()
+        //            },
+        //            PaymentMethod = new PaymentMethod
+        //            {
+        //                Name = PaymentMethods.Online.ToString()
+        //            }
+        //        }
+        //    }.AsQueryable());
+        //    var service = new OrderService(mock.Object, GetMapper());
 
-            var result = service.GetOrders();
+        //    var result = service.GetOrders();
 
-            Assert.Equal(5, result.Count());
-        }
+        //    Assert.Equal(1, result.Count());
+        //}
 
-        [Fact]
-        public void GetOrders_Invoke_OrderHaveInstanceOfProductOrders()
-        {
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.GetAll()).Returns(GetOrders());
-            var service = new OrderService(mock.Object);
+        //[Fact]
+        //public void GetOrders_Invoke_OrderHaveInstanceOfProductOrders()
+        //{
+        //    var mock = new Mock<IRepository<Order>>();
+        //    mock.Setup(repo => repo.GetAll()).Returns(GetOrders());
+        //    var service = new OrderService(mock.Object, GetMapper());
 
-            var result = service.GetOrders().ToArray();
+        //    var result = service.GetOrders().ToArray();
 
-            Assert.NotNull(result[0].ProductOrders);
-        }
+        //    Assert.NotNull(result[0].ProductOrders);
+        //}
 
         [Fact]
         public void Create_CreateOrder_OrderIsCreated()
@@ -51,261 +67,14 @@ namespace EShop.Services.Tests
                 }
             };
             var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Create(order));
-            var service = new OrderService(mock.Object);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(repo => repo.Create(order));
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
             var orderDto = mapper.Map<Order, OrderDTO>(order);
             service.Create(orderDto);
 
-            mock.Verify(m => m.Create(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once);
-        }
-
-
-
-        [Fact]
-        public void Pay_PayPaidOrder_ThrowInvalidOperationException()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid",
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
-        }
-
-        [Fact]
-        public void Pay_PayNotConfirmedOrder_ThrowInvalidOperationException()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                Status = "New",
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
-        }
-
-        [Fact]
-        public void Pay_PayOrderWithUnknownStatus_ThrowInvalidOperationException()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                Status = "123",
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            Assert.Throws<InvalidOperationException>(() => service.Pay(1));
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
-        }
-
-        [Fact]
-        public void Pay_PayConfirmedOrder_OrderIsPaid()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Confirmed",
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            service.Pay(1);
-
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
-        }
-
-        [Fact]
-        public void Confirm_ConfirmCashPayment_OrderIsPaid()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                PaymentMethod = new PaymentMethod
-                {
-                    Name = "Cash"
-                }
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Paid"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            service.Confirm(1);
-
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
-        }
-
-        [Fact]
-        public void Confirm_ConfirmOnlinePayment_OrderIsConfirmed()
-        {
-            var gotOrder = new Order
-            {
-                OrderId = 1,
-                PaymentMethod = new PaymentMethod
-                {
-                    Name = "Online"
-                }
-            };
-            var updatedOrder = new Order
-            {
-                OrderId = 1,
-                Status = "Confirmed"
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            service.Confirm(1);
-
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
-        }
-
-        [Fact]
-        public void Confirm_ConfirmNotExistOrder_OrderIsNotUpdated()
-        {
-            Order gotOrder = null;
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(gotOrder);
-            mock.Setup(repo => repo.Update(It.IsAny<Order>()));
-            var service = new OrderService(mock.Object);
-
-            service.Confirm(1);
-
-            mock.Verify(m => m.Update(It.IsAny<Order>()), Times.Never);
-        }
-
-        [Fact]
-        public void IsConfirmAvailable_InvokeWithValidOrder_True()
-        {
-            var order = new Order
-            {
-                OrderId = 1,
-                ProductOrders = new List<ProductOrder>
-                {
-                    new ProductOrder
-                    {
-                        Product = new Product {IsDeleted = false}
-                    }
-                }
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(order);
-            var service = new OrderService(mock.Object);
-
-            var result = service.IsConfirmAvailable(1);
-
-            Assert.True(result);
-        }
-
-        [Fact]
-        public void IsConfirmAvailable_InvokeWithOrderWithDeletedProduct_False()
-        {
-            var order = new Order
-            {
-                OrderId = 1,
-                ProductOrders = new List<ProductOrder>
-                {
-                    new ProductOrder
-                    {
-                        Product = new Product {IsDeleted = true}
-                    }
-                }
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(order);
-            var service = new OrderService(mock.Object);
-
-            var result = service.IsConfirmAvailable(1);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void IsConfirmAvailable_InvokeWithOrderWithoutProductOrders_False()
-        {
-            var order = new Order
-            {
-                OrderId = 1,
-                ProductOrders = new List<ProductOrder>()
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(order);
-            var service = new OrderService(mock.Object);
-
-            var result = service.IsConfirmAvailable(1);
-
-            Assert.False(result);
-        }
-
-        [Fact]
-        public void IsConfirmAvailable_InvokeWithOrderWithNullProductOrders_False()
-        {
-            var order = new Order
-            {
-                OrderId = 1,
-                ProductOrders = null
-            };
-            var mapper = GetMapper();
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Get(1)).Returns(order);
-            var service = new OrderService(mock.Object);
-
-            var result = service.IsConfirmAvailable(1);
-
-            Assert.False(result);
+            orderRepository.Verify(m => m.Create(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once);
         }
 
         [Fact]
@@ -336,35 +105,46 @@ namespace EShop.Services.Tests
                 }
             };
 
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(m => m.Update(order));
-            var service = new OrderService(mock.Object);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(m => m.Update(order));
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
             var mapper = GetMapper();
 
             service.Update(mapper.Map<OrderDTO>(order));
 
-            mock.Verify(m => m.Update(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once());
+            orderRepository.Verify(m => m.Update(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once());
         }
 
         [Fact]
-        public void Delete_InvokeWithValidId_OrderDeleted()
+        public void Delete_InvokeWithValidId_OrderUpdateStatusToDeleted()
         {
-            var mock = new Mock<IRepository<Order>>();
-            mock.Setup(repo => repo.Delete(1));
-            var service = new OrderService(mock.Object);
+            var oldOrder = new Order
+            {
+                OrderId = 1,
+                Status = "New",
+                OrderStatusChanges = new List<OrderStatusChange>()
+            };
 
-            service.Delete(1);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(repo => repo.Get(oldOrder.OrderId)).Returns(oldOrder);
+            orderRepository.Setup(repo => repo.Update(It.IsAny<Order>()));
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
 
-            mock.Verify(m => m.Delete(1));
+            service.Delete(oldOrder.OrderId);
+
+            orderRepository.Verify(m => m.Update(It.Is<Order>(o => o.Status == "Deleted")));
         }
 
         [Fact]
         public void GetOrder_InvokeWithValidId_ReturnOrderDTO()
         {
             int id = 1;
-            var repository = new Mock<IRepository<Order>>();
-            repository.Setup(m => m.Get(id)).Returns(new Order());
-            var service = new OrderService(repository.Object);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(m => m.Get(id)).Returns(new Order());
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
 
             var result = service.GetOrder(id);
 
@@ -374,9 +154,10 @@ namespace EShop.Services.Tests
         [Fact]
         public void GetCountOfConfirmed_Invoke_NotNull()
         {
-            var repository = new Mock<IRepository<Order>>();
-            repository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
-            var service = new OrderService(repository.Object);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
 
             var result = service.GetCountOfConfirmedProducts();
 
@@ -386,14 +167,62 @@ namespace EShop.Services.Tests
         [Fact]
         public void GetCountOfConfirmedOrdersByDate_Invoke_NotNull()
         {
-            var repository = new Mock<IRepository<Order>>();
-            repository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
-            var service = new OrderService(repository.Object);
+            var customerRepository = new Mock<IRepository<Customer>>();
+            var orderRepository = new Mock<IRepository<Order>>();
+            orderRepository.Setup(m => m.GetAll()).Returns(new List<Order>().AsQueryable());
+            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
 
             var result = service.GetCountOfConfirmedOrdersByDate();
 
             Assert.NotNull(result);
         }
+
+        //[Fact]
+        //public void ChangeState_ChangeStateOfExistOrder_StateIsChanged()
+        //{
+        //    const int id = 1;
+        //    Order gotOrder = new Order
+        //    {
+        //        OrderId = id,
+        //        Status = "New"
+        //    };
+        //    var updatedOrder = new Order
+        //    {
+        //        OrderId = 1,
+        //        Status = "Confirmed"
+        //    };
+        //    var repository = new Mock<IRepository<Order>>();
+        //    repository.Setup(repo => repo.Get(id)).Returns(gotOrder);
+        //    repository.Setup(repo => repo.Update(It.IsAny<Order>()));
+        //    var service = new OrderService(repository.Object);
+
+        //    service.ChangeState(id, Commands.Confirm);
+
+        //    repository.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Once);
+        //}
+
+        //[Fact]
+        //public void ChangeState_ChangeStateWithWrongCommand_InvalidOperationException()
+        //{
+        //    const int id = 1;
+        //    Order gotOrder = new Order
+        //    {
+        //        OrderId = id,
+        //        Status = "New"
+        //    };
+        //    var updatedOrder = new Order
+        //    {
+        //        OrderId = 1,
+        //        Status = "Confirmed"
+        //    };
+        //    var repository = new Mock<IRepository<Order>>();
+        //    repository.Setup(repo => repo.Get(id)).Returns(gotOrder);
+        //    repository.Setup(repo => repo.Update(It.IsAny<Order>()));
+        //    var service = new OrderService(repository.Object);
+
+        //    Assert.Throws<InvalidOperationException>(() => service.ChangeState(id, Commands.Complete));
+        //    repository.Verify(m => m.Update(It.Is<Order>(o => o.Status == updatedOrder.Status)), Times.Never);
+        //}
 
         private IMapper GetMapper()
         {
@@ -401,7 +230,8 @@ namespace EShop.Services.Tests
             {
                 cfg.AddProfile(new OrderProfile());
                 cfg.AddProfile(new ProductOrderProfile());
-                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductDTOProfile());
+                cfg.AddProfile(new PaymentMethodDTOProfile());
             }).CreateMapper();
 
             return mapper;

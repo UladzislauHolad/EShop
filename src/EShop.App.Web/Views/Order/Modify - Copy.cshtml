@@ -1,0 +1,191 @@
+﻿@model OrderViewModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Create Order";
+}
+<div class="row">
+    <div class="col-md-10">
+        <h3>Customer</h3>
+
+        <form id="customer-form" onchange="enableSubmit()">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="OrderId" class="form-control" type="hidden" />
+            <input asp-for="Customer.CustomerId" class="form-control" type="hidden" />
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.FirstName" class="control-label"></label>
+                    <input asp-for="Customer.FirstName" class="form-control" />
+                    <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.LastName" class="control-label"></label>
+                    <input asp-for="Customer.LastName" class="form-control" />
+                    <span asp-validation-for="Customer.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Patronymic" class="control-label"></label>
+                    <input asp-for="Customer.Patronymic" class="form-control" />
+                    <span asp-validation-for="Customer.Patronymic" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Phone" class="control-label"></label>
+                    <input asp-for="Customer.Phone" placeholder="1231231321" pattern="\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})" class="form-control" />
+                    <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Address" class="control-label"></label>
+                    <input asp-for="Customer.Address" class="form-control" />
+                    <span asp-validation-for="Customer.Address" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label asp-for="Customer.Comment" class="control-label"></label>
+                    <input asp-for="Customer.Comment" class="form-control" />
+                    <span asp-validation-for="Customer.Comment" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label class="control-label">Payment Method</label>
+                    <select id="payment-select" asp-for="PaymentMethodId" class="form-control"></select>
+                    <span asp-validation-for="PaymentMethodId" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-3">
+                    <label class="control-label">Delivery Method</label>
+                    <select id="delivery-select" asp-for="DeliveryMethodId" class="form-control"></select>
+                    <span asp-validation-for="DeliveryMethodId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="text-center">
+                <br />
+                <button id="submit" type="submit" class="btn btn-primary" disabled>Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*<div id="app-2">
+        <span v-bind:title="message">
+            Hover your mouse over me for a few seconds
+            to see my dynamically bound title!
+        </span>
+    </div>
+
+    <div id="components-demo">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+    </div>
+
+    <div id="blog-post-demo">
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <custom-input v-model="searchText"></custom-input>
+            <blog-post v-for="post in posts"
+                       v-bind:key="post.id"
+                       v-bind:post="post"
+                       v-on:enlarge-text="postFontSize += 0.1">
+            </blog-post>
+        </div>
+    </div>*@
+<div id="products-list">
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Name</th><th>Price</th><th>Count</th><th>Sum</th></tr>
+        </thead>
+        <tbody >
+            <tr v-if="products.length">
+                <template v-for="product in products">
+                    <td>{{product.name}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.orderCount}}</td>
+                    <td>{{product.orderCount * product.price}}</td>
+                </template>
+            </tr>
+            <tr v-else><td colspan="4" class="text-center"><i>No Products</i></td></tr>
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    var productList = new Vue({
+        el: '#products-list',
+        data: {
+            products: []
+        },
+        created: function () {
+            var vm = this;
+            fetch('/Orders/test/69/Products')
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    vm.products = data;
+                });
+        }
+    });
+
+    //var app2 = new Vue({
+    //    el: '#app-2',
+    //    data: {
+    //        message: 'You loaded this page on ' + new Date().toLocaleString()
+    //    }
+    //});
+
+    //Vue.component('button-counter', {
+    //    data: function () {
+    //        return {
+    //            count: 0
+    //        };
+    //    },
+    //    template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    //});
+
+    //new Vue({ el: '#components-demo' });
+
+    //Vue.component('blog-post', {
+    //    props: ['post'],
+    //    template: `
+    //        <div class="blog-post">
+    //          <h3>{{ post.date }}</h3>
+    //          <button v-on:click="$emit('enlarge-text')">
+    //                Enlarge text
+    //            </button>
+    //          <div v-html="post.count"></div>
+    //        </div>
+    //    `
+    //});
+
+    //    new Vue({
+    //        el: '#blog-post-demo',
+    //        data: {
+    //            posts: [],
+    //            postFontSize: 1
+    //        },
+    //        created: function () {
+    //            // Alias the component instance as `vm`, so that we
+    //            // can access it inside the promise function
+    //            var vm = this;
+    //            // Fetch our array of posts from an API
+    //            fetch('/Order/GetConfirmedOrdersByDate')
+    //                .then(function (response) {
+    //                    return response.json();
+    //                })
+    //                .then(function (data) {
+    //                    vm.posts = data;
+    //                });
+    //        }
+    //    });
+
+    //    Vue.component('custom-input', {
+    //        props: ['value'],
+    //        template: `
+    //            <input
+    //              v-bind:value="value"
+    //              v-on:input="$emit('input', $event.target.value)"
+    //            >
+    //          `
+    //    });
+</script>

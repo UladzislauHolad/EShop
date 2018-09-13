@@ -10,7 +10,7 @@
     <div class="text-danger" asp-validation-summary="ModelOnly"></div>
     <table class="table table-striped">
         <thead>
-            <tr><th>Id</th><th>UserName</th><th>Email</th><th></th></tr>
+            <tr><th>UserName</th><th>Email</th><th></th></tr>
         </thead>
         <tbody>
             @if (Model.Count() == 0)
@@ -22,11 +22,10 @@
                 @foreach (var user in Model)
                 {
                     <tr>
-                        <td>@user.Id</td>
                         <td>@user.UserName</td>
                         <td>@user.Email</td>
                         <td>
-                            <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                            <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="pull-right">
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                             </form>
                         </td>

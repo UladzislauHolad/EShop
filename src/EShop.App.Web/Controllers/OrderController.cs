@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.OrderViewModels;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
@@ -24,18 +27,58 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("Orders")]
-        public ViewResult Index()
+        public ActionResult Index(string orderFilter, string searchString, DateTime from, DateTime to, string sortOrder = "OrderId_desc", int page = 1, int pageSize = 8)
         {
-            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders()
-                .OrderByDescending(o => o.OrderId));
+            if (from >= to)
+            {
+                to = DateTime.Now;
+            }
 
-            return View(orders);
+            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders().Where(o => o.Date >= from && o.Date <= to));
+
+            if (!string.IsNullOrEmpty(orderFilter))
+            {
+                orders = orders.Where(o => o.Status == orderFilter);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(o => $"{o.Customer.FirstName} {o.Customer.LastName} {o.Customer.Patronymic}".ToUpper()
+                    .Contains(searchString.ToUpper()));
+            }
+
+            var name = sortOrder.Split("_")[0];
+            var direction = sortOrder.Split("_")[1];
+            if (direction == "desc")
+                orders = orders.OrderByDescending(o => o.GetType().GetProperty(name).GetValue(o, null));
+            else
+                orders = orders.OrderBy(o => o.GetType().GetProperty(name).GetValue(o, null));
+
+            SetButtonConfiguration(orders);
+            var orderList = new OrderListViewModel
+            {
+                Orders = PaginatedList<OrderViewModel>.Create(orders, page, pageSize),
+                IdSort = sortOrder == "OrderId_asc" ? "OrderId_desc" : "OrderId_asc",
+                CustomerSort = sortOrder == "Customer_asc" ? "Customer_desc" : "Customer_asc",
+                StatusSort = sortOrder == "Status_asc" ? "Status_desc" : "Status_asc",
+                DateSort = sortOrder == "Date_asc" ? "Date_desc" : "Date_asc",
+                CurrentSort = sortOrder,
+                CurrentOrderFilter = orderFilter,
+                CurrentSearchString = searchString,
+                CurrentFrom = from,
+                CurrentTo = to               
+            };
+            
+            return View(orderList);
         }
 
         [HttpGet("Orders/new")]
         public ActionResult Create()
         {
-            return View(new OrderViewModel());
+            var orderToView = new OrderViewModel();
+            Enum.TryParse(orderToView.Status, out StatusStates status);
+            orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+            return View("Modify", orderToView);
         }
 
         [HttpPost("Orders/new")]
@@ -43,54 +86,28 @@ namespace EShop.App.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                order.Status = "New";
                 _service.Create(_mapper.Map<OrderDTO>(order));
                 return RedirectToAction("Index");
             }
 
-            return View(order);
+            Enum.TryParse(order.Status, out StatusStates status);
+            order.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+            return View("Modify", order);
         }
 
         [HttpDelete("Orders/{orderId}")]
         public ActionResult Delete([FromRoute]int orderId)
         {
-            var order = _service.GetOrder(orderId);
-            if(order != null)
+            try
             {
-                if (order.Status != "New")
-                {
-                    return BadRequest();
-                }
                 _service.Delete(orderId);
-
                 return Ok();
             }
-
-            return NotFound();
-        }
-
-        [HttpPatch("Orders/api/{orderId}")]
-        public ActionResult Confirm(int orderId)
-        {
-            var order = _service.GetOrder(orderId);
-            if(order != null)
+            catch (InvalidOperationException ex)
             {
-                if(order.Status != "New")
-                {
-                    return BadRequest();
-                }
-                if(_service.IsConfirmAvailable(orderId))
-                {
-                    _service.Confirm(orderId);
-
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NotFound();
         }
 
         [HttpGet]
@@ -109,47 +126,77 @@ namespace EShop.App.Web.Controllers
             return Json(data);
         }
 
-        [HttpGet("Orders/{orderId}")]
+        //[HttpGet("Orders/{orderId}")]
         public ActionResult Edit([FromRoute]int orderId)
         {
             var order = _service.GetOrder(orderId);
             if(order != null)
             {
                 if(order.Status == "New")
-                    return View(_mapper.Map<OrderViewModel>(order));
+                {
+                    var orderToView = _mapper.Map<OrderViewModel>(order);
+                    Enum.TryParse(orderToView.Status, out StatusStates status);
+                    orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+                    return View(orderToView);
+                }
                 return View("Info", (_mapper.Map<OrderViewModel>(order)));
             }
 
             return BadRequest();
         }
 
-        [HttpPatch("Orders/{orderId}")]
-        public ActionResult Edit([FromRoute]int orderId , OrderViewModel order)
+        [HttpGet("Orders/{orderId}")]
+        public ActionResult Modify([FromRoute]int orderId)
         {
-            var existOrder = _service.GetOrder(orderId);
-            if (existOrder != null && existOrder.Status == "New")
+            var order = _service.GetOrder(orderId);
+            if (order != null)
             {
-                existOrder.Customer = _mapper.Map<CustomerDTO>(order.Customer);
-                existOrder.PaymentMethod = null;
-                existOrder.PaymentMethodId = order.PaymentMethodId;
-                _service.Update(_mapper.Map<OrderDTO>(existOrder));
-                return Ok();
+                if (order.Status == "New")
+                {
+                    var orderToView = _mapper.Map<OrderViewModel>(order);
+                    Enum.TryParse(orderToView.Status, out StatusStates status);
+                    orderToView.FormConfiguration = new FormConfigurator().GetConfiguration(status);
+                    return View(orderToView);
+                }
+                return View("Info", (_mapper.Map<OrderViewModel>(order)));
             }
-            
+
             return BadRequest();
         }
 
-        [HttpPatch("Orders/api/Pay/{orderId}")]
-        public ActionResult Pay(int orderId)
+        [HttpPost("Orders/{orderId}")]
+        public ActionResult Modify([FromRoute]int orderId, OrderViewModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                order.Status = StatusStates.New.ToString();
+                _service.Update(_mapper.Map<OrderDTO>(order));
+                return RedirectToAction("Modify", new { orderId = orderId });
+            }
+            return View(order);
+        }
+
+        [HttpPatch("Orders/api/{orderId}")]
+        public ActionResult ChangeState(int orderId)
         {
             try
             {
-                _service.Pay(orderId);
+                _service.ChangeState(orderId);
                 return Ok();
             }
             catch (InvalidOperationException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }        
+
+        private void SetButtonConfiguration(IEnumerable<OrderViewModel> orders)
+        {
+            ButtonConfigurator configurator = new ButtonConfigurator();
+
+            foreach (var order in orders)
+            {
+                order.ButtonConfiguration = configurator.GetConfiguration(order.Command);
             }
         }
     }

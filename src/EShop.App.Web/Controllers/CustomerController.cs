@@ -40,9 +40,9 @@ namespace EShop.App.Web.Controllers
         public JsonResult CustomersSelectList()
         {
             var customers = _service.GetCustomers()
-                .Select(c => new { c.CustomerId, c.FirstName }).ToList();
+                .Select(c => new { c.CustomerId, FullName = $"{c.FirstName} {c.LastName} {c.Patronymic}" }).ToList();
 
-            return Json(new SelectList(customers, "CustomerId", "FirstName"));
+            return Json(new SelectList(customers, "CustomerId", "FullName"));
         }
 
         public ActionResult CustomerJson(int id)
