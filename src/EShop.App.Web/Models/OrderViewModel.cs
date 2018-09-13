@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Models
 {
-    public class OrderViewModel
+    public class OrderViewModel : IComparable<OrderViewModel>
     {
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
@@ -34,5 +34,10 @@ namespace EShop.App.Web.Models
         public Commands Command { get; set; }
         public ButtonConfiguration ButtonConfiguration { get; set; }
         public FormConfiguration FormConfiguration { get; set; }
+
+        public int CompareTo(OrderViewModel other)
+        {
+            return Customer.CompareTo(other.Customer);
+        }
     }
 }

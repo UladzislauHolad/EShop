@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace EShop.App.Web.Controllers
@@ -26,45 +27,46 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("Orders")]
-        public ViewResult Index(string sortOrder)
+        public ActionResult Index(string orderFilter, string searchString, DateTime from, DateTime to, string sortOrder = "OrderId_desc", int page = 1, int pageSize = 8)
         {
-            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders());
-            switch(sortOrder)
+            if (from >= to)
             {
-                case "id_desc":
-                    orders = orders.OrderByDescending(o => o.OrderId);
-                    break;
-                case "customer":
-                    orders = orders.OrderBy(o => o.Customer, new CustomerComparer());
-                    break;
-                case "customer_desc":
-                    orders = orders.OrderByDescending(o => o.Customer, new CustomerComparer());
-                    break;
-                case "status":
-                    orders = orders.OrderBy(o => o.Status);
-                    break;
-                case "status_desc":
-                    orders = orders.OrderByDescending(o => o.Status);
-                    break;
-                case "date":
-                    orders = orders.OrderBy(o => o.Date);
-                    break;
-                case "date_desc":
-                    orders = orders.OrderByDescending(o => o.Date);
-                    break;
-                default:
-                    orders = orders.OrderBy(o => o.OrderId);
-                    break;
+                to = DateTime.Now;
             }
+
+            var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders().Where(o => o.Date >= from && o.Date <= to));
+
+            if (!string.IsNullOrEmpty(orderFilter))
+            {
+                orders = orders.Where(o => o.Status == orderFilter);
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(o => $"{o.Customer.FirstName} {o.Customer.LastName} {o.Customer.Patronymic}".ToUpper()
+                    .Contains(searchString.ToUpper()));
+            }
+
+            var name = sortOrder.Split("_")[0];
+            var direction = sortOrder.Split("_")[1];
+            if (direction == "desc")
+                orders = orders.OrderByDescending(o => o.GetType().GetProperty(name).GetValue(o, null));
+            else
+                orders = orders.OrderBy(o => o.GetType().GetProperty(name).GetValue(o, null));
 
             SetButtonConfiguration(orders);
             var orderList = new OrderListViewModel
             {
-                Orders = orders,
-                IdSort = string.IsNullOrEmpty(sortOrder) ? "id_desc" : "",
-                CustomerSort = sortOrder == "customer" ? "customer_desc" : "customer",
-                StatusSort = sortOrder == "status" ? "status_desc" : "status",
-                DateSort = sortOrder == "date" ? "date_desc" : "date"
+                Orders = PaginatedList<OrderViewModel>.Create(orders, page, pageSize),
+                IdSort = sortOrder == "OrderId_asc" ? "OrderId_desc" : "OrderId_asc",
+                CustomerSort = sortOrder == "Customer_asc" ? "Customer_desc" : "Customer_asc",
+                StatusSort = sortOrder == "Status_asc" ? "Status_desc" : "Status_asc",
+                DateSort = sortOrder == "Date_asc" ? "Date_desc" : "Date_asc",
+                CurrentSort = sortOrder,
+                CurrentOrderFilter = orderFilter,
+                CurrentSearchString = searchString,
+                CurrentFrom = from,
+                CurrentTo = to               
             };
             
             return View(orderList);
@@ -186,7 +188,7 @@ namespace EShop.App.Web.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
+        }        
 
         private void SetButtonConfiguration(IEnumerable<OrderViewModel> orders)
         {

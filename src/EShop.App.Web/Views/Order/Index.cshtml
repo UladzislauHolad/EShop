@@ -7,14 +7,43 @@
 
 <div class="col-md-10">
     <h3>Order List</h3>
+
+    <form class="form-inline" asp-action="Index" method="get">
+        <input name="sortOrder" value="@Model.CurrentSort" hidden />
+        <div class="form-group">
+            <label class="control-label">Choose order filter</label>
+            <select class="form-control" name="orderFilter">
+                <option value="@Model.CurrentOrderFilter" selected>>@Model.CurrentOrderFilter</option>
+                <option value="New">New</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Paid">Paid</option>
+                <option value="Packed">Completed</option>
+                <option value="OnDelivering">OnDelivering</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Find by FullName</label>
+            <input class="form-control" name="searchString" value="@Model.CurrentSearchString" />
+        </div>
+        <label for="from">From</label>
+        <input class="form-control" type="date" id="from" name="from" value="@Model.CurrentFrom.ToString("yyyy-MM-dd")">
+        <label for="to">to</label>
+        <input class="form-control" type="date" id="to" name="to" required value="@Model.CurrentTo.ToString("yyyy-MM-dd")">
+        <input type="submit" value="Search" class="btn btn-primary" />
+        <a class="btn btn-default" asp-action="Index">Back to full List</a>
+    </form>
+
     <table class="table table-striped">
         <thead>
             <tr>
-            <th><a asp-action="Index" asp-route-sortOrder="@Model.IdSort">Id</a></th>
-            <th><a asp-action="Index" asp-route-sortOrder="@Model.CustomerSort">Customer</a></th>
-            <th><a asp-action="Index" asp-route-sortOrder="@Model.StatusSort">Status</a></th>
-            <th><a asp-action="Index" asp-route-sortOrder="@Model.DateSort">Date</a></th>
-            <th></th></tr>
+                <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.IdSort">Id</a></th>
+                @*<th><a asp-action="Index" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter = "@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.CustomerSort">Customer</a></th>*@
+                <th>Customer</th>
+                <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.StatusSort">Status</a></th>
+                <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.DateSort">Date</a></th>
+                <th></th>
+            </tr>
         </thead>
         <tbody>
             @foreach (OrderViewModel order in Model.Orders)
@@ -44,7 +73,7 @@
                     }
                     else
                     {
-                        <td style="color:red">Not Confirmed</td>
+                        <td style="color:red">New</td>
                         <td></td>
                         <td>
                             <div class="btn-toolbar pull-right" role="toolbar">
@@ -68,6 +97,32 @@
             Add New Order
         </a>
     </div>
+
+    @{
+        var prevDisabled = !Model.Orders.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.Orders.HasNextPage ? "disabled" : "";
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-page="@(Model.Orders.PageIndex - 1)"
+       asp-route-orderFilter="@Model.CurrentOrderFilter"
+       asp-route-searchString="@Model.CurrentSearchString"
+       asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")"
+       asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")"
+       class="btn btn-default @prevDisabled">
+        Previous
+    </a>
+    <a asp-action="Index"
+       asp-route-sortOrder="@Model.CurrentSort"
+       asp-route-page="@(Model.Orders.PageIndex + 1)"
+       asp-route-orderFilter="@Model.CurrentOrderFilter"
+       asp-route-searchString="@Model.CurrentSearchString"
+       asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")"
+       asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")"
+       class="btn btn-default @nextDisabled">
+        Next
+    </a>
 </div>
 
 
