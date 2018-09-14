@@ -29,11 +29,6 @@ namespace EShop.App.Web.Controllers
         [HttpGet("Orders")]
         public ActionResult Index(string orderFilter, string searchString, DateTime from, DateTime to, string sortOrder = "OrderId_desc", int page = 1, int pageSize = 8)
         {
-            if (from >= to)
-            {
-                to = DateTime.Now;
-            }
-
             var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders().Where(o => o.Date >= from && o.Date <= to));
 
             if (!string.IsNullOrEmpty(orderFilter))
