@@ -14,10 +14,10 @@
                 <th>Price</th>
                 <th>OrderCount</th>
                 <th>Sum</th>
-                @if (!Model.IsConfirmed)
+                @*@if (!Model.IsConfirmed)
                 {
                     <th></th>
-                }
+                }*@
             </tr>
         </thead>
         <tbody>
@@ -26,7 +26,7 @@
             <tr id="@po.ProductOrderId">
                 <td id="name">@po.Name</td>
                 <td id="price">@po.Price</td>
-                @if (Model.IsConfirmed)
+                @*@if (Model.IsConfirmed)
                 {
                     <td>@po.OrderCount</td>
                     <td>@(po.OrderCount * po.Price)</td>
@@ -53,24 +53,14 @@
                             <div class="btn-group" role="group"><a class="btn btn-danger" onclick="confirmDelete(@po.ProductOrderId)"><span class="glyphicon glyphicon-trash"></span></a></div>
                         </div>
                     </td>
-                }
+                }*@
             </tr>
             }
         </tbody>
     </table>
-    @*<div page-model="@Model.PageInfo" page-action="Index"
-             page-classes-enabled="true"
-             page-class="btn" page-class-normal="btn-default"
-             page-class-selected="btn-primary" class="btn-group">
-        </div>*@
+
     <div class="text-center">
         <div class="btn-group">
-            @if (!Model.IsConfirmed)
-            {
-                <a asp-action="Create" class="btn btn-primary">
-                    Add Product To Order
-                </a>
-            }
             <a asp-controller="Order" asp-action="Index" class="btn btn-default">
                 Back To Order List
             </a>
