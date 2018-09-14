@@ -38,8 +38,7 @@
         <thead>
             <tr>
                 <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.IdSort">Id</a></th>
-                @*<th><a asp-action="Index" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter = "@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.CustomerSort">Customer</a></th>*@
-                <th>Customer</th>
+                <th><a asp-action="Index" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter = "@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.CustomerSort">Customer</a></th>
                 <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.StatusSort">Status</a></th>
                 <th><a asp-action="Index" asp-route-page="@Model.Orders.PageIndex" asp-route-from="@Model.CurrentFrom.ToString("yyyy-MM-dd")" asp-route-to="@Model.CurrentTo.ToString("yyyy-MM-dd")" asp-route-searchString="@Model.CurrentSearchString" asp-route-orderFilter="@Model.CurrentOrderFilter" asp-route-sortOrder="@Model.DateSort">Date</a></th>
                 <th></th>
