@@ -30,6 +30,19 @@ namespace EShop.Services.DTO
                    Address == other.Address;
         }
 
+        public override int GetHashCode()
+        {
+            var hashCode = 240610697;
+            hashCode = hashCode * -1521134295 + CustomerId.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FirstName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(LastName);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Patronymic);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Phone);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
+            hashCode = hashCode * -1521134295 + EqualityComparer<ICollection<OrderDTO>>.Default.GetHashCode(Orders);
+            return hashCode;
+        }
+
         public static bool operator ==(CustomerDTO dTO1, CustomerDTO dTO2)
         {
             return EqualityComparer<CustomerDTO>.Default.Equals(dTO1, dTO2);

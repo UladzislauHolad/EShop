@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -29,11 +30,6 @@ namespace EShop.App.Web.Controllers
         [HttpGet("Orders")]
         public ActionResult Index(string orderFilter, string searchString, DateTime from, DateTime to, string sortOrder = "OrderId_desc", int page = 1, int pageSize = 8)
         {
-            if (from >= to)
-            {
-                to = DateTime.Now;
-            }
-
             var orders = _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders().Where(o => o.Date >= from && o.Date <= to));
 
             if (!string.IsNullOrEmpty(orderFilter))
@@ -49,10 +45,9 @@ namespace EShop.App.Web.Controllers
 
             var name = sortOrder.Split("_")[0];
             var direction = sortOrder.Split("_")[1];
-            if (direction == "desc")
-                orders = orders.OrderByDescending(o => o.GetType().GetProperty(name).GetValue(o, null));
-            else
-                orders = orders.OrderBy(o => o.GetType().GetProperty(name).GetValue(o, null));
+
+            bool desc = direction == "desc" ? true : false;
+            orders = orders.AsQueryable().OrderBy(name, desc);
 
             SetButtonConfiguration(orders);
             var orderList = new OrderListViewModel
@@ -70,6 +65,11 @@ namespace EShop.App.Web.Controllers
             };
             
             return View(orderList);
+        }
+
+        static T GetValue<T>(T obj)
+        {
+            return obj;
         }
 
         [HttpGet("Orders/new")]
