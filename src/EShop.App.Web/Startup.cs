@@ -15,6 +15,7 @@ using EShop.Data.EF.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Reflection;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace EShop.App.Web
 {
@@ -68,16 +69,36 @@ namespace EShop.App.Web
             services.AddMvc()
                 .AddFluentValidation(fvc => 
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
-            services.AddMvc();            
+            services.AddMvc();
+
+
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseAuthentication();
-            app.UseStaticFiles();
             app.UseDeveloperExceptionPage();
-            app.UseMvcWithDefaultRoute();
+            app.UseStaticFiles();
+            app.UseSpaStaticFiles();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(name: "default", template: "{controller}/{action=index}/{id}");
+            });
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+                spa.Options.SourcePath = "ClientApp";
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
     }
 }
