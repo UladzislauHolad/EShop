@@ -133,5 +133,11 @@ namespace EShop.App.Web.Controllers
 
             return Json(data);
         }
+
+        [HttpGet("api/categories")]
+        public JsonResult GetCategories()
+        {
+            return Json(_service.GetCategories());
+        }
     }
 }
