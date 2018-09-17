@@ -1,0 +1,24 @@
+<div class="ui container">
+    <div class="ui buttons">
+        <a class="ui positive button" routerLink="new">Create new</a>
+    </div>
+    <table class="ui celled stripped table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of categories">
+            <td>{{c.name}}</td>
+            <td class="center aligned two wide">
+                <div class="ui small basic icon buttons">
+                  <a class="ui button" routerLink="{{c.categoryId}}"><i class="pencil alternate icon"></i></a>
+                  <button class="ui button"><i class="trash icon"></i></button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>
