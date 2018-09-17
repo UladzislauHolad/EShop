@@ -148,5 +148,11 @@ namespace EShop.App.Web.Controllers
         {
             return Json(_service.GetProducts());
         }
+
+        [HttpGet("api/products/{id}")]
+        public JsonResult GetProducts([FromRoute]int id)
+        {
+            return Json(_service.GetProduct(id));
+        }
     }
 }
