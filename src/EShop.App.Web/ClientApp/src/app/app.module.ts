@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -12,6 +14,7 @@ import { EditProductComponent } from './components/products/edit-product/edit-pr
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/categories/create-category/create-category.component';
 import { EditCategoryComponent } from './components/categories/edit-category/edit-category.component';
+import { CategoryMultiselectComponent } from './components/products/category-multiselect/category-multiselect.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +25,16 @@ import { EditCategoryComponent } from './components/categories/edit-category/edi
     EditProductComponent,
     CategoriesComponent,
     CreateCategoryComponent,
-    EditCategoryComponent
+    EditCategoryComponent,
+    CategoryMultiselectComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgSelectModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
