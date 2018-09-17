@@ -1,16 +1,28 @@
 <div class="ui container">
-    <form class="ui small form segment">
-        <h3 class="ui header">Create a new product</h3>
-      
-        <div class="field">
-          <label for="name">Product name:</label>
-          <input type="text" name="name">
-        </div>
-        <div class="field">
-            <label for="price">Product name:</label>
-            <input type="text" name="price">
-        </div>
-        <button class="ui positive button" type="submit">Save</button>
-        <button class="ui button" type="button" (click)="goBack()">Cancel</button>
-      </form>
+  <form class="ui small form segment">
+    <h3 class="ui header">Create a new product</h3>
+
+    <div class="field">
+      <label for="name">Product name:</label>
+      <input type="text" name="name">
+    </div>
+    <div class="field">
+      <label for="price">Price:</label>
+      <input type="text" name="price">
+    </div>
+    <div class="field">
+      <label for="count">Count:</label>
+      <input type="number" name="count">
+    </div>
+    <div class="field">
+      <label for="description">Description:</label>
+      <input type="text" name="description">
+    </div>
+    <div class="field">
+      <label for="categories">Categories:</label>
+      <app-category-multiselect></app-category-multiselect>
+    </div>
+      <button class="ui positive button" type="submit">Save</button>
+      <button class="ui button" type="button" (click)="goBack()">Cancel</button>
+  </form>
 </div>
