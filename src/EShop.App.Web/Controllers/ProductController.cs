@@ -142,5 +142,11 @@ namespace EShop.App.Web.Controllers
                 .Select(p => new { p.ProductId, p.Name }).ToList();
             return Json(new SelectList(products, "ProductId", "Name"));
         }
+
+        [HttpGet("api/products")]
+        public JsonResult GetProducts()
+        {
+            return Json(_service.GetProducts());
+        }
     }
 }
