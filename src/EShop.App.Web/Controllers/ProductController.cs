@@ -154,5 +154,20 @@ namespace EShop.App.Web.Controllers
         {
             return Json(_service.GetProduct(id));
         }
+
+        [HttpPost("api/products")]
+        [AllowAnonymous]
+        public ActionResult CreateProduct([FromBody]ProductViewModel product)
+        {
+            return Ok();
+        }
+
+        [HttpPatch("api/products/{id}")]
+        [AllowAnonymous]
+        public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
+        {
+            //return BadRequest();
+            return Ok();
+        }
     }
 }
