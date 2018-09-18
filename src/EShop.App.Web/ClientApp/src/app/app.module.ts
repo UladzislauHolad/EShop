@@ -15,6 +15,7 @@ import { CategoriesComponent } from './components/categories/categories.componen
 import { CreateCategoryComponent } from './components/categories/create-category/create-category.component';
 import { EditCategoryComponent } from './components/categories/edit-category/edit-category.component';
 import { CategoryMultiselectComponent } from './components/products/category-multiselect/category-multiselect.component';
+import { ProductFormComponent } from './components/products/product-form/product-form.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CategoryMultiselectComponent } from './components/products/category-mul
     CategoriesComponent,
     CreateCategoryComponent,
     EditCategoryComponent,
-    CategoryMultiselectComponent
+    CategoryMultiselectComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,
