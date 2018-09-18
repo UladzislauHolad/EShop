@@ -1,28 +1,12 @@
 <div class="ui container">
-  <form class="ui small form segment">
-    <h3 class="ui header">Create a new product</h3>
-
-    <div class="field">
-      <label for="name">Product name:</label>
-      <input type="text" name="name">
+  <div class="ui {{msgClass}} message" *ngIf="msgVisible">
+    <i class="close icon" (click)="closeMsg()"></i>
+    <div class="header">
+      {{msgHeader}}
     </div>
-    <div class="field">
-      <label for="price">Price:</label>
-      <input type="text" name="price">
-    </div>
-    <div class="field">
-      <label for="count">Count:</label>
-      <input type="number" name="count">
-    </div>
-    <div class="field">
-      <label for="description">Description:</label>
-      <input type="text" name="description">
-    </div>
-    <div class="field">
-      <label for="categories">Categories:</label>
-      <app-category-multiselect></app-category-multiselect>
-    </div>
-      <button class="ui positive button" type="submit">Save</button>
-      <button class="ui button" type="button" (click)="goBack()">Cancel</button>
-  </form>
+    <p>{{msg}}</p>
+  </div>
+  <h3 class="ui header">Create product</h3>
+  <app-product-form [product]="product" (onFormSubmit)="onSubmit($event)">
+  </app-product-form>
 </div>

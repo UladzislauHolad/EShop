@@ -1,85 +1,12 @@
-<div class="ui container" *ngIf="myForm">
-  <h3 class="ui header">Edit product</h3>
-  <form [formGroup]="myForm" class="ui form" (ngSubmit)="onSubmit(myForm.value)">
-    <input type="hidden" name="productId" value="{{product.productId}}"/>
-    <div class="field" [class.error]="!name.valid">
-      <label for="name">Product name:</label>
-      <div class="ui input">
-        <input type="text" placeholder="Product name" [formControl]="myForm.controls['name']">
+<div class="ui container">
+    <div class="ui {{msgClass}} message" *ngIf="msgVisible">
+      <i class="close icon" (click)="closeMsg()"></i>
+      <div class="header">
+        {{msgHeader}}
       </div>
-      <div *ngIf="!name.valid" class="ui mini negative message">
-        <div *ngIf="name.errors.required">
-          Name is required
-        </div>
-        <div *ngIf="name.errors.minlength">
-          Name must be at least 4 characters long
-        </div>
-        <div *ngIf="name.errors.maxlength">
-          Name must be less than 51 characters long
-        </div>
-      </div>
+      <p>{{msg}}</p>
     </div>
-
-    <div class="field" [class.error]="!price.valid">
-      <label for="price">Price:</label>
-      <div class="ui input">
-        <input type="number" placeholder="Price" [formControl]="myForm.controls['price']">
-      </div>
-      <div *ngIf="!price.valid" class="ui mini negative message">
-        <div *ngIf="price.errors.required">
-          Price is required
-        </div>
-        <div *ngIf="price.errors?.min">
-          Minimum valid price is 0.01
-        </div>
-      </div>
-    </div>
-
-    <div class="field" [class.error]="!count.valid">
-      <label for="count">Count:</label>
-      <div class="ui input">
-        <input type="number" placeholder="Count" [formControl]="myForm.controls['count']">
-      </div>
-      <div *ngIf="!count.valid" class="ui mini negative message">
-        <div *ngIf="count.errors.required">
-          count is required
-        </div>
-        <div *ngIf="count.errors?.min">
-          Minimum valid count is 1
-        </div>
-      </div>
-    </div>
-
-    <div class="field" [class.error]="!description.valid">
-      <label for="description">Description:</label>
-      <div class="ui input">
-        <input type="text" placeholder="Description" [formControl]="myForm.controls['description']">
-      </div>
-      <div *ngIf="!description.valid" class="ui mini negative message">
-        <div *ngIf="description.errors.required">
-          Description is required
-        </div>
-        <div *ngIf="description.errors.minlength">
-          Description must be at least 20 characters long
-        </div>
-        <div *ngIf="description.errors.maxlength">
-          Description must be less than 501 characters long
-        </div>
-      </div>
-    </div>
-
-    
-    <div class="field" [class.error]="!categories.valid">
-        <ng-select [formControl]="myForm.controls['categories']" name="categories" [items]="existCategories" [multiple]="true" bindLabel="name" [closeOnSelect]="false" bindValue="categoryId" notFoundText="No categories">
-            <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-              <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.name}}
-            </ng-template>
-        </ng-select> 
-    </div>
-
-
-    <button type="submit" class="ui positive button" [disabled]="!myForm.valid">Submit</button>
-    <button class="ui button" (click)="goBack()" type="button">Cancel</button>
-  </form>
-  <div *ngIf="!myForm.valid" class="ui negative message">Form is Invalid</div>
-</div>
+    <h3 class="ui header">Edit product</h3>
+    <app-product-form *ngIf="product" [product]="product" (onFormSubmit)="onSubmit($event)">
+    </app-product-form>
+  </div>

@@ -4,10 +4,6 @@ import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product';
 import { ActivatedRoute } from '@angular/router';
 
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { CategoryService } from '../../../services/category.service';
-import { Category } from '../../../models/category';
-
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
@@ -15,97 +11,62 @@ import { Category } from '../../../models/category';
 })
 export class EditProductComponent implements OnInit {
 
+  msgVisible: boolean;
+  msg: string;
+  msgHeader: string;
   product: Product;
-  existCategories: Category[];
-  // selectedCategories: Category[];
-  
-  myForm: FormGroup;
-  name: AbstractControl;
-  price: AbstractControl;
-  count: AbstractControl;
-  description: AbstractControl;
-  categories: AbstractControl;
-
-
+  msgClass: string;
 
   constructor(
-    private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private location: Location,
-    private categoryService: CategoryService,
     private productService: ProductService,
-    ) { }
+  ) { }
+
+  ngOnInit() {
+    this.getProduct();
+    this.msgVisible = false;
+  }
 
   getProduct(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.productService.getProduct(id)
       .subscribe(product => {
-        this.product = product
-        this.createForm(product);
-        this.getCategories();
+        this.product = product;
       });
   }
 
-  onSubmit(form: any): void {
-    console.log('You submited form: ', form);
-  }
-
-  getCategories(): void {
-    this.categoryService.getCategories()
-      .subscribe(categories => {
-        this.existCategories = categories;
-      });
-  }
-
-  createForm(product: Product) {
-    this.myForm = this.formBuilder.group({
-      'name': [
-        product.name,
-        [ 
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(50)
-        ]
-      ],
-      'price': [
-        product.price,
-        [
-          Validators.required,
-          Validators.min(0.01)
-        ]
-      ],
-      'count': [
-        product.count,
-        [
-          Validators.required,
-          Validators.min(1)
-        ]
-      ],
-      'description': [
-        product.description,
-        [
-          Validators.required,
-          Validators.minLength(20),
-          Validators.maxLength(500)
-        ]
-      ],
-      'categories': [
-        product.categories        
-      ]
-    });
-
-    this.name = this.myForm.controls['name'];
-    this.price = this.myForm.controls['price'];
-    this.count = this.myForm.controls['count'];
-    this.description = this.myForm.controls['description'];
-    this.categories = this.myForm.controls['categories'];
-  }
-
-  ngOnInit() {
-    this.getProduct();
+  onSubmit(product: Product): void {
+    console.log('You submited form: ', product);
+    this.productService.updateProduct(product).subscribe(
+      () => {
+        this.buildMsg("Success!", "positive", "Product is updated!");
+        setTimeout(() => {
+          this.location.back();
+        }, 3000);
+      },
+      error => {
+        this.buildMsg("Error!", "negative", error);
+        setTimeout(() => {
+          this.closeMsg();
+        }, 3000);
+      }
+    );
   }
 
   goBack() {
     this.location.back();
+  }
+
+  buildMsg(msgHeader: string, msgClass: string, msg: string)
+  {
+    this.msgHeader = msgHeader;
+    this.msgClass = msgClass;
+    this.msg = msg;
+    this.msgVisible = true;
+  }
+
+  closeMsg() {
+    this.msgVisible = false;
   }
 }
