@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgHttpLoaderModule } from 'ng-http-loader';
 
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -36,7 +37,8 @@ import { ProductFormComponent } from './components/products/product-form/product
     AppRoutingModule,
     NgSelectModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgHttpLoaderModule
   ],
   providers: [],
   bootstrap: [AppComponent]
