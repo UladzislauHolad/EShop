@@ -18,4 +18,8 @@ export class ProductsComponent implements OnInit {
       .subscribe(products => this.products = products);
   }
 
+  delete(product: Product){
+    this.productService.deleteProduct(product.productId).subscribe();
+    console.dir(product);    
+  }
 }

@@ -169,5 +169,13 @@ namespace EShop.App.Web.Controllers
             //return BadRequest();
             return Ok();
         }
+
+        [HttpDelete("api/products/{id}")]
+        [AllowAnonymous]
+        public ActionResult DeleteProduct([FromRoute]int id)
+        {
+            //return BadRequest();
+            return Ok();
+        }
     }
 }
