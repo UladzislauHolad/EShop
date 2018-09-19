@@ -159,22 +159,31 @@ namespace EShop.App.Web.Controllers
         [AllowAnonymous]
         public ActionResult CreateProduct([FromBody]ProductViewModel product)
         {
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _service.Add(_mapper.Map<ProductViewModel, ProductDTO>(product));
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [HttpPatch("api/products/{id}")]
         [AllowAnonymous]
         public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
         {
-            //return BadRequest();
-            return Ok();
+            if (ModelState.IsValid)
+            {
+                _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [HttpDelete("api/products/{id}")]
         [AllowAnonymous]
         public ActionResult DeleteProduct([FromRoute]int id)
         {
-            //return BadRequest();
+            _service.Delete(id);
             return Ok();
         }
     }
