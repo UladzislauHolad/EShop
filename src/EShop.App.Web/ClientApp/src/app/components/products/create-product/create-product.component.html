@@ -1,13 +1,5 @@
 <div class="ui container">
-  <div class="ui {{msgClass}} message" *ngIf="msgVisible">
-    <i class="close icon" (click)="closeMsg()"></i>
-    <div class="header">
-      {{msgHeader}}
-    </div>
-    <p>{{msg}}</p>
-  </div>
   <h3 class="ui header">Create product</h3>
   <app-product-form [product]="product" (onFormSubmit)="onSubmit($event)">
   </app-product-form>
 </div>
-<div id="notification"></div>
