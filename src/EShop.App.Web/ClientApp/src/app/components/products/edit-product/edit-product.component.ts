@@ -3,29 +3,27 @@ import { Location } from '@angular/common';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from 'ng2-notify-popup';
 
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.css']
+  styleUrls: ['./edit-product.component.css'],
+  providers: [NotificationService]
 })
 export class EditProductComponent implements OnInit {
 
-  msgVisible: boolean;
-  msg: string;
-  msgHeader: string;
   product: Product;
-  msgClass: string;
 
   constructor(
     private route: ActivatedRoute,
     private location: Location,
     private productService: ProductService,
+    private notify: NotificationService
   ) { }
 
   ngOnInit() {
     this.getProduct();
-    this.msgVisible = false;
   }
 
   getProduct(): void {
@@ -40,16 +38,13 @@ export class EditProductComponent implements OnInit {
     console.log('You submited form: ', product);
     this.productService.updateProduct(product).subscribe(
       () => {
-        this.buildMsg("Success!", "positive", "Product is updated!");
+        this.show("Product is updated!", "success");
         setTimeout(() => {
           this.location.back();
         }, 3000);
       },
       error => {
-        this.buildMsg("Error!", "negative", error);
-        setTimeout(() => {
-          this.closeMsg();
-        }, 3000);
+        this.show(error, "error");
       }
     );
   }
@@ -58,15 +53,7 @@ export class EditProductComponent implements OnInit {
     this.location.back();
   }
 
-  buildMsg(msgHeader: string, msgClass: string, msg: string)
-  {
-    this.msgHeader = msgHeader;
-    this.msgClass = msgClass;
-    this.msg = msg;
-    this.msgVisible = true;
-  }
-
-  closeMsg() {
-    this.msgVisible = false;
+  show(text: string, type: string): void {
+    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }

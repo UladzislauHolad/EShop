@@ -2,19 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../services/product.service';
+import { NotificationService } from 'ng2-notify-popup';
 
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
-  styleUrls: ['./create-product.component.css']
+  styleUrls: ['./create-product.component.css'],
+  providers: [NotificationService]
 })
 export class CreateProductComponent implements OnInit {
 
-  msgVisible: boolean;
-  msg: string;
-  msgHeader: string;
-  msgClass: string;
-  
   product: Product = {
     productId: 0,
     name: '',
@@ -26,29 +23,24 @@ export class CreateProductComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private productService: ProductService
+    private productService: ProductService,
+    private notify: NotificationService
   ) { }
 
   ngOnInit() {
     console.dir(this.product);
-    this.msgVisible = false;
   }
 
   onSubmit(product: Product) {
-    console.dir(product);
-    console.log("submit");
     this.productService.createProduct(product).subscribe(
       () => {
-        this.buildMsg("Success!", "positive", "Done! You will be redirected to the previous page");
+        this.show("Done! You will be redirected to the previous page", "success");
         setTimeout(() => {
           this.goBack()
         }, 3000);
       },
       error => {
-        this.buildMsg("Error!", "negative", error);
-        setTimeout(() => {
-          this.closeMsg();
-        }, 3000);
+        this.show(error, "error");
       }
     );
   }
@@ -56,16 +48,8 @@ export class CreateProductComponent implements OnInit {
   goBack() {    
     this.location.back();
   }
-
-  buildMsg(msgHeader: string, msgClass: string, msg: string)
-  {
-    this.msgHeader = msgHeader;
-    this.msgClass = msgClass;
-    this.msg = msg;
-    this.msgVisible = true;
-  }
-
-  closeMsg() {
-    this.msgVisible = false;
+   // to append in body
+  show(text: string, type: string): void {
+    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }

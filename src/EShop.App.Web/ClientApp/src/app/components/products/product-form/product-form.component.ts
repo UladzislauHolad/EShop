@@ -16,8 +16,8 @@ export class ProductFormComponent implements OnInit {
 
   @Input() product: Product;
   existCategories: Category[];
-  
-  
+
+
   myForm: FormGroup;
   name: AbstractControl;
   price: AbstractControl;
@@ -33,7 +33,7 @@ export class ProductFormComponent implements OnInit {
     private location: Location,
     private categoryService: CategoryService,
     private productService: ProductService,
-    ) { }
+  ) { }
 
   getProduct(): void {
     const id = +this.route.snapshot.paramMap.get('id');
@@ -48,9 +48,7 @@ export class ProductFormComponent implements OnInit {
 
   @Output() onFormSubmit = new EventEmitter<Product>();
 
-  onSubmit(product: Product)
-  {
-    console.log("emit");
+  onSubmit(product: Product) {
     this.onFormSubmit.emit(product);
   }
 
@@ -66,7 +64,7 @@ export class ProductFormComponent implements OnInit {
       'productId': product.productId,
       'name': [
         product.name,
-        [ 
+        [
           Validators.required,
           Validators.minLength(4),
           Validators.maxLength(50)
@@ -98,7 +96,7 @@ export class ProductFormComponent implements OnInit {
         product.categories,
         [
           Validators.required
-        ]       
+        ]
       ]
     });
 

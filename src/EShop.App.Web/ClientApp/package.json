@@ -21,10 +21,14 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@ng-select/ng-select": "^2.9.0",
+    "@toverux/ngx-sweetalert2": "^4.0.0",
     "core-js": "^2.5.4",
     "ng-http-loader": "^3.0.0",
+    "ng2-notify-popup": "^0.1.25",
     "rxjs": "~6.2.0",
     "semantic-ui-css": "^2.4.0",
+    "sweetalert2": "^7.26.29",
+    "web-animations-js": "^2.3.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
