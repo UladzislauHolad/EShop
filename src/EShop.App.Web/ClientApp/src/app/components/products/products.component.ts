@@ -32,7 +32,6 @@ export class ProductsComponent implements OnInit {
         this.show(error, "error");
       }
     );
-    console.dir(product);
   }
 
   show(text: string, type: string): void {

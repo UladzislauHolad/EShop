@@ -48,7 +48,7 @@ export class CreateProductComponent implements OnInit {
   goBack() {    
     this.location.back();
   }
-   // to append in body
+  
   show(text: string, type: string): void {
     this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }

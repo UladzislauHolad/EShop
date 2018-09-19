@@ -139,5 +139,42 @@ namespace EShop.App.Web.Controllers
         {
             return Json(_service.GetCategories());
         }
+
+        [HttpGet("api/categories/{id}")]
+        public JsonResult GetCategory([FromRoute]int id)
+        {
+            return Json(_service.GetCategory(id));
+        }
+
+        [HttpPost("api/categories/")]
+        public ActionResult CreateCategory([FromBody]CategoryViewModel category)
+        {
+            if (ModelState.IsValid)
+            {
+                _service.Create(_mapper.Map<CategoryDTO>(category));
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPatch("api/categories/{id}")]
+        public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
+        {
+            if (ModelState.IsValid)
+            {
+                _service.Update(_mapper.Map<CategoryDTO>(category));
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete("api/categories/{id}")]
+        public ActionResult DeleteCategory([FromRoute]int id)
+        {
+            _service.Delete(id);
+            return Ok();
+        }
     }
 }

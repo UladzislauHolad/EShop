@@ -1,0 +1,36 @@
+<form *ngIf="myForm" [formGroup]="myForm" class="ui form" (ngSubmit)="onSubmit(myForm.value)">
+  <div class="field" [class.error]="!name.valid">
+    <label for="name">Category name:</label>
+    <div class="ui input">
+      <input type="text" placeholder="Category name" [formControl]="myForm.controls['name']">
+    </div>
+    <div *ngIf="!name.valid" class="ui mini negative message">
+        <div *ngIf="name.errors?.required">
+          Name is required
+        </div>
+        <div *ngIf="name.errors?.minlength">
+          Name must be at least 2 characters long
+        </div>
+        <div *ngIf="name.errors?.maxlength">
+          Name must be less than 51 characters long
+        </div>
+      </div>
+  </div>
+  <div class="field" [class.error]="!parentId.valid">
+    <label for="parentId">Parent:</label>
+    <ng-select [items]="existCategories"
+      bindValue="categoryId"
+      bindLabel="name"
+      labelForId="parentId"
+      formControlName="parentId"
+      notFoundText="No catetegories"
+      markFirst="true">
+    </ng-select>
+    <div *ngIf="!parentId.valid" class="ui mini negative message">
+      Parent is required
+    </div>
+  </div>
+  <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
+  <button class="ui button" (click)="goBack()" type="button">Cancel</button>  
+  <div *ngIf="!myForm.valid" class="ui negative message">Form is Invalid</div>
+</form>

@@ -10,7 +10,9 @@ namespace EShop.App.Web.Models.ModelValidators
     {
         public CategoryViewModelValidator()
         {
+            RuleFor(c => c.CategoryId).GreaterThan(-1);
             RuleFor(c => c.Name).NotEmpty().MaximumLength(50);
+            RuleFor(c => c.ParentId).GreaterThan(-1);
         }
     }
 }

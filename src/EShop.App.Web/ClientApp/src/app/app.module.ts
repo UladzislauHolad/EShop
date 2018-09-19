@@ -23,7 +23,8 @@ import { ProductFormComponent } from './components/products/product-form/product
 /** IMPORTANT : IE10 and IE11 requires the following to support `@angular/animation` (which is used by this module).
 Run `npm install --save web-animations-js`.
 */
-import 'web-animations-js';  
+import 'web-animations-js';
+import { CategoryFormComponent } from './components/categories/category-form/category-form.component';  
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import 'web-animations-js';
     EditCategoryComponent,
     CategoryMultiselectComponent,
     ProductFormComponent,
+    CategoryFormComponent,
   ],
   imports: [
     BrowserModule,

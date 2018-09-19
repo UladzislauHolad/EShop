@@ -1,16 +1,5 @@
 <div class="ui container">
-    <form class="ui small form segment">
-      <h3 class="ui header">Edit category</h3>
-    
-      <div class="field">
-        <label for="name">Category name:</label>
-        <input type="text" name="name">
-      </div>
-      <div class="field">
-          <label for="parentId">Parent category:</label>
-          <input type="number" name="parentId">
-      </div>
-      <button class="ui positive button" type="submit">Save</button>
-      <button class="ui button" (click)="goBack()" type="button">Cancel</button>
-    </form>
+  <h3 class="ui header">Edit category</h3>
+  <app-category-form *ngIf="category" [processing]="processing" [category]="category" (submitForm)="onSubmit($event)"></app-category-form>
 </div>
+<div id="notification"></div>
