@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.Angular.ProductOrder;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -120,6 +121,20 @@ namespace EShop.App.Web.Controllers
                 _productOrderService.Update(_mapper.Map<ProductOrderDTO>(productOrder));
 
                 return Json(new { success = true });
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet("api/orders/{orderId}/products")]
+        public ActionResult GetProductOrders([FromRoute]int orderId)
+        {
+            var order = _orderService.GetOrder(orderId);
+            if (order != null)
+            {
+                var result = _mapper.Map<IEnumerable<ProductOrderAngularViewModel>>(order.ProductOrders);
+
+                return Json(result);
             }
 
             return BadRequest();
