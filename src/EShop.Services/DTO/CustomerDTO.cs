@@ -13,7 +13,7 @@ namespace EShop.Services.DTO
         public string Phone { get; set; }
         public string Address { get; set; }
 
-        public virtual ICollection<OrderDTO> Orders { get; set; }
+        //public virtual ICollection<OrderDTO> Orders { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -39,7 +39,7 @@ namespace EShop.Services.DTO
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Patronymic);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Phone);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Address);
-            hashCode = hashCode * -1521134295 + EqualityComparer<ICollection<OrderDTO>>.Default.GetHashCode(Orders);
+            //hashCode = hashCode * -1521134295 + EqualityComparer<ICollection<OrderDTO>>.Default.GetHashCode(Orders);
             return hashCode;
         }
 
