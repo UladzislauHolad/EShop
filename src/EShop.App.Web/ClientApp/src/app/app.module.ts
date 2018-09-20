@@ -26,6 +26,7 @@ Run `npm install --save web-animations-js`.
 import 'web-animations-js';
 import { CategoryFormComponent } from './components/categories/category-form/category-form.component';  
 import { ProductOrdersComponent } from './components/orders/order-form/product-orders/product-orders.component';  
+import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ProductOrdersComponent } from './components/orders/order-form/product-o
     ProductFormComponent,
     CategoryFormComponent,
     ProductOrdersComponent,
+    CreateProductOrderComponent,
   ],
   imports: [
     BrowserModule,
