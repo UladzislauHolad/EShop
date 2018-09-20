@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.Angular;
 using EShop.App.Web.Models.OrderViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -198,6 +200,48 @@ namespace EShop.App.Web.Controllers
             {
                 order.ButtonConfiguration = configurator.GetConfiguration(order.Command);
             }
+        }
+
+        [HttpGet("api/orders")]
+        [AllowAnonymous]
+        public JsonResult GetOrders()
+        {
+            return Json(_mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders()));
+        }
+
+        [HttpGet("api/orders/{id}")]
+        [AllowAnonymous]
+        public JsonResult GetOrder([FromRoute]int id)
+        {
+            return Json(_mapper.Map<ModifyOrderAngularViewModel>(_service.GetOrder(id)));
+        }
+
+        [HttpPost("api/orders")]
+        [AllowAnonymous]
+        public ActionResult CreateOrder([FromBody]ModifyOrderAngularViewModel order)
+        {
+            if (ModelState.IsValid)
+            {
+                order.Status = "New";
+                var result = _service.Create(_mapper.Map<OrderDTO>(order));
+
+                return StatusCode(StatusCodes.Status201Created, _mapper.Map<ModifyOrderAngularViewModel>(result));
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPatch("api/orders/{id}")]
+        [AllowAnonymous]
+        public ActionResult UpdateOrder([FromRoute]int id, [FromBody]ModifyOrderAngularViewModel order)
+        {
+            if(ModelState.IsValid)
+            {
+                _service.Update(_mapper.Map<OrderDTO>(order));
+                return NoContent();
+            }
+
+            return BadRequest();
         }
     }
 }
