@@ -21,6 +21,8 @@ export class CreateProductComponent implements OnInit {
     categories: []
   };
 
+  processing: boolean;
+
   constructor(
     private location: Location,
     private productService: ProductService,
@@ -28,10 +30,11 @@ export class CreateProductComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.dir(this.product);
+    this.processing = false;
   }
 
   onSubmit(product: Product) {
+    this.processing = true;
     this.productService.createProduct(product).subscribe(
       () => {
         this.show("Done! You will be redirected to the previous page", "success");
@@ -41,6 +44,7 @@ export class CreateProductComponent implements OnInit {
       },
       error => {
         this.show(error, "error");
+        this.processing = false;
       }
     );
   }

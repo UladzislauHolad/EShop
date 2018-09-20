@@ -1,10 +1,10 @@
 <form *ngIf="myForm" [formGroup]="myForm" class="ui form" (ngSubmit)="onSubmit(myForm.value)">
-  <div class="field" [class.error]="!name.valid">
+  <div class="field" [class.error]="!name.valid && name.dirty">
     <label for="name">Product name:</label>
     <div class="ui input">
       <input type="text" placeholder="Product name" [formControl]="myForm.controls['name']">
     </div>
-    <div *ngIf="!name.valid" class="ui mini negative message">
+    <div *ngIf="!name.valid && name.dirty" class="ui mini negative message">
       <div *ngIf="name.errors.required">
         Name is required
       </div>
@@ -17,12 +17,12 @@
     </div>
   </div>
 
-  <div class="field" [class.error]="!price.valid">
+  <div class="field" [class.error]="!price.valid && price.dirty">
     <label for="price">Price:</label>
     <div class="ui input">
       <input type="number" placeholder="Price" [formControl]="myForm.controls['price']">
     </div>
-    <div *ngIf="!price.valid" class="ui mini negative message">
+    <div *ngIf="!price.valid && price.dirty" class="ui mini negative message">
       <div *ngIf="price.errors.required">
         Price is required
       </div>
@@ -32,12 +32,12 @@
     </div>
   </div>
 
-  <div class="field" [class.error]="!count.valid">
+  <div class="field" [class.error]="!count.valid && count.dirty">
     <label for="count">Count:</label>
     <div class="ui input">
       <input type="number" placeholder="Count" [formControl]="myForm.controls['count']">
     </div>
-    <div *ngIf="!count.valid" class="ui mini negative message">
+    <div *ngIf="!count.valid && count.dirty" class="ui mini negative message">
       <div *ngIf="count.errors.required">
         count is required
       </div>
@@ -47,12 +47,12 @@
     </div>
   </div>
 
-  <div class="field" [class.error]="!description.valid">
+  <div class="field" [class.error]="!description.valid && description.dirty">
     <label for="description">Description:</label>
     <div class="ui input">
       <input type="text" placeholder="Description" [formControl]="myForm.controls['description']">
     </div>
-    <div *ngIf="!description.valid" class="ui mini negative message">
+    <div *ngIf="!description.valid && description.dirty" class="ui mini negative message">
       <div *ngIf="description.errors.required">
         Description is required
       </div>
@@ -66,11 +66,11 @@
   </div>
 
 
-  <div class="field" [class.error]="!categories.valid">
-    <ng-select [items]="existCategories" bindLabel="name" labelForId="name" [multiple]="true" placeholder="Select categories"
+  <div class="field" [class.error]="!categories.valid && categories.dirty">
+    <ng-select [items]="existCategories" bindLabel="name" [multiple]="true" placeholder="Select categories"
       clearAllText="Clear" formControlName="categories" [closeOnSelect]="false">
     </ng-select>
-    <div *ngIf="!categories.valid" class="ui mini negative message">
+    <div *ngIf="!categories.valid && categories.dirty" class="ui mini negative message">
       <div *ngIf="categories.errors.required">
         Categories is required
       </div>
@@ -78,7 +78,7 @@
   </div>
 
 
-  <button type="submit" class="ui positive button" [disabled]="!myForm.valid">Submit</button>
+  <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
   <button class="ui button" (click)="goBack()" type="button">Cancel</button>
-  <div *ngIf="!myForm.valid" class="ui negative message">Form is Invalid</div>
+  <div *ngIf="!myForm.valid && myForm.dirty" class="ui negative message">Form is Invalid</div>
 </form>

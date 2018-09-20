@@ -24,8 +24,13 @@ import { ProductFormComponent } from './components/products/product-form/product
 Run `npm install --save web-animations-js`.
 */
 import 'web-animations-js';
-import { CategoryFormComponent } from './components/categories/category-form/category-form.component';  
+import { CategoryFormComponent } from './components/categories/category-form/category-form.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { CreateOrderComponent } from './components/orders/create-order/create-order.component';
+import { OrderFormComponent } from './components/orders/order-form/order-form.component';
 import { ProductOrdersComponent } from './components/orders/order-form/product-orders/product-orders.component';  
+import { ProductOrderFormComponent } from './components/orders/order-form/product-orders/product-order-form/product-order-form.component';
+import { EditOrderComponent } from './components/orders/edit-order/edit-order.component';
 import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
 
 @NgModule({
@@ -41,7 +46,12 @@ import { CreateProductOrderComponent } from './components/orders/order-form/prod
     CategoryMultiselectComponent,
     ProductFormComponent,
     CategoryFormComponent,
+    OrdersComponent,
+    CreateOrderComponent,
+    OrderFormComponent,
+    ProductOrderFormComponent,
     ProductOrdersComponent,
+    EditOrderComponent,
     CreateProductOrderComponent,
   ],
   imports: [

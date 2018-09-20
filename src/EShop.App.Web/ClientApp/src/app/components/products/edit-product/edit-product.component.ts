@@ -14,6 +14,7 @@ import { NotificationService } from 'ng2-notify-popup';
 export class EditProductComponent implements OnInit {
 
   product: Product;
+  processing: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +25,7 @@ export class EditProductComponent implements OnInit {
 
   ngOnInit() {
     this.getProduct();
+    this.processing = false;
   }
 
   getProduct(): void {
@@ -35,7 +37,7 @@ export class EditProductComponent implements OnInit {
   }
 
   onSubmit(product: Product): void {
-    console.log('You submited form: ', product);
+    this.processing = true;
     this.productService.updateProduct(product).subscribe(
       () => {
         this.show("Product is updated!", "success");
@@ -45,6 +47,7 @@ export class EditProductComponent implements OnInit {
       },
       error => {
         this.show(error, "error");
+        this.processing = false;
       }
     );
   }

@@ -15,8 +15,9 @@ import { Location } from '@angular/common';
 export class ProductFormComponent implements OnInit {
 
   @Input() product: Product;
-  existCategories: Category[];
+  @Input() processing: boolean;
 
+  existCategories: Category[];
 
   myForm: FormGroup;
   name: AbstractControl;
@@ -34,6 +35,11 @@ export class ProductFormComponent implements OnInit {
     private categoryService: CategoryService,
     private productService: ProductService,
   ) { }
+
+  ngOnInit() {
+    this.getCategories();
+    this.createForm(this.product);
+  }
 
   getProduct(): void {
     const id = +this.route.snapshot.paramMap.get('id');
@@ -105,11 +111,6 @@ export class ProductFormComponent implements OnInit {
     this.count = this.myForm.controls['count'];
     this.description = this.myForm.controls['description'];
     this.categories = this.myForm.controls['categories'];
-  }
-
-  ngOnInit() {
-    this.getCategories();
-    this.createForm(this.product);
   }
 
   goBack() {
