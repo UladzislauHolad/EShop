@@ -10,7 +10,7 @@ namespace EShop.Services.Interfaces
     public interface IOrderService
     {
         IEnumerable<OrderDTO> GetOrders();
-        void Create(OrderDTO orderDTO);
+        OrderDTO Create(OrderDTO orderDTO);
         OrderDTO GetOrder(int id);
         void Update(OrderDTO orderDTO);
         void Delete(int id);
