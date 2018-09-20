@@ -14,7 +14,7 @@ namespace EShop.App.Web.Models
         public string Phone { get; set; }
         public string Address { get; set; }
 
-        public virtual ICollection<OrderViewModel> Orders { get; set; }
+        //public virtual ICollection<OrderViewModel> Orders { get; set; }
 
         public int Compare(CustomerViewModel x, CustomerViewModel y)
         {
