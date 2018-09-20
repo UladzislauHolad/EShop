@@ -26,11 +26,11 @@ namespace EShop.Services.Services
             _mapper = mapper;
         }
 
-        public void Create(OrderDTO orderDTO)
+        public OrderDTO Create(OrderDTO orderDTO)
         {
             var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
 
-            if (!existCustomer.Equals(orderDTO.Customer))
+            if (!orderDTO.Customer.Equals(existCustomer))
                 orderDTO.CustomerId = 0;
             else
                 orderDTO.Customer = null;
@@ -40,7 +40,8 @@ namespace EShop.Services.Services
 
             var order = _mapper.Map<Order>(orderDTO);
             AddStatusChanges(order, StatusStates.New.ToString());
-            _orderRepository.Create(order);
+
+            return _mapper.Map<OrderDTO>(_orderRepository.Create(order));
         }
 
         public void Delete(int id)
