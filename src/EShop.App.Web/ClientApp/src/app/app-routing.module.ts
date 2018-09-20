@@ -6,6 +6,10 @@ import { EditProductComponent } from './components/products/edit-product/edit-pr
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/categories/create-category/create-category.component';
 import { EditCategoryComponent } from './components/categories/edit-category/edit-category.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { CreateOrderComponent } from './components/orders/create-order/create-order.component';
+import { EditOrderComponent } from './components/orders/edit-order/edit-order.component';
+import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
 
 const spa = 'spa';
 
@@ -17,6 +21,10 @@ const routes: Routes = [
   { path: spa + '/categories', component: CategoriesComponent },
   { path: spa + '/categories/new', component: CreateCategoryComponent },
   { path: spa + '/categories/:id', component: EditCategoryComponent },
+  { path: spa + '/orders', component: OrdersComponent },
+  { path: spa + '/orders/new', component: CreateOrderComponent },
+  { path: spa + '/orders/:id', component: EditOrderComponent },
+  { path: spa + '/orders/:id/products/new', component: CreateProductOrderComponent },
 ];
 
 @NgModule({
