@@ -101,7 +101,7 @@ namespace EShop.Services.Services
             {
                 var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
 
-                if (!existCustomer.Equals(orderDTO.Customer))
+                if (!orderDTO.Customer.Equals(existCustomer))
                     orderDTO.CustomerId = 0;
                 else
                     orderDTO.Customer = null;
