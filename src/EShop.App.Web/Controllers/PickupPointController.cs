@@ -26,5 +26,11 @@ namespace EShop.App.Web.Controllers
 
             return Json(new SelectList(points, "Id", "Name"));
         }
+
+        [HttpGet("api/pickups")]
+        public JsonResult GetPickups()
+        {
+            return Json(_service.GetPickupPoints());
+        }
     }
 }
