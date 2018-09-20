@@ -27,5 +27,11 @@ namespace EShop.App.Web.Controllers
 
             return Json(new SelectList(payments, "Id", "Name"));
         }
+
+        [HttpGet("api/deliveries")]
+        public JsonResult GetDeliveries()
+        {
+            return Json(_service.GetDeliveryMethods());
+        }
     }
 }
