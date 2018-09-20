@@ -54,5 +54,10 @@ namespace EShop.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        PaymentMethod IRepository<PaymentMethod>.Create(PaymentMethod item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

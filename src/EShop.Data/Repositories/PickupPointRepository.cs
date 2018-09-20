@@ -51,5 +51,10 @@ namespace EShop.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        PickupPoint IRepository<PickupPoint>.Create(PickupPoint item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

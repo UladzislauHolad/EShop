@@ -15,9 +15,9 @@ namespace EShop.Data.Repositories
         public CustomerRepository(IDbContext context)
         {
             _context = context;
-        }        
+        }
 
-        public void Create(Customer item)
+        public Customer Create(Customer item)
         {
             throw new NotImplementedException();
         }

@@ -16,10 +16,12 @@ namespace EShop.Data.Repositories
             _context = context;
         }
 
-        public void Create(Category category)
+        public Category Create(Category category)
         {
             _context.Set<Category>().Add(category);
             _context.SaveChanges();
+
+            return category;
         }
 
         public void Delete(int id)

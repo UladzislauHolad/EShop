@@ -17,10 +17,12 @@ namespace EShop.Data.Repositories
             _context = context;
         }
 
-        public void Create(Product product)
+        public Product Create(Product product)
         {
             _context.Set<Product>().Add(product);
             _context.SaveChanges();
+
+            return product;
         }
 
         public void Delete(int id)
