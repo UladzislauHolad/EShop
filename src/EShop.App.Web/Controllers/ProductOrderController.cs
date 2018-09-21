@@ -139,5 +139,60 @@ namespace EShop.App.Web.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost("api/orders/{orderId}/products")]
+        public ActionResult CreateProductOrder([FromBody]ProductOrderCreateViewModel productOrderCreateModel)
+        {
+            var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(productOrderCreateModel.OrderId));
+            if (order != null && ModelState.IsValid)
+            {
+                if (order.Status != "New")
+                {
+                    return BadRequest();
+                }
+                _productOrderService.Create(_mapper.Map<ProductOrderDTO>(productOrderCreateModel));
+
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+        [HttpDelete("api/orders/{orderId}/products/{productOrderId}")]
+        public ActionResult DeleteProductOrder([FromRoute]int orderId, [FromRoute]int productOrderId)
+        {
+            var order = _orderService.GetOrder(orderId);
+            var productOrder = _productOrderService.GetProductOrder(productOrderId);
+            if (productOrder != null && order != null)
+            {
+                if (order.Status != "New")
+                {
+                    return BadRequest();
+                }
+                _productOrderService.Delete(productOrderId);
+
+                return Ok();
+            }
+            return NotFound();
+        }
+
+        [HttpPatch("api/orders/{orderId}/products/{productOrderId}")]
+        public ActionResult UpdateProductOrder([FromRoute]int orderId, [FromRoute]int productOrderId, [FromBody]NewOrderCount OrderCount)
+        {
+            var order = _orderService.GetOrder(orderId);
+            var productOrder = _productOrderService.GetProductOrder(productOrderId);
+            if (order != null && productOrder != null)
+            {
+                if (order.Status != "New")
+                {
+                    return BadRequest();
+                }
+                productOrder.OrderCount = OrderCount.OrderCount;
+                _productOrderService.Update(_mapper.Map<ProductOrderDTO>(productOrder));
+
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }
