@@ -14,6 +14,8 @@ export class ProductOrdersComponent implements OnInit {
 
   productOrders: ProductOrder[];
 
+  private orderId = +this.route.snapshot.paramMap.get("id");
+
   constructor(
     private productOrderService: ProductOrderService,
     private route: ActivatedRoute,
@@ -25,13 +27,40 @@ export class ProductOrdersComponent implements OnInit {
   }
 
   getProductOrders() {
-    const id = +this.route.snapshot.paramMap.get("id");
-    this.productOrderService.getProductOrders(id).subscribe(
+    this.productOrderService.getProductOrders(this.orderId).subscribe(
       productOrders => {
         this.productOrders = productOrders;
       },
       error => this.show(error, "error")
     );
+  }
+
+  delete(productOrder: ProductOrder)
+  {
+    this.productOrderService.deleteProductOrder(this.orderId, productOrder.productOrderId).subscribe(
+      () => {
+        this.show("Done!", "success");
+        this.productOrders = this.productOrders.filter(po => po != productOrder);
+      },
+      error => this.show(error, "error")
+    );
+  }
+
+  save(productOrder: ProductOrder)
+  {
+    console.dir(productOrder);
+    this.productOrderService.updateProductOrder(this.orderId, productOrder).subscribe(
+      () => {
+        this.show("Done!", "success");
+        productOrder.isEditing = !productOrder.isEditing;
+      },
+      error => this.show(error, "error")
+    );
+  }
+
+  edit(productOrder: ProductOrder)
+  {
+    productOrder.isEditing = !productOrder.isEditing;
   }
 
   show(text: string, type: string): void {
