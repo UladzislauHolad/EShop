@@ -9,6 +9,7 @@ import { DeliveryService } from '../../../services/delivery.service';
 import { DeliveryMethod } from '../../../models/deliveryMethod';
 import { PickupService } from '../../../services/pickup.service';
 import { PickupPoint } from '../../../models/pickupPoint';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -42,7 +43,7 @@ export class OrderFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private location: Location,
+    private router: Router,
     private paymentService: PaymentService,
     private deliveryService: DeliveryService,
     private pickupService: PickupService,
@@ -187,7 +188,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['spa/orders']);
   }
 
   show(text: string, type: string): void {
