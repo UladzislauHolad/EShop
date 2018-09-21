@@ -24,4 +24,23 @@ export class ProductOrderService {
       catchError(this.errorHandler.handleError)
     );
   }
+
+  createProductOrder(productOrder: ProductOrder): Observable<ProductOrder> {
+    return this.http.post<ProductOrder>(`${ordersUrl}/${productOrder.orderId}/products`, productOrder, httpOptions).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
+
+  deleteProductOrder(orderId: number, id: number): Observable<ProductOrder> {
+    return this.http.delete<ProductOrder>(`${ordersUrl}/${orderId}/products/${id}`).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
+
+  updateProductOrder(orderId: number, productOrder: ProductOrder): Observable<ProductOrder> {
+    return this.http.patch<ProductOrder>(`${ordersUrl}/${orderId}/products/${productOrder.productOrderId}`,
+      productOrder, httpOptions).pipe(
+        catchError(this.errorHandler.handleError)
+      )
+  }
 }
