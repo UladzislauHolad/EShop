@@ -1,3 +1,33 @@
-<p>
-  product-order-form works!
-</p>
+<form *ngIf="product" #poForm="ngForm" class="ui equal width form" (ngSubmit)="onSubmit(poForm.value)" ngNativeValidate>
+  <input type="hidden" id="productId" name="productId" [ngModel]="product.productId">
+  <input type="hidden" id="orderId" name="orderId" [ngModel]="orderId">
+  <div class="field">
+    <label for="name">Product name:</label>
+    <div class="ui input">
+      <input name="name" id="name" [ngModel]="product.name" type="text" required readonly>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="name">Product price:</label>
+    <div class="ui input">
+      <input name="price" id="price" [ngModel]="product.price" type="number" required readonly>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="name">Count:</label>
+    <div class="ui input">
+      <input name="count" id="count" [ngModel]="product.count" type="number" required>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="name">Order count:</label>
+    <div class="ui input">
+      <input name="orderCount" id="orderCount" [(ngModel)]="orderCount" type="number" min=1 max="{{product.count}}" required>
+    </div>
+  </div>
+  <button [disabled]="poForm.invalid" type="submit" class="ui positive button">Submit</button>
+  <button class="ui button" (click)="goBack()" type="button">Back</button>
+</form>

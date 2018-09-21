@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ProductOrder } from '../../../../../models/productOrder';
 import { ProductService } from '../../../../../services/product.service';
 import { ProductOrderService } from '../../../../../services/product-order.service';
 import { Product } from '../../../../../models/product';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-order-form',
@@ -11,16 +13,26 @@ import { Product } from '../../../../../models/product';
 })
 export class ProductOrderFormComponent implements OnInit {
 
-  @Input() productOrder: ProductOrder;
-  products: Product[];
-  selectedProduct: Product;
+  @Output() onFormSubmit = new EventEmitter<ProductOrder>();
+  @Input() orderId: number;
+  @Input() oldOrderCount: number;
+  @Input() product: Product;
+
+  orderCount: number;
 
   constructor(
-    private productService: ProductService,
-    private productOrderService: ProductOrderService
+    private router: Router
   ) { }
 
   ngOnInit() {
+    this.orderCount = this.oldOrderCount;
   }
 
+  onSubmit(productOrder: ProductOrder) {
+    this.onFormSubmit.emit(productOrder);
+  }
+
+  goBack() {
+    this.router.navigate([`spa/orders/${this.orderId}`]);
+  }
 }
