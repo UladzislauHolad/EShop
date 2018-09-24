@@ -8,5 +8,5 @@ export class ProductOrder {
     name: string;
     price: number;
     isEditing: boolean = false;
-    availableCount: number;
+    maxCount: number;
 }

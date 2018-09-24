@@ -18,7 +18,7 @@
       <td>{{po.price}}</td>
       <!-- <td>{{po.orderCount}}</td> -->
       <td>
-        <input type="number" min="0" max="{{po.orderCount + po.availableCount}}" name="count" [(ngModel)]="po.orderCount" [disabled]="!po.isEditing">
+        <input type="number" min="0" [attr.max]="po.maxCount" name="count" [(ngModel)]="po.orderCount" [disabled]="!po.isEditing" aria-readonly="true" (onStepUp)="console.log(1)">
       </td>
       <td>{{po.price * po.orderCount}}</td>
       <td class="center aligned two wide">

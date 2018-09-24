@@ -9,7 +9,7 @@ namespace EShop.App.Web.Models.Angular.ProductOrder
     {
         public int ProductOrderId { get; set; }
         public int OrderCount { get; set; }
-        public int AvailableCount { get; set; }
+        public int MaxCount { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
     }

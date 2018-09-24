@@ -14,8 +14,8 @@ namespace EShop.App.Web.Profiles.Angular.ProductOrder
         {
             CreateMap<ProductOrderAngularViewModel, ProductOrderDTO>();
             CreateMap<ProductOrderDTO, ProductOrderAngularViewModel>()
-                .ForMember(dest => dest.AvailableCount, opt => 
-                    opt.MapFrom(src => src.Product.Count));
+                .ForMember(dest => dest.MaxCount, opt => 
+                    opt.MapFrom(src => src.Product.Count + src.OrderCount));
         }
     }
 }
