@@ -13,8 +13,12 @@ export class errorHandler {
             `Backend returned code ${error.status}, ` +
             `body was: ${error.error}`);
         }
+
+        let message = 'Something bad happened! Please try again later.';
+
+        if(error.error.message)
+          message = error.error.message;
         // return an observable with a user-facing error message
-        return throwError(
-          'Something bad happened! Please try again later.');
+        return throwError(message);
       };
 }
