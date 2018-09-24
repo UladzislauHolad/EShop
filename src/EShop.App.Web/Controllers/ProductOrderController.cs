@@ -187,9 +187,15 @@ namespace EShop.App.Web.Controllers
                     return BadRequest();
                 }
                 productOrder.OrderCount = OrderCount.OrderCount;
-                _productOrderService.Update(_mapper.Map<ProductOrderDTO>(productOrder));
-
-                return Ok();
+                try
+                {
+                    _productOrderService.Update(_mapper.Map<ProductOrderDTO>(productOrder));
+                    return Ok();
+                }
+                catch(InvalidOperationException ex)
+                {
+                    return BadRequest(new { ex.Message });
+                }
             }
 
             return BadRequest();

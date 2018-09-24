@@ -11,6 +11,5 @@ namespace EShop.Services.Interfaces
         ProductOrderDTO GetProductOrder(int id);
         void Update(ProductOrderDTO productOrderDTO);
         void Create(ProductOrderDTO productOrderDTO);
-
     }
 }

@@ -87,6 +87,8 @@ namespace EShop.Services.Services
             if(productOrder != null)
             {
                 int newCount = product.Count + productOrder.OrderCount - productOrderDTO.OrderCount;
+                if (newCount < 0)
+                    throw new InvalidOperationException("OrderCount is not valid");
                 productOrder.Name = product.Name;
                 productOrder.Description = product.Description;
                 productOrder.Price = product.Price;
