@@ -8,5 +8,6 @@ namespace EShop.App.Web.Models
     public class NewOrderCount
     {
         public int OrderCount { get; set; }
+        public int MaxCount { get; set; }
     }
 }

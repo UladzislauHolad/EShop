@@ -176,8 +176,14 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpPatch("api/orders/{orderId}/products/{productOrderId}")]
+        [AllowAnonymous]
         public ActionResult UpdateProductOrder([FromRoute]int orderId, [FromRoute]int productOrderId, [FromBody]NewOrderCount OrderCount)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(new { Message = "Wrong data" });
+            }
+
             var order = _orderService.GetOrder(orderId);
             var productOrder = _productOrderService.GetProductOrder(productOrderId);
             if (order != null && productOrder != null)
