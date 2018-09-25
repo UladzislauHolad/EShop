@@ -29,6 +29,16 @@ import { ProductOrdersComponent } from './components/orders/order-form/product-o
 import { ProductOrderFormComponent } from './components/orders/order-form/product-orders/product-order-form/product-order-form.component';
 import { EditOrderComponent } from './components/orders/edit-order/edit-order.component';
 import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
+import { StateDirective } from './components/orders/buttons/state.directive';
+import { ButtonsComponent } from './components/orders/buttons/buttons.component';
+import { CompletedStateComponent } from './components/orders/buttons/completed-state/completed-state.component';
+import { OnDeliveringStateComponent } from './components/orders/buttons/on-delivering-state/on-delivering-state.component';
+import { PackedStateComponent } from './components/orders/buttons/packed-state/packed-state.component';
+import { PaidStateComponent } from './components/orders/buttons/paid-state/paid-state.component';
+import { ConfirmedStateComponent } from './components/orders/buttons/confirmed-state/confirmed-state.component';
+import { NewStateComponent } from './components/orders/buttons/new-state/new-state.component';
+import { OrderInfoComponent } from './components/orders/order-info/order-info.component';
+
 
 @NgModule({
   declarations: [
@@ -49,7 +59,16 @@ import { CreateProductOrderComponent } from './components/orders/order-form/prod
     ProductOrderFormComponent,
     ProductOrdersComponent,
     EditOrderComponent,
-    CreateProductOrderComponent
+    CreateProductOrderComponent,
+    NewStateComponent,
+    StateDirective,
+    ButtonsComponent,
+    ConfirmedStateComponent,
+    PaidStateComponent,
+    PackedStateComponent,
+    OnDeliveringStateComponent,
+    CompletedStateComponent,
+    OrderInfoComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +82,14 @@ import { CreateProductOrderComponent } from './components/orders/order-form/prod
     SweetAlert2Module.forRoot()
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    NewStateComponent,
+    ConfirmedStateComponent,
+    PaidStateComponent,
+    PackedStateComponent,
+    OnDeliveringStateComponent,
+    CompletedStateComponent
+  ]
 })
 export class AppModule { }

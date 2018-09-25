@@ -12,7 +12,12 @@ namespace EShop.App.Web.Profiles.Angular
     {
         public OrderAngularViewModelProfile()
         {
-            CreateMap<OrderDTO, OrderAngularViewModel>();
+            CreateMap<OrderDTO, OrderAngularViewModel>()
+                .ForMember(dest => dest.DeliveryMethodName,
+                opt => opt.MapFrom(src => src.DeliveryMethod.Name))
+                .ForMember(dest => dest.PaymentMethodName,
+                opt => opt.MapFrom(src => src.PaymentMethod.Name));
+
             CreateMap<OrderAngularViewModel, OrderDTO>();
         }
     }

@@ -1,0 +1,68 @@
+<div *ngIf="order" class="ui container">
+  <h3 class="ui header">Order info</h3>
+  <div class="ui list">
+    <div class="item">
+      <div class="header">First name</div>
+      {{order.customer.firstName}}
+    </div>
+    <div class="item">
+      <div class="header">Last name</div>
+      {{order.customer.lastName}}
+    </div>
+    <div class="item">
+      <div class="header">Patronymic</div>
+      {{order.customer.patronymic}}
+    </div>
+    <div class="item">
+      <div class="header">Phone</div>
+      {{order.customer.phone}}
+    </div>
+    <div class="item">
+      <div class="header">Address name</div>
+      {{order.customer.address}}
+    </div>
+    <div class="item">
+      <div class="header">Date</div>
+      {{order.date}}
+    </div>
+    <div class="item">
+      <div class="header">Status</div>
+      {{order.status}}
+    </div>
+    <div class="item">
+      <div class="header">Comment</div>
+      {{order.comment || 'not exist'}}
+    </div>
+    <div class="item">
+      <div class="header">Payment</div>
+      {{order.paymentMethod.name || 'not exist'}}
+    </div>
+    <div class="item">
+      <div class="header">Delivery</div>
+      {{order.deliveryMethod.name || 'not exist'}}
+    </div>
+    <div *ngIf="order.deliveryMethod.name === 'Pickup'" class="item">
+        <div class="header">Pickup point</div>
+        {{order.pickupPoint?.address || 'not exist'}}
+      </div>
+  </div>
+  <button class="ui button" (click)="goBack()" type="button">Back</button>
+  <table *ngIf="order.productOrders" class="ui celled stripped table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Count</th>
+        <th>Sum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let po of order.productOrders">
+        <td>{{po.name}}</td>
+        <td>{{po.price}}</td>
+        <td>{{po.orderCount}}</td>
+        <td>{{po.price * po.orderCount}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

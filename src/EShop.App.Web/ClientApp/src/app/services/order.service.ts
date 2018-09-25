@@ -33,6 +33,12 @@ export class OrderService {
     );
   }
 
+  deleteOrder(id: number): Observable<Order> {
+    return this.http.delete<Order>(`${ordersUrl}/${id}`).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
+
   createOrder(order: Order): Observable<Order> {
     return this.http.post<Order>(ordersUrl, order, httpOptions).pipe(
       catchError(this.errorHandler.handleError)
@@ -41,6 +47,12 @@ export class OrderService {
 
   updateOrder(order: Order): Observable<Order> {
     return this.http.patch<Order>(`${ordersUrl}/${order.orderId}`, order, httpOptions).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
+
+  changeState(order: Order): Observable<Order> {
+    return this.http.put<Order>(`${ordersUrl}/${order.orderId}`, order, httpOptions).pipe(
       catchError(this.errorHandler.handleError)
     );
   }

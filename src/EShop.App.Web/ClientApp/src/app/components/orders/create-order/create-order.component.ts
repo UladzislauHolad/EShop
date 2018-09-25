@@ -26,11 +26,17 @@ export class CreateOrderComponent implements OnInit {
       lastName: '',
       patronymic: '',
       phone: '',
-      address: ''
+      address: '',
     },
     paymentMethodId: null,
+    paymentMethodName: null,
+    deliveryMethodName: null,
     deliveryMethodId: null,
-    pickupPointId: null
+    pickupPointId: null,
+    deliveryMethod: null,
+    paymentMethod: null,
+    pickupPoint: null,
+    productOrders: null
   };
 
   processing: boolean;

@@ -1,0 +1,3 @@
+<button class="ui button" (click)="info(order)"><i class="info circle icon"></i></button>
+<button *ngIf="order.deliveryMethodName === 'Courier'" class="ui button" (click)="nextState(order)"><i class="truck icon"></i></button>
+<button *ngIf="order.deliveryMethodName === 'Pickup'" class="ui button" (click)="nextState(order)"><i class="flag checkered icon"></i></button>

@@ -10,5 +10,7 @@ namespace EShop.App.Web.Models.Angular
         public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public string Status { get; set; }
+        public string DeliveryMethodName { get; set; }
+        public string PaymentMethodName { get; set; }
     }
 }

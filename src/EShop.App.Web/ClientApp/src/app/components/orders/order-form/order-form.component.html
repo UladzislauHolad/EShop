@@ -110,6 +110,6 @@
   </div>  
 
   <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
-  <button class="ui button" (click)="goBack()" type="button">Cancel</button>
+  <button class="ui button" (click)="goBack()" type="button">Back</button>
   <div *ngIf="!myForm.valid && myForm.dirty" class="ui negative message">Form is Invalid</div>
 </form>

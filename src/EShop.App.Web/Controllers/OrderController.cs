@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
 using EShop.App.Web.Models.Angular;
+using EShop.App.Web.Models.Angular.Order;
 using EShop.App.Web.Models.OrderViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Infrastructure.Enums;
@@ -204,7 +205,7 @@ namespace EShop.App.Web.Controllers
 
         [HttpGet("api/orders")]
         [AllowAnonymous]
-        public JsonResult GetOrders()
+        public JsonResult GetOrders()//ActionREsult
         {
             return Json(_mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders()));
         }
@@ -213,7 +214,7 @@ namespace EShop.App.Web.Controllers
         [AllowAnonymous]
         public JsonResult GetOrder([FromRoute]int id)
         {
-            return Json(_mapper.Map<ModifyOrderAngularViewModel>(_service.GetOrder(id)));
+            return Json(_mapper.Map<OrderInfoAngularViewModel>(_service.GetOrder(id)));
         }
 
         [HttpPost("api/orders")]
@@ -228,7 +229,7 @@ namespace EShop.App.Web.Controllers
                 return StatusCode(StatusCodes.Status201Created, _mapper.Map<ModifyOrderAngularViewModel>(result));
             }
 
-            return BadRequest();
+            return BadRequest();//422 entity invalid state
         }
 
         [HttpPatch("api/orders/{id}")]
@@ -242,6 +243,34 @@ namespace EShop.App.Web.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPut("api/orders/{orderId}")]
+        public ActionResult ChangeOrderState([FromRoute]int orderId)
+        {
+            try
+            {
+                var result = _service.ChangeState(orderId);
+                return StatusCode(StatusCodes.Status200OK, _mapper.Map<OrderAngularViewModel>(result));
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("api/orders/{orderId}")]
+        public ActionResult DeleteOrder([FromRoute]int orderId)
+        {
+            try
+            {
+                _service.Delete(orderId);
+                return Ok();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

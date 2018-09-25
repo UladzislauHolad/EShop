@@ -16,10 +16,9 @@
         <td>{{o.orderId}}</td>
         <td>{{o.status}}</td>
         <td>{{o.date}}</td>
-        <td class="center aligned two wide">
+        <td class="right aligned two wide">
           <div class="ui small basic icon buttons">
-            <a class="ui button" routerLink="{{o.orderId}}"><i class="pencil alternate icon"></i></a>
-            <button class="ui button" (click)="delete(o)"><i class="trash icon"></i></button>
+            <app-buttons [order]="o"></app-buttons>
           </div>
         </td>
       </tr>

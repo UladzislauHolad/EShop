@@ -12,9 +12,12 @@ export class Order {
     customerId: number;
     customer: Customer;
     paymentMethodId: number;
+    paymentMethodName: string;
+    paymentMethod: PaymentMethod;
     deliveryMethodId: number;
+    deliveryMethodName: string;
+    deliveryMethod: DeliveryMethod;
     pickupPointId: number;
-    // paymentMethod: PaymentMethod;
-    // deliveryMethod: DeliveryMethod;
-    // pickupPoint: PickupPoint;
+    pickupPoint: PickupPoint;
+    productOrders: ProductOrder[];
 }
