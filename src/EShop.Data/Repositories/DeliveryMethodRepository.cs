@@ -56,5 +56,10 @@ namespace EShop.Data.Repositories
         {
             throw new NotImplementedException();
         }
+
+        DeliveryMethod IRepository<DeliveryMethod>.Update(DeliveryMethod item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

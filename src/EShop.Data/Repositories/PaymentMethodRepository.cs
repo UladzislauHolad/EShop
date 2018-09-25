@@ -50,7 +50,7 @@ namespace EShop.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(PaymentMethod item)
+        public PaymentMethod Update(PaymentMethod item)
         {
             throw new NotImplementedException();
         }

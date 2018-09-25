@@ -54,10 +54,12 @@ namespace EShop.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(ProductOrder productOrder)
+        public ProductOrder Update(ProductOrder productOrder)
         {
             _context.Set<ProductOrder>().Update(productOrder);
             _context.SaveChanges();
+
+            return productOrder;
         }
     }
 }

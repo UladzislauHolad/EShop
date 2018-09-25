@@ -16,6 +16,6 @@ namespace EShop.Services.Interfaces
         void Delete(int id);
         object GetCountOfConfirmedProducts();
         object GetCountOfConfirmedOrdersByDate();
-        void ChangeState(int id);
+        OrderDTO ChangeState(int id);
     }
 }

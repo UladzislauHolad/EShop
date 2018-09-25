@@ -53,10 +53,12 @@ namespace EShop.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Category category)
+        public Category Update(Category category)
         {
             _context.Set<Category>().Update(category);
             _context.SaveChanges();
+
+            return category;
         }
     }
 }

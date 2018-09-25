@@ -162,7 +162,7 @@ namespace EShop.Services.Services
             return orders;
         }
 
-        public void ChangeState(int id)
+        public OrderDTO ChangeState(int id)
         {
             var order = _orderRepository.Get(id);
             if(order != null)
@@ -177,7 +177,8 @@ namespace EShop.Services.Services
                     Commands nextAction = actionState.GetNext(statusState, paymentMethod, deliveryMethod);
                     order.Status = status.GetNext(nextAction).ToString();
                     AddStatusChanges(order, order.Status);
-                    _orderRepository.Update(order);
+
+                    return _mapper.Map<OrderDTO>(_orderRepository.Update(order));
                 }
                 catch(InvalidOperationException ex)
                 {

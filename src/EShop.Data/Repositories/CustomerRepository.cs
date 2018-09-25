@@ -52,10 +52,12 @@ namespace EShop.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Customer customer)
+        public Customer Update(Customer customer)
         {
             _context.Set<Customer>().Update(customer);
             _context.SaveChanges();
+
+            return customer;
         }
     }
 }

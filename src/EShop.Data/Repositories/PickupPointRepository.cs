@@ -47,7 +47,7 @@ namespace EShop.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(PickupPoint item)
+        public PickupPoint Update(PickupPoint item)
         {
             throw new NotImplementedException();
         }

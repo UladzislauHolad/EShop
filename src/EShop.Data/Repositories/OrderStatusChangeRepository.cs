@@ -47,12 +47,12 @@ namespace EShop.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(OrderStatusChange item)
+        OrderStatusChange IRepository<OrderStatusChange>.Create(OrderStatusChange item)
         {
             throw new NotImplementedException();
         }
 
-        OrderStatusChange IRepository<OrderStatusChange>.Create(OrderStatusChange item)
+        OrderStatusChange IRepository<OrderStatusChange>.Update(OrderStatusChange item)
         {
             throw new NotImplementedException();
         }

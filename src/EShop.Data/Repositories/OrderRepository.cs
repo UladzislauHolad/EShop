@@ -81,10 +81,12 @@ namespace EShop.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Order order)
+        public Order Update(Order order)
         {
             _context.Set<Order>().Update(order);
             _context.SaveChanges();
+
+            return order;
         }
     }
 }

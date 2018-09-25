@@ -62,7 +62,7 @@ namespace EShop.Data.Repositories
             _context.SaveChanges();
         }
 
-        public void Update(Product product)
+        public Product Update(Product product)
         {
             var existCategories = _context.Set<ProductCategory>().Where(c => c.ProductId == product.ProductId);
             var existedProduct = _context.Set<Product>().Single(p => p.ProductId == product.ProductId);
@@ -72,6 +72,8 @@ namespace EShop.Data.Repositories
             existedProduct.Description = product.Description;
             existedProduct.Count = product.Count;
             _context.SaveChanges();
+
+            return existedProduct;
         }
     }
 }
