@@ -61,8 +61,8 @@ export class OrdersComponent implements OnInit {
   delete(order: Order) {
     this.orderService.deleteOrder(order.orderId).subscribe(
       () => {
+        this.getOrders();
         this.show("Done!", "success");
-        this.orders = this.orders.filter(o => o !== order);
       },
       error => {
         this.show(error, "error");
@@ -80,12 +80,8 @@ export class OrdersComponent implements OnInit {
 
   changeState(order: Order) {
     this.orderService.changeState(order).subscribe(
-      order => {
-        this.orders = this.orders.map(o => {
-          if(o.orderId === order.orderId)
-            o = order;
-          return o;
-        });
+      () => {
+        this.getOrders();
         this.show("Done!", "success");
       },
       error => {
