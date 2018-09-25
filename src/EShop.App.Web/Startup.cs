@@ -69,7 +69,7 @@ namespace EShop.App.Web
             services.AddMvc()
                 .AddFluentValidation(fvc => 
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
-            services.AddMvc();
+            services.AddMvc().AddXmlSerializerFormatters();
 
 
             services.AddSpaStaticFiles(configuration =>

@@ -37,7 +37,7 @@ namespace EShop.App.Web.Controllers
                 Completed = _service.GetInfoByStatus(StatusStates.Completed)
             };
 
-            return Json(data);
+            return Ok(data);
         }
     }
 }

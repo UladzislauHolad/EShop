@@ -88,10 +88,10 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult Childs([FromRoute]int id)
+        public ActionResult Childs([FromRoute]int id)
         {
             var categories = _service.GetChildCategories(id);
-            return Json(categories);
+            return Ok(categories);
         }
         
         [HttpGet]
@@ -119,25 +119,25 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult CategoryJson()
+        public ActionResult CategoryJson()
         {
             var categories = _service.GetCategories()
                 .Select(c => new { c.CategoryId, c.Name }).ToList();
-            return Json(new SelectList(categories, "CategoryId", "Name"));
+            return Ok(new SelectList(categories, "CategoryId", "Name"));
         }
 
         [HttpGet]
-        public JsonResult CategoryWithCountOfProducts()
+        public ActionResult CategoryWithCountOfProducts()
         {
             var data = _service.GetCategoryNameWithCountOfProducts();
 
-            return Json(data);
+            return Ok(data);
         }
 
         [HttpGet("api/categories")]
-        public JsonResult GetCategories()
+        public ActionResult GetCategories()
         {
-            return Json(_service.GetCategories());
+            return Ok(_service.GetCategories());
         }
 
         [HttpGet("api/categories/{id}")]

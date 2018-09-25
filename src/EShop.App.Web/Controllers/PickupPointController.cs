@@ -20,17 +20,17 @@ namespace EShop.App.Web.Controllers
             _mapper = mapper;
         }
 
-        public JsonResult PickupPoints()
+        public ActionResult PickupPoints()
         {
             var points = _service.GetPickupPoints().Select(p => new { Id = p.PickupPointId, Name = p.Name });
 
-            return Json(new SelectList(points, "Id", "Name"));
+            return Ok(new SelectList(points, "Id", "Name"));
         }
 
         [HttpGet("api/pickups")]
-        public JsonResult GetPickups()
+        public ActionResult GetPickups()
         {
-            return Json(_service.GetPickupPoints());
+            return Ok(_service.GetPickupPoints());
         }
     }
 }

@@ -21,7 +21,7 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("DeliveryMethod/api/Deliveries")]
-        public JsonResult Deliveries()
+        public ActionResult Deliveries()
         {
             var payments = _service.GetDeliveryMethods().Select(d => new { Id = d.DeliveryMethodId, Name = d.Name });
 
@@ -29,9 +29,9 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("api/deliveries")]
-        public JsonResult GetDeliveries()
+        public ActionResult GetDeliveries()
         {
-            return Json(_service.GetDeliveryMethods());
+            return Ok(_service.GetDeliveryMethods());
         }
     }
 }

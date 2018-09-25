@@ -111,11 +111,11 @@ namespace EShop.App.Web.Controllers
             return PartialView(categories);
         }
 
-        public JsonResult ChartData()
+        public ActionResult ChartData()
         {
             var data = _service.GetCategoriesWithCountOfProducts();
 
-            return Json(data);
+            return Ok(data);
         }
 
         [HttpGet]
@@ -134,25 +134,25 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult ProductJson(int id)
+        public ActionResult ProductJson(int id)
         {
             var products = _service.GetProducts()
                 .Where(p => p.Categories
                     .Any(c => c.CategoryId == id))
                 .Select(p => new { p.ProductId, p.Name }).ToList();
-            return Json(new SelectList(products, "ProductId", "Name"));
+            return Ok(new SelectList(products, "ProductId", "Name"));
         }
 
         [HttpGet("api/products")]
-        public JsonResult GetProducts()
+        public ActionResult GetProducts()
         {
-            return Json(_service.GetProducts());
+            return Ok(_service.GetProducts());
         }
 
         [HttpGet("api/products/{id}")]
-        public JsonResult GetProducts([FromRoute]int id)
+        public ActionResult GetProducts([FromRoute]int id)
         {
-            return Json(_service.GetProduct(id));
+            return Ok(_service.GetProduct(id));
         }
 
         [HttpPost("api/products")]

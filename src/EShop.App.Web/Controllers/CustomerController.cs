@@ -37,12 +37,12 @@ namespace EShop.App.Web.Controllers
             return BadRequest();
         }
 
-        public JsonResult CustomersSelectList()
+        public ActionResult CustomersSelectList()
         {
             var customers = _service.GetCustomers()
                 .Select(c => new { c.CustomerId, FullName = $"{c.FirstName} {c.LastName} {c.Patronymic}" }).ToList();
 
-            return Json(new SelectList(customers, "CustomerId", "FullName"));
+            return Ok(new SelectList(customers, "CustomerId", "FullName"));
         }
 
         public ActionResult CustomerJson(int id)
@@ -51,7 +51,7 @@ namespace EShop.App.Web.Controllers
 
             if(customer != null)
             {
-                return Json(customer);
+                return Ok(customer);
             }
 
             return NotFound();

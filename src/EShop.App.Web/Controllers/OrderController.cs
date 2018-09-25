@@ -114,19 +114,19 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetConfirmedProducts()
+        public ActionResult GetConfirmedProducts()
         {
             var data = _service.GetCountOfConfirmedProducts();
 
-            return Json(data);
+            return Ok(data);
         }
 
         [HttpGet]
-        public JsonResult GetConfirmedOrdersByDate()
+        public ActionResult GetConfirmedOrdersByDate()
         {
             var data = _service.GetCountOfConfirmedOrdersByDate();
 
-            return Json(data);
+            return Ok(data);
         }
 
         //[HttpGet("Orders/{orderId}")]
@@ -205,16 +205,16 @@ namespace EShop.App.Web.Controllers
 
         [HttpGet("api/orders")]
         [AllowAnonymous]
-        public JsonResult GetOrders()//ActionREsult
+        public ActionResult GetOrders()//ActionREsult
         {
-            return Json(_mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders()));
+            return Ok(_mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders()));
         }
 
         [HttpGet("api/orders/{id}")]
         [AllowAnonymous]
-        public JsonResult GetOrder([FromRoute]int id)
+        public ActionResult GetOrder([FromRoute]int id)
         {
-            return Json(_mapper.Map<OrderInfoAngularViewModel>(_service.GetOrder(id)));
+            return Ok(_mapper.Map<OrderInfoAngularViewModel>(_service.GetOrder(id)));
         }
 
         [HttpPost("api/orders")]
@@ -251,7 +251,7 @@ namespace EShop.App.Web.Controllers
             try
             {
                 var result = _service.ChangeState(orderId);
-                return StatusCode(StatusCodes.Status200OK, _mapper.Map<OrderAngularViewModel>(result));
+                return Ok(_mapper.Map<OrderAngularViewModel>(result));
             }
             catch (InvalidOperationException ex)
             {

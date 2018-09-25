@@ -21,17 +21,17 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("PaymentMethod/api/Payments")]
-        public JsonResult Payments()
+        public ActionResult Payments()
         {
             var payments = _service.GetPaymentMethods().Select(p => new { Id = p.PaymentMethodId, Name = p.Name });
 
-            return Json(new SelectList(payments, "Id", "Name"));
+            return Ok(new SelectList(payments, "Id", "Name"));
         }
 
         [HttpGet("api/payments")]
-        public JsonResult GetPayments()
+        public ActionResult GetPayments()
         {
-            return Json(_service.GetPaymentMethods());
+            return Ok(_service.GetPaymentMethods());
         }
     }
 }

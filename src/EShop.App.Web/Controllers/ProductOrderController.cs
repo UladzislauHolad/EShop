@@ -40,7 +40,7 @@ namespace EShop.App.Web.Controllers
 
 
         [HttpGet("Orders/test/{orderId}/Products")]
-        public JsonResult Products([FromRoute]int orderId)
+        public ActionResult Products([FromRoute]int orderId)
         {
             var order = _orderService.GetOrder(orderId);
             if (order != null)
