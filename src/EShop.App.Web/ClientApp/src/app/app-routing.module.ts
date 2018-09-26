@@ -11,6 +11,7 @@ import { CreateOrderComponent } from './components/orders/create-order/create-or
 import { EditOrderComponent } from './components/orders/edit-order/edit-order.component';
 import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
 import { OrderInfoComponent } from './components/orders/order-info/order-info.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const spa = 'spa';
 
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: spa + '/orders/:id', component: EditOrderComponent },
   { path: spa + '/orders/:id/details', component: OrderInfoComponent },
   { path: spa + '/orders/:id/products/new', component: CreateProductOrderComponent },
+  { path: spa + '/dashboard', component: DashboardComponent },
 ];
 
 @NgModule({

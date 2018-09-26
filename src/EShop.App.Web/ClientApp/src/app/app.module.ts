@@ -38,6 +38,7 @@ import { PaidStateComponent } from './components/orders/buttons/paid-state/paid-
 import { ConfirmedStateComponent } from './components/orders/buttons/confirmed-state/confirmed-state.component';
 import { NewStateComponent } from './components/orders/buttons/new-state/new-state.component';
 import { OrderInfoComponent } from './components/orders/order-info/order-info.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import { OrderInfoComponent } from './components/orders/order-info/order-info.co
     PackedStateComponent,
     OnDeliveringStateComponent,
     CompletedStateComponent,
-    OrderInfoComponent
+    OrderInfoComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
