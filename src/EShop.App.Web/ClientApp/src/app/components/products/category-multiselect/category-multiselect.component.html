@@ -1,5 +1,0 @@
-<ng-select name="categories" class="custom" [items]="categories" [multiple]="true" bindLabel="name" [closeOnSelect]="false" bindValue="id" [(ngModel)]="selectedPeople" notFoundText="No categories">
-  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
-    <input id="{{index}}" type="checkbox" [ngModel]="item$.selected"/> {{item.name}}
-  </ng-template>
-</ng-select>

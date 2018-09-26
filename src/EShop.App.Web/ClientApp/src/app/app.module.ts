@@ -18,7 +18,6 @@ import { EditProductComponent } from './components/products/edit-product/edit-pr
 import { CategoriesComponent } from './components/categories/categories.component';
 import { CreateCategoryComponent } from './components/categories/create-category/create-category.component';
 import { EditCategoryComponent } from './components/categories/edit-category/edit-category.component';
-import { CategoryMultiselectComponent } from './components/products/category-multiselect/category-multiselect.component';
 import { ProductFormComponent } from './components/products/product-form/product-form.component';
 import { CategoryFormComponent } from './components/categories/category-form/category-form.component';
 import { OrdersComponent } from './components/orders/orders.component';
@@ -51,7 +50,6 @@ import { CategoryChartComponent } from './components/dashboard/category-chart/ca
     CategoriesComponent,
     CreateCategoryComponent,
     EditCategoryComponent,
-    CategoryMultiselectComponent,
     ProductFormComponent,
     CategoryFormComponent,
     OrdersComponent,
