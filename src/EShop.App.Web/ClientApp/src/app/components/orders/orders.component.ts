@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ComponentFactory, ComponentFactoryResolver } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
-import { NotificationService } from 'ng2-notify-popup';
 import { ButtonEventService } from './buttons/button-event.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +9,6 @@ import { Subscription } from 'rxjs';
   selector: 'app-orders',
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.css'],
-  providers: [NotificationService]
 })
 export class OrdersComponent implements OnInit {
 
@@ -24,7 +22,6 @@ export class OrdersComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private notify: NotificationService,
     private buttonEventService: ButtonEventService,
     private router: Router
   ) { 
@@ -62,10 +59,8 @@ export class OrdersComponent implements OnInit {
     this.orderService.deleteOrder(order.orderId).subscribe(
       () => {
         this.getOrders();
-        this.show("Done!", "success");
       },
       error => {
-        this.show(error, "error");
       }
     );
   }
@@ -82,10 +77,8 @@ export class OrdersComponent implements OnInit {
     this.orderService.changeState(order).subscribe(
       () => {
         this.getOrders();
-        this.show("Done!", "success");
       },
       error => {
-        this.show(error, "error");
       }
     );
   }
@@ -95,11 +88,6 @@ export class OrdersComponent implements OnInit {
       orders => {
         this.orders = orders
       },
-      error => this.show(error, "error")
     );
-  }
-
-  show(text: string, type: string): void {
-    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }

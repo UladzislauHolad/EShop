@@ -27,19 +27,12 @@ export class OrderInfoComponent implements OnInit {
   getOrder() {
     this.orderService.getOrder(this.orderId).subscribe(
       order => {
-        this.order = order,
-        console.dir(order);
+        this.order = order
       }
-    );
+    )
   }
 
   goBack() {
     this.router.navigate([`spa/orders`])
   }
-  // getTotal() {
-  //   this.total = this.order.productOrders.reduce((prev, current) => {
-  //     return prev.price + (current.price * current.orderCount));
-  //   }, 0);
-  // }
-
 }

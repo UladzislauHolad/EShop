@@ -5,12 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
-import { NgNotifyPopup } from 'ng2-notify-popup';
-import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import 'web-animations-js';
 
 
 import { AppComponent } from './app.component';
@@ -86,8 +83,6 @@ import { CategoryChartComponent } from './components/dashboard/category-chart/ca
     FormsModule,
     ReactiveFormsModule,
     NgHttpLoaderModule,
-    NgNotifyPopup,
-    SweetAlert2Module.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

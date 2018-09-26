@@ -43,8 +43,7 @@ export class CategoryFormComponent implements OnInit {
         this.existCategories = categories
         this.existCategories.push(this.noParentCategory);
         console.dir(this.existCategories);
-      },
-      error => console.log(error)
+      }
     );
   }
 

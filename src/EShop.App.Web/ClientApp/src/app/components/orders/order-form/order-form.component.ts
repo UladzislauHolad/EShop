@@ -1,10 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Order } from '../../../models/order';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
-import { Location } from '@angular/common';
 import { PaymentService } from '../../../services/payment.service';
 import { PaymentMethod } from '../../../models/paymentMethod';
-import { NotificationService } from 'ng2-notify-popup';
 import { DeliveryService } from '../../../services/delivery.service';
 import { DeliveryMethod } from '../../../models/deliveryMethod';
 import { PickupService } from '../../../services/pickup.service';
@@ -15,8 +13,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-order-form',
   templateUrl: './order-form.component.html',
-  styleUrls: ['./order-form.component.css'],
-  providers: [NotificationService]
+  styleUrls: ['./order-form.component.css']
 })
 export class OrderFormComponent implements OnInit {
 
@@ -47,7 +44,6 @@ export class OrderFormComponent implements OnInit {
     private paymentService: PaymentService,
     private deliveryService: DeliveryService,
     private pickupService: PickupService,
-    private notify: NotificationService
   ) { }
 
   ngOnInit() {
@@ -166,7 +162,6 @@ export class OrderFormComponent implements OnInit {
   getPayments() {
     this.paymentService.getPayments().subscribe(
       payments => this.existPayments = payments,
-      error => this.show(error, "error")
     );
   }
 
@@ -176,22 +171,16 @@ export class OrderFormComponent implements OnInit {
         this.existDeliveries = deliveries;
         this.delivery.setValue(deliveries.find(d => d.deliveryMethodId === this.order.deliveryMethodId));
       },
-      error => this.show(error, "error")
     );
   }
 
   getPickups() {
     this.pickupService.getPickups().subscribe(
       pickups => this.existPickups = pickups,
-      error => this.show(error, "error")
     );
   }
 
   goBack() {
     this.router.navigate(['spa/orders']);
-  }
-
-  show(text: string, type: string): void {
-    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }

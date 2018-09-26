@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../services/product.service';
-import { NotificationService } from 'ng2-notify-popup';
 
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
-  styleUrls: ['./create-product.component.css'],
-  providers: [NotificationService]
+  styleUrls: ['./create-product.component.css']
 })
 export class CreateProductComponent implements OnInit {
 
@@ -25,8 +23,7 @@ export class CreateProductComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private productService: ProductService,
-    private notify: NotificationService
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -37,13 +34,9 @@ export class CreateProductComponent implements OnInit {
     this.processing = true;
     this.productService.createProduct(product).subscribe(
       () => {
-        this.show("Done! You will be redirected to the previous page", "success");
-        setTimeout(() => {
           this.goBack()
-        }, 3000);
       },
       error => {
-        this.show(error, "error");
         this.processing = false;
       }
     );
@@ -51,9 +44,5 @@ export class CreateProductComponent implements OnInit {
 
   goBack() {    
     this.location.back();
-  }
-  
-  show(text: string, type: string): void {
-    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }
