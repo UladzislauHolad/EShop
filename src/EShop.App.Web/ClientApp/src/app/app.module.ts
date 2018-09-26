@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -7,6 +8,7 @@ import { NgHttpLoaderModule } from 'ng-http-loader';
 import { NgNotifyPopup } from 'ng2-notify-popup';
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { AppRoutingModule } from './/app-routing.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import 'web-animations-js';
 
@@ -39,6 +41,7 @@ import { ConfirmedStateComponent } from './components/orders/buttons/confirmed-s
 import { NewStateComponent } from './components/orders/buttons/new-state/new-state.component';
 import { OrderInfoComponent } from './components/orders/order-info/order-info.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CategoryChartComponent } from './components/dashboard/category-chart/category-chart.component';
 
 
 @NgModule({
@@ -70,10 +73,13 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     OnDeliveringStateComponent,
     CompletedStateComponent,
     OrderInfoComponent,
-    DashboardComponent
+    DashboardComponent,
+    CategoryChartComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule, 
+    NgxChartsModule,
     HttpClientModule,
     AppRoutingModule,
     NgSelectModule,

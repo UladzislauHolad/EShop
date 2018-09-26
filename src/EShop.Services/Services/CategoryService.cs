@@ -42,7 +42,7 @@ namespace EShop.Services.Services
         public object GetCategoryNameWithCountOfProducts()
         {
             var categories = _repository.GetAll();
-            var result = categories.Select(c => new { Name = c.Name, Count = c.ProductCategories.Count });
+            var result = categories.Select(c => new { Name = c.Name, Value = c.ProductCategories.Count });
 
             return result;
         }

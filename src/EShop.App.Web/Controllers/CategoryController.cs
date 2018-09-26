@@ -126,7 +126,7 @@ namespace EShop.App.Web.Controllers
             return Ok(new SelectList(categories, "CategoryId", "Name"));
         }
 
-        [HttpGet]
+        [HttpGet("api/categories-chart")]
         public ActionResult CategoryWithCountOfProducts()
         {
             var data = _service.GetCategoryNameWithCountOfProducts();
@@ -141,9 +141,9 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("api/categories/{id}")]
-        public JsonResult GetCategory([FromRoute]int id)
+        public ActionResult GetCategory([FromRoute]int id)
         {
-            return Json(_service.GetCategory(id));
+            return Ok(_service.GetCategory(id));
         }
 
         [HttpPost("api/categories/")]
