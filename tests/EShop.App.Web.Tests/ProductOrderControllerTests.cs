@@ -320,10 +320,10 @@ namespace EShop.App.Web.Tests
         {
             var mapper = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new OrderProfile());
-                cfg.AddProfile(new ProductOrderProfile());
+                cfg.AddProfile(new OrderViewModelProfile());
+                cfg.AddProfile(new ProductOrderViewModelProfile());
                 cfg.AddProfile(new ProductOrderCreateViewModelProfile());
-                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductViewModelProfile());
             }).CreateMapper();
 
             return mapper;

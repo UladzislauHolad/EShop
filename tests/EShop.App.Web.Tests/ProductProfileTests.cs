@@ -35,7 +35,7 @@ namespace EShop.App.Web.Tests
 
         private IRuntimeMapper GetMapper()
         {
-            var profile = new ProductProfile();
+            var profile = new ProductViewModelProfile();
             MapperConfiguration cfg = new MapperConfiguration(configure => configure.AddProfile(profile));
             return new Mapper(cfg).DefaultContext.Mapper;
         }

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Profiles
 {
-    public class ProductOrderProfile : Profile
+    public class ProductOrderViewModelProfile : Profile
     {
-        public ProductOrderProfile()
+        public ProductOrderViewModelProfile()
         {
             CreateMap<ProductOrderDTO, ProductOrderViewModel>()
                 .ForMember(dest => dest.IsNotAvailable,

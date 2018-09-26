@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Profiles
 {
-    public class CategoryProfile : Profile
+    public class CategoryViewModelProfile : Profile
     {
-        public CategoryProfile()
+        public CategoryViewModelProfile()
         {
             CreateMap<CategoryDTO, CategoryViewModel>();
             CreateMap<CategoryViewModel, CategoryDTO>();

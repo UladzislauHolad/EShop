@@ -252,7 +252,7 @@ namespace EShop.App.Web.Tests
         private IMapper GetMapper()
         {
             var config = new MapperConfiguration(cfg => {
-                cfg.AddProfile(new ProductProfile());
+                cfg.AddProfile(new ProductViewModelProfile());
                 cfg.AddProfile(new ProductDTOProfile());
             });
             return new Mapper(config);

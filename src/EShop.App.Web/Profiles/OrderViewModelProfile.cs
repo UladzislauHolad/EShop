@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace EShop.App.Web.Profiles
 {
-    public class OrderProfile : Profile
+    public class OrderViewModelProfile : Profile
     {
-        public OrderProfile()
+        public OrderViewModelProfile()
         {
             CreateMap<OrderDTO, OrderViewModel>();
             CreateMap<OrderViewModel, OrderDTO>();

@@ -4,9 +4,9 @@ using EShop.Services.DTO;
 
 namespace EShop.App.Web
 {
-    public class ProductProfile : Profile
+    public class ProductViewModelProfile : Profile
     {
-        public ProductProfile()
+        public ProductViewModelProfile()
         {
             CreateMap<ProductDTO, ProductViewModel>();
             CreateMap<ProductViewModel, ProductDTO>();
