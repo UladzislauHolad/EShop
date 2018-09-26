@@ -9,5 +9,6 @@ namespace EShop.Services.Interfaces
     public interface IOrderStatusChangeService
     {
         IEnumerable<OrderStatusChartInfoDTO> GetInfoByStatus(StatusStates status);
+        IEnumerable<LineChartItemDTO> GetOrdersByState(StatusStates status);
     }
 }

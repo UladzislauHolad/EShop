@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ChartOptions } from '../chart-options';
 
 @Component({
   selector: 'app-category-chart',
@@ -9,21 +10,11 @@ export class CategoryChartComponent implements OnInit {
   
   @Input() data;
 
-  view: any[] = [700, 400];
-
-  // options
-  showLegend = true;
-
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  // pie
-  showLabels = true;
-  explodeSlices = false;
-  doughnut = false;
+  options = new ChartOptions();
 
   ngOnInit() {
+    this.options.legendTitle = 'Category'
+    this.options.view = [,400];
   }
 
   onSelect(obj)

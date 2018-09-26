@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using EShop.App.Web.Models.Angular.Dashboard;
 using EShop.App.Web.Models.DashboardViewModels;
 using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
@@ -14,10 +16,12 @@ namespace EShop.App.Web.Controllers
     public class DashboardController : Controller
     {
         private readonly IOrderStatusChangeService _service;
+        private readonly IMapper _mapper;
 
-        public DashboardController(IOrderStatusChangeService service)
+        public DashboardController(IOrderStatusChangeService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet("Dashboard")]
@@ -38,6 +42,32 @@ namespace EShop.App.Web.Controllers
             };
 
             return Ok(data);
+        }
+
+        [HttpGet("api/dashboard/line/orders")]
+        public ActionResult GetOrdersByStateInfo(string[] states)
+        {
+            List<LineChartAngularViewModel> responseList = new List<LineChartAngularViewModel>();
+
+            try
+            {
+                foreach (var s in states)
+                {
+                    StatusStates state;
+                    Enum.TryParse(s, out state);
+                    var part = new LineChartAngularViewModel
+                    {
+                        Name = state.ToString(),
+                        Series = _service.GetOrdersByState(state)
+                    };
+                    responseList.Add(part);
+                }
+                return Ok(responseList);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

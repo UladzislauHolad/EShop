@@ -38,6 +38,7 @@ import { NewStateComponent } from './components/orders/buttons/new-state/new-sta
 import { OrderInfoComponent } from './components/orders/order-info/order-info.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CategoryChartComponent } from './components/dashboard/category-chart/category-chart.component';
+import { OrderLineChartComponent } from './components/dashboard/order-line-chart/order-line-chart.component';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { CategoryChartComponent } from './components/dashboard/category-chart/ca
     CompletedStateComponent,
     OrderInfoComponent,
     DashboardComponent,
-    CategoryChartComponent
+    CategoryChartComponent,
+    OrderLineChartComponent
   ],
   imports: [
     BrowserModule,

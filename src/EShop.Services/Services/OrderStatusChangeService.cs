@@ -26,5 +26,13 @@ namespace EShop.Services.Services
                 .GroupBy(os => os.Date.Date)
                 .Select(g => new OrderStatusChartInfoDTO { Date = g.Key, Count = g.Count() });
         }
+
+        public IEnumerable<LineChartItemDTO> GetOrdersByState(StatusStates status)
+        {
+            return _repository.GetAll()
+                .Where(os => os.Status == status.ToString())
+                .GroupBy(os => os.Date.Date)
+                .Select(g => new LineChartItemDTO { Name = g.Key, Value = g.Count() });
+        }
     }
 }
