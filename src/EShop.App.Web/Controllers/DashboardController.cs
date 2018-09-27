@@ -31,6 +31,7 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("Dashboard/Line")]
+        [AllowAnonymous]
         public ActionResult GetLineCharInfo()
         {
             var data = new LineChartInfoViewModel
@@ -45,6 +46,7 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("api/dashboard/line/orders")]
+        [AllowAnonymous]
         public ActionResult GetOrdersByStateInfo(string[] states)
         {
             List<LineChartAngularViewModel> responseList = new List<LineChartAngularViewModel>();

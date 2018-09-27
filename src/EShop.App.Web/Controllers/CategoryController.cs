@@ -127,6 +127,7 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("api/categories-chart")]
+        [AllowAnonymous]
         public ActionResult CategoryWithCountOfProducts()
         {
             var data = _service.GetCategoryNameWithCountOfProducts();
