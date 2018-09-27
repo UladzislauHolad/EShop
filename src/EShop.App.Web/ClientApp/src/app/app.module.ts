@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule } from '@angular/material';
 
 
 
@@ -41,6 +42,7 @@ import { CategoryChartComponent } from './components/dashboard/category-chart/ca
 import { OrderLineChartComponent } from './components/dashboard/order-line-chart/order-line-chart.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { CategoryTreeComponent } from './components/catalog/category-tree/category-tree.component';
+import { CdkTreeModule } from '@angular/cdk/tree';
 
 
 @NgModule({
@@ -87,6 +89,11 @@ import { CategoryTreeComponent } from './components/catalog/category-tree/catego
     FormsModule,
     ReactiveFormsModule,
     NgHttpLoaderModule,
+    MatTreeModule,
+    CdkTreeModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],

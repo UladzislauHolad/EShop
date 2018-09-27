@@ -12,5 +12,6 @@ namespace EShop.Services.Interfaces
         IEnumerable<CategoryDTO> GetChildCategories(int id);
         CategoryDTO GetCategory(int id);
         object GetCategoryNameWithCountOfProducts();
+        IEnumerable<CategoryNodeDTO> GetCategoryNodes(int parentId);
     }
 }

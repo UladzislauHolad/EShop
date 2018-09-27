@@ -47,6 +47,24 @@ namespace EShop.Services.Services
             return result;
         }
 
+        public IEnumerable<CategoryNodeDTO> GetCategoryNodes(int parentId)
+        {
+            var categoryNodes = _repository.GetAll().Where(c => c.ParentId == parentId)
+                .Select(c => new CategoryNodeDTO
+                {
+                    CategoryId = c.CategoryId,
+                    Name = c.Name
+                }).ToList();
+
+            foreach (var categoryNode in categoryNodes)
+            {
+                categoryNode.HasChilds = _repository.GetAll().Any(c => c.ParentId == categoryNode.CategoryId);
+            }
+
+
+            return categoryNodes;
+        }
+
         public IEnumerable<CategoryDTO> GetChildCategories(int id)
         {
             var categories = _repository.Find(c => c.ParentId == id);
