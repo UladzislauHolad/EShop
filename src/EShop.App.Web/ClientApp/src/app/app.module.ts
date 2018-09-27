@@ -39,6 +39,8 @@ import { OrderInfoComponent } from './components/orders/order-info/order-info.co
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CategoryChartComponent } from './components/dashboard/category-chart/category-chart.component';
 import { OrderLineChartComponent } from './components/dashboard/order-line-chart/order-line-chart.component';
+import { CatalogComponent } from './components/catalog/catalog.component';
+import { CategoryTreeComponent } from './components/catalog/category-tree/category-tree.component';
 
 
 @NgModule({
@@ -71,7 +73,9 @@ import { OrderLineChartComponent } from './components/dashboard/order-line-chart
     OrderInfoComponent,
     DashboardComponent,
     CategoryChartComponent,
-    OrderLineChartComponent
+    OrderLineChartComponent,
+    CatalogComponent,
+    CategoryTreeComponent
   ],
   imports: [
     BrowserModule,
