@@ -47,24 +47,6 @@ namespace EShop.Services.Services
             return result;
         }
 
-        public IEnumerable<CategoryNodeDTO> GetCategoryNodes(int parentId)
-        {
-            var categoryNodes = _repository.GetAll().Where(c => c.ParentId == parentId)
-                .Select(c => new CategoryNodeDTO
-                {
-                    CategoryId = c.CategoryId,
-                    Name = c.Name
-                }).ToList();
-
-            foreach (var categoryNode in categoryNodes)
-            {
-                categoryNode.HasChilds = _repository.GetAll().Any(c => c.ParentId == categoryNode.CategoryId);
-            }
-
-
-            return categoryNodes;
-        }
-
         public IEnumerable<CategoryDTO> GetChildCategories(int id)
         {
             var categories = _repository.Find(c => c.ParentId == id);
@@ -75,6 +57,44 @@ namespace EShop.Services.Services
         public void Update(CategoryDTO categoryDTO)
         {
             _repository.Update(_mapper.Map<CategoryDTO, Category>(categoryDTO));
+        }
+
+        public IEnumerable<CategoryNestedNodeDTO> GetCategoryNestedNodes()
+        {
+            var categories = _repository.GetAll().ToList();
+            List<CategoryNestedNodeDTO> nodes;
+            nodes = categories.Where(c => c.ParentId == 0)
+                .Select(c => new CategoryNestedNodeDTO
+                {
+                    Category = _mapper.Map<CategoryDTO>(c),
+                    Childs = new List<CategoryNestedNodeDTO>()
+                }).ToList();
+
+            foreach (var node in nodes)
+            {
+                FillNodes(categories, node);
+            }
+
+            return nodes;
+        }
+
+        private void FillNodes(IEnumerable<Category> categories, CategoryNestedNodeDTO node)
+        {
+            var childs = categories.Where(c => c.ParentId == node.Category.CategoryId);
+            if(childs.Count() == 0)
+            {
+                return;
+            }
+
+            node.Childs = childs.Select(c => new CategoryNestedNodeDTO {
+                Category = _mapper.Map<CategoryDTO>(c),
+                Childs = new List<CategoryNestedNodeDTO>()
+            }).ToList();
+
+            foreach (var child in node.Childs)
+            {
+                FillNodes(categories, child);
+            }
         }
     }
 }

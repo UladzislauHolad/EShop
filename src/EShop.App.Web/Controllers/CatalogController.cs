@@ -30,17 +30,12 @@ namespace EShop.App.Web.Controllers
             return View(categories);
         }
 
-        [HttpGet("api/catalog/category-nodes/{id}")]
+        [HttpGet("api/catalog/category-nodes")]
         [AllowAnonymous]
-        public ActionResult GetCategoryNodes([FromRoute]int id)
+        public ActionResult GetCategoryNestedNodes()
         {
-            var result = _service.GetCategoryNodes(id);
-
-            if(result.Count() == 0)
-            {
-                return BadRequest();
-            }
-
+            var result = _service.GetCategoryNestedNodes();
+            
             return Ok(result);
         }
     }

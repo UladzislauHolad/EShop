@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { of, Observable } from 'rxjs';
-import { CategoryNode } from '../components/catalog/category-tree/category-node';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { CategoryNestedNode } from '../components/catalog/category-tree/category-nested-node';
 
 const catalogUrl = "/api/catalog"
 
@@ -12,8 +12,9 @@ const catalogUrl = "/api/catalog"
 export class CatalogService {
 
   constructor(private http: HttpClient) { }
-  getCategoryNodesByParentId(id: number): Observable<CategoryNode[]> {
-    return this.http.get<CategoryNode[]>(`${catalogUrl}/category-nodes/${id}`).pipe(
+  
+  getCategoryNestedNodes(): Observable<CategoryNestedNode[]> {
+    return this.http.get<CategoryNestedNode[]>(`${catalogUrl}/category-nodes`).pipe(
       tap(data => console.dir(data))
     )
   }
