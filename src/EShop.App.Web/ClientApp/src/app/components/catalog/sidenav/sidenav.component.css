@@ -1,0 +1,13 @@
+.nav-container {
+    height: 100vh;
+}
+
+.mat-drawer {
+    padding: 10px;
+    width: 20vw;
+}
+
+.mat-drawer-content {
+    padding: 10px;
+    width: 80vw;
+}
