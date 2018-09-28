@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.Angular.Product;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -144,12 +145,14 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpGet("api/products")]
+        [AllowAnonymous]
         public ActionResult GetProducts()
         {
             return Ok(_service.GetProducts());
         }
 
         [HttpGet("api/products/{id}")]
+        [AllowAnonymous]
         public ActionResult GetProducts([FromRoute]int id)
         {
             return Ok(_service.GetProduct(id));
@@ -185,6 +188,15 @@ namespace EShop.App.Web.Controllers
         {
             _service.Delete(id);
             return Ok();
+        }
+
+        [HttpGet("api/categories/{id}/products")]
+        [AllowAnonymous]
+        public IEnumerable<ProductAngularViewModel> GetProductOfCategory([FromRoute]int id)
+        {
+            var products = _mapper.Map<IEnumerable<ProductAngularViewModel>>(_service.GetProductsByCategoryId(id));
+
+            return products;
         }
     }
 }

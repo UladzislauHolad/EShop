@@ -12,3 +12,13 @@
     margin-bottom: 0;
     list-style-type: none;
 }
+
+.btn-li:hover {
+    background-color: rgb(229, 236, 245);
+    cursor: pointer;
+}
+
+.btn-li {
+    width: 100%;
+    height: 100%;
+}

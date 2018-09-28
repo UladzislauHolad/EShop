@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EShop.App.Web.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class CategoryController : Controller
     {
         private readonly IMapper _mapper;

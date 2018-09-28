@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule } from '@angular/material';
+import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule } from '@angular/material';
 
 
 
@@ -44,6 +44,7 @@ import { CatalogComponent } from './components/catalog/catalog.component';
 import { CategoryTreeComponent } from './components/catalog/category-tree/category-tree.component';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { SidenavComponent } from './components/catalog/sidenav/sidenav.component';
+import { ProductGridComponent } from './components/catalog/product-grid/product-grid.component';
 
 
 @NgModule({
@@ -79,7 +80,8 @@ import { SidenavComponent } from './components/catalog/sidenav/sidenav.component
     OrderLineChartComponent,
     CatalogComponent,
     CategoryTreeComponent,
-    SidenavComponent
+    SidenavComponent,
+    ProductGridComponent
   ],
   imports: [
     BrowserModule,
@@ -96,7 +98,8 @@ import { SidenavComponent } from './components/catalog/sidenav/sidenav.component
     MatIconModule,
     MatProgressBarModule,
     MatButtonModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent],

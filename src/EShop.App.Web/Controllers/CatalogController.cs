@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
-using EShop.App.Web.Models.Angular.Catalog;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;

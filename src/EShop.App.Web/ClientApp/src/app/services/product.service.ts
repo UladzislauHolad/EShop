@@ -9,6 +9,9 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
+const categoriesUrl = 'api/categories';
+const productsUrl = '/api/products';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,36 +20,42 @@ export class ProductService {
 
   private errorHandler: errorHandler = new errorHandler();
 
-  private productsUrl = '/api/products';
+  
 
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl).pipe(
+    return this.http.get<Product[]>(productsUrl).pipe(
       catchError(this.errorHandler.handleError)
     );
   };
 
   getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${this.productsUrl}/${id}`).pipe(
+    return this.http.get<Product>(`${productsUrl}/${id}`).pipe(
       catchError(this.errorHandler.handleError)
     );
   }
 
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.productsUrl, product, httpOptions).pipe(
+    return this.http.post<Product>(productsUrl, product, httpOptions).pipe(
       catchError(this.errorHandler.handleError)
     );
   }
 
   updateProduct(product: Product): Observable<Product> {
-    return this.http.patch<Product>(`${this.productsUrl}/${product.productId}`, product, httpOptions).pipe(
+    return this.http.patch<Product>(`${productsUrl}/${product.productId}`, product, httpOptions).pipe(
       catchError(this.errorHandler.handleError)
     );
   }
 
   deleteProduct(id: number): Observable<Product> {
-    return this.http.delete<Product>(`${this.productsUrl}/${id}`).pipe(
+    return this.http.delete<Product>(`${productsUrl}/${id}`).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
+
+  getProductsByCategoryId(id: number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${categoriesUrl}/${id}/products`).pipe(
       catchError(this.errorHandler.handleError)
     );
   }

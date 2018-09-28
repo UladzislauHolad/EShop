@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { CatalogService } from '../../../services/catalog.service';
 import { CategoryNestedNode } from './category-nested-node';
+import { SideNavEventService } from '../sidenav/sidenav-event.service';
 
 @Component({
   selector: 'app-category-tree',
@@ -15,7 +15,8 @@ export class CategoryTreeComponent {
   nestedDataSource: MatTreeNestedDataSource<CategoryNestedNode>;
 
   constructor(
-    private catalogService: CatalogService
+    private catalogService: CatalogService,
+    private sidenavEventService: SideNavEventService
   ) {
     this.nestedTreeControl = new NestedTreeControl<CategoryNestedNode>(this._getChildren);
     this.nestedDataSource = new MatTreeNestedDataSource();
@@ -29,6 +30,10 @@ export class CategoryTreeComponent {
   }
 
   hasNestedChild = (_: number, nodeData: CategoryNestedNode) => nodeData.childs.length > 0;
+
+  chooseCategory(id: number) {
+    this.sidenavEventService.choose(id);
+  }
 
   private _getChildren = (node: CategoryNestedNode) => { 
     return node.childs
