@@ -126,52 +126,97 @@ namespace EShop.App.Web.Controllers
             return Ok(new SelectList(categories, "CategoryId", "Name"));
         }
 
+        /// <summary>
+        /// Get category info for pie chart
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200"></response>
         [HttpGet("api/categories-chart")]
+        [ProducesResponseType(200)]
         [AllowAnonymous]
-        public ActionResult CategoryWithCountOfProducts()
+        public IEnumerable<CategoryPieChartInfoDTO> CategoryWithCountOfProducts()
         {
-            var data = _service.GetCategoryNameWithCountOfProducts();
-
-            return Ok(data);
+            return  _service.GetCategoryNameWithCountOfProducts();
         }
 
+        /// <summary>
+        /// Get list of categories
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Returns list of categories</response>
         [HttpGet("api/categories")]
-        public ActionResult GetCategories()
+        [ProducesResponseType(200)]
+        public IEnumerable<CategoryViewModel> GetCategories()
         {
-            return Ok(_service.GetCategories());
+            return _mapper.Map<IEnumerable<CategoryViewModel>>(_service.GetCategories());
         }
 
+        /// <summary>
+        /// Get category by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Return category</response>
+        /// <response code="204">Return no content</response>
         [HttpGet("api/categories/{id}")]
-        public ActionResult GetCategory([FromRoute]int id)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        public CategoryViewModel GetCategory([FromRoute]int id)
         {
-            return Ok(_service.GetCategory(id));
+            return _mapper.Map<CategoryViewModel>(_service.GetCategory(id));
         }
 
+        /// <summary>
+        /// Create new instance of category
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        /// <response code="201">Category was created</response>
+        /// <response code="422">Invalid model</response>
         [HttpPost("api/categories/")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(422)]
         public ActionResult CreateCategory([FromBody]CategoryViewModel category)
         {
             if (ModelState.IsValid)
             {
                 _service.Create(_mapper.Map<CategoryDTO>(category));
-                return Ok();
+                return StatusCode(StatusCodes.Status201Created);
             }
 
-            return BadRequest();
+            return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Update category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        /// <response code="204">Category was updated</response>
+        /// <response code="422">Model is invalid</response>
         [HttpPatch("api/categories/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(422)]
         public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
         {
             if (ModelState.IsValid)
             {
                 _service.Update(_mapper.Map<CategoryDTO>(category));
-                return Ok();
+                return StatusCode(StatusCodes.Status204NoContent);
             }
 
-            return BadRequest();
+            return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Delete category
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Category was deleted</response>
         [HttpDelete("api/categories/{id}")]
+        [ProducesResponseType(200)]
         public ActionResult DeleteCategory([FromRoute]int id)
         {
             _service.Delete(id);

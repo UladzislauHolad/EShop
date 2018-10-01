@@ -39,10 +39,10 @@ namespace EShop.Services.Services
             return _mapper.Map<CategoryDTO>(_repository.Get(id));
         }
 
-        public object GetCategoryNameWithCountOfProducts()
+        public IEnumerable<CategoryPieChartInfoDTO> GetCategoryNameWithCountOfProducts()
         {
             var categories = _repository.GetAll();
-            var result = categories.Select(c => new { Name = c.Name, Value = c.ProductCategories.Count });
+            var result = categories.Select(c => new CategoryPieChartInfoDTO{ Name = c.Name, Value = c.ProductCategories.Count }).ToList();
 
             return result;
         }
