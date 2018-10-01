@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using EShop.App.Web.Models.Angular.PaymentMethod;
+using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,10 +30,23 @@ namespace EShop.App.Web.Controllers
             return Ok(new SelectList(payments, "Id", "Name"));
         }
 
+        /// <summary>
+        /// Get list of PaymentMethods
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/payments
+        ///     
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200">Returns list of PaymentMethods</response>
         [HttpGet("api/payments")]
-        public ActionResult GetPayments()
+        [ProducesResponseType(200)]
+        public IEnumerable<PaymentMethodAngularViewModel> GetPayments()
         {
-            return Ok(_service.GetPaymentMethods());
+            return _mapper.Map<IEnumerable<PaymentMethodAngularViewModel>>(_service.GetPaymentMethods());
         }
     }
 }
