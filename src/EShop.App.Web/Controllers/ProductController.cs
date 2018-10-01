@@ -4,6 +4,7 @@ using EShop.App.Web.Models.Angular.Product;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -144,13 +145,30 @@ namespace EShop.App.Web.Controllers
             return Ok(new SelectList(products, "ProductId", "Name"));
         }
 
+        /// <summary>
+        /// Gets list of ProductViewModel
+        /// </summary>
+        /// <returns>List of ProductViewModel</returns>
+        /// <response code="200">Returns the list of ProductViewModel</response>
         [HttpGet("api/products")]
         [AllowAnonymous]
-        public ActionResult GetProducts()
+        public IEnumerable<ProductViewModel> GetProducts()
         {
-            return Ok(_service.GetProducts());
+            return _mapper.Map<IEnumerable<ProductViewModel>>(_service.GetProducts());
         }
 
+        /// <summary>
+        /// Get ProductViewModel by id
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/products/1
+        ///     
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>ProductViewModel</returns>
         [HttpGet("api/products/{id}")]
         [AllowAnonymous]
         public ActionResult GetProducts([FromRoute]int id)
@@ -158,31 +176,104 @@ namespace EShop.App.Web.Controllers
             return Ok(_service.GetProduct(id));
         }
 
+        /// <summary>
+        /// Create new instance of ProductViewModel
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Post api/products
+        ///     {
+        ///         "name": "Product",
+        ///         "price": 122,
+        ///         "description": "Description",
+        ///         "count": 2,
+        ///         "categories": [
+        ///             {
+        ///                 "categoryId": 0,
+        ///                 "name": "string",
+        ///                 "parentId": 0
+        ///             }
+        ///         ]
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        /// <response code="201">ProductViewModel is created</response>
+        /// <response code="400">ProductViewModel is not valid</response>
         [HttpPost("api/products")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
         [AllowAnonymous]
-        public ActionResult CreateProduct([FromBody]ProductViewModel product)
+        public ActionResult<ProductViewModel> CreateProduct([FromBody]ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 _service.Add(_mapper.Map<ProductViewModel, ProductDTO>(product));
-                return Ok();
+                return StatusCode(StatusCodes.Status201Created, null);
             }
             return BadRequest();
         }
 
+        /// <summary>
+        /// Update instance of ProductViewModel
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Patch api/products/1
+        ///     {
+        ///         "name": "Product",
+        ///         "price": 122,
+        ///         "description": "Description",
+        ///         "count": 2,
+        ///         "categories": [
+        ///             {
+        ///                 "categoryId": 0,
+        ///                 "name": "string",
+        ///                 "parentId": 0
+        ///             }
+        ///         ]
+        ///     }
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        /// <response code="204">ProductViewModel is updated</response>
+        /// <response code="400">ProductViewModel is not valid</response>
         [HttpPatch("api/products/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         [AllowAnonymous]
         public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
-                return Ok();
+                return NoContent();
             }
             return BadRequest();
         }
 
+        /// <summary>
+        /// Delete ProductViewModel by id
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Delete api/products/1
+        ///     
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>ProductViewModel</returns>
+        /// <response code="200">ProductViewModel is deleted</response>
         [HttpDelete("api/products/{id}")]
+        [ProducesResponseType(200)]
         [AllowAnonymous]
         public ActionResult DeleteProduct([FromRoute]int id)
         {
@@ -190,7 +281,21 @@ namespace EShop.App.Web.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Get list of ProductAngularViewModel by category id
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/categories/1/products
+        ///     
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns>ProductViewModel</returns>
+        /// <response code="200">Returns list of ProductAngularViewModel by category id</response>
         [HttpGet("api/categories/{id}/products")]
+        [ProducesResponseType(200)]
         [AllowAnonymous]
         public IEnumerable<ProductAngularViewModel> GetProductOfCategory([FromRoute]int id)
         {
