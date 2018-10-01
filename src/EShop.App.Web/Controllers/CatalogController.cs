@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.Angular.Catalog;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -30,15 +31,18 @@ namespace EShop.App.Web.Controllers
         }
 
         /// <summary>
-        /// Deletes a specific TodoItem.
+        /// Gets a list of CategoryNestedNodeViewModels.
         /// </summary>
+        /// <returns>A list of CategoryNestedNodeViewModels</returns>
+        /// <response code="200">Returns the list of CategoryNestedNodeViewModels</response>
         [HttpGet("api/catalog/category-nodes")]
+        [ProducesResponseType(200)]
         [AllowAnonymous]
-        public ActionResult GetCategoryNestedNodes()
+        public IEnumerable<CategoryNestedNodeViewModel> GetCategoryNestedNodes()
         {
-            var result = _service.GetCategoryNestedNodes();
+            var result = _mapper.Map<IEnumerable<CategoryNestedNodeViewModel>>(_service.GetCategoryNestedNodes());
             
-            return Ok(result);
+            return result;
         }
     }
 }
