@@ -203,21 +203,60 @@ namespace EShop.App.Web.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Get list of orders
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/orders
+        /// 
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200">Returns list of orders</response>
         [HttpGet("api/orders")]
+        [ProducesResponseType(200)]
         [AllowAnonymous]
-        public ActionResult GetOrders()//ActionREsult
+        public IEnumerable<OrderAngularViewModel> GetOrders()
         {
-            return Ok(_mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders()));
+            return _mapper.Map<IEnumerable<OrderAngularViewModel>>(_service.GetOrders());
         }
 
+        /// <summary>
+        /// Get order by id
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        ///     
+        ///     Get api/orders/1
+        /// 
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns order</response>
+        /// <response code="204">Returns no content</response>
         [HttpGet("api/orders/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [AllowAnonymous]
-        public ActionResult GetOrder([FromRoute]int id)
+        public OrderInfoAngularViewModel GetOrder([FromRoute]int id)
         {
-            return Ok(_mapper.Map<OrderInfoAngularViewModel>(_service.GetOrder(id)));
+            return _mapper.Map<OrderInfoAngularViewModel>(_service.GetOrder(id));
         }
 
+        /// <summary>
+        /// Create new instance of Order
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        /// <response code="201">Order was created</response>
+        /// <response code="422">Invalid model</response>
         [HttpPost("api/orders")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(422)]
         [AllowAnonymous]
         public ActionResult CreateOrder([FromBody]ModifyOrderAngularViewModel order)
         {
@@ -229,10 +268,20 @@ namespace EShop.App.Web.Controllers
                 return StatusCode(StatusCodes.Status201Created, _mapper.Map<ModifyOrderAngularViewModel>(result));
             }
 
-            return BadRequest();//422 entity invalid state
+            return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Update order
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        /// <response code="204">Order was updated</response>
+        /// <response code="422">Invalid model</response>
         [HttpPatch("api/orders/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(422)]
         [AllowAnonymous]
         public ActionResult UpdateOrder([FromRoute]int id, [FromBody]ModifyOrderAngularViewModel order)
         {
@@ -242,11 +291,20 @@ namespace EShop.App.Web.Controllers
                 return NoContent();
             }
 
-            return BadRequest();
+            return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Change order state
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <response code="200">Order state is changed</response>
+        /// <response code="422">Can not change state of this order</response>
         [HttpPut("api/orders/{orderId}")]
-        public ActionResult ChangeOrderState([FromRoute]int orderId)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
+        public ActionResult<OrderAngularViewModel> ChangeOrderState([FromRoute]int orderId)
         {
             try
             {
@@ -255,11 +313,20 @@ namespace EShop.App.Web.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
             }
         }
 
+        /// <summary>
+        /// Delete order
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
+        /// <response code="200">Order was deleted</response>
+        /// <response code="422">Can not delete this order</response>
         [HttpDelete("api/orders/{orderId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
         public ActionResult DeleteOrder([FromRoute]int orderId)
         {
             try
@@ -269,7 +336,7 @@ namespace EShop.App.Web.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
             }
         }
     }

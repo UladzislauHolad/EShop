@@ -19,8 +19,5 @@ namespace EShop.App.Web.Models.Angular
         public int PaymentMethodId { get; set; }
         public int DeliveryMethodId { get; set; }
         public int? PickupPointId { get; set; }
-        //public PaymentMethodViewModel PaymentMethod { get; set; }
-        //public DeliveryMethodViewModel DeliveryMethod { get; set; }
-        //public PickupPointViewModel PickupPoint { get; set; }
     }
 }
