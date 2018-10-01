@@ -8,6 +8,7 @@ using EShop.App.Web.Models.DashboardViewModels;
 using EShop.Services.Infrastructure.Enums;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EShop.App.Web.Controllers
@@ -45,9 +46,18 @@ namespace EShop.App.Web.Controllers
             return Ok(data);
         }
 
+        /// <summary>
+        /// Get order data for line chart
+        /// </summary>
+        /// <param name="states"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns order data for line chart</response>
+        /// <response code="422">Wrong parameters</response>
         [HttpGet("api/dashboard/line/orders")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
         [AllowAnonymous]
-        public ActionResult GetOrdersByStateInfo(string[] states)
+        public ActionResult<IEnumerable<LineChartAngularViewModel>> GetOrdersByStateInfo(string[] states)
         {
             List<LineChartAngularViewModel> responseList = new List<LineChartAngularViewModel>();
 
@@ -68,7 +78,7 @@ namespace EShop.App.Web.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex.Message);
             }
         }
     }
