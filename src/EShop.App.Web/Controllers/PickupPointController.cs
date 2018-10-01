@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,10 +28,23 @@ namespace EShop.App.Web.Controllers
             return Ok(new SelectList(points, "Id", "Name"));
         }
 
+        /// <summary>
+        /// Get list of PickupPoints
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/pickups
+        ///     
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200">Returns list of PickupPoints</response>
         [HttpGet("api/pickups")]
-        public ActionResult GetPickups()
+        [ProducesResponseType(200)]
+        public IEnumerable<PickupPointDTO> GetPickups()
         {
-            return Ok(_service.GetPickupPoints());
+            return _service.GetPickupPoints();
         }
     }
 }
