@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using EShop.App.Web.Models.Angular.DeliveryMethod;
+using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,10 +30,23 @@ namespace EShop.App.Web.Controllers
             return Json(new SelectList(payments, "Id", "Name"));
         }
 
+        /// <summary>
+        /// Get list of DeliveryMethods
+        /// </summary>
+        /// <remarks>
+        /// 
+        /// Sample request:
+        /// 
+        ///     Get api/deliveries
+        ///     
+        /// </remarks>
+        /// <returns></returns>
+        /// <response code="200">Returns list of DeliveryMethods</response>
         [HttpGet("api/deliveries")]
-        public ActionResult GetDeliveries()
+        [ProducesResponseType(200)]
+        public IEnumerable<DeliveryMethodAngularViewModel> GetDeliveries()
         {
-            return Ok(_service.GetDeliveryMethods());
+            return _mapper.Map<IEnumerable<DeliveryMethodAngularViewModel>>(_service.GetDeliveryMethods());
         }
     }
 }
