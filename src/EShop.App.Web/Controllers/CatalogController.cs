@@ -29,6 +29,9 @@ namespace EShop.App.Web.Controllers
             return View(categories);
         }
 
+        /// <summary>
+        /// Deletes a specific TodoItem.
+        /// </summary>
         [HttpGet("api/catalog/category-nodes")]
         [AllowAnonymous]
         public ActionResult GetCategoryNestedNodes()

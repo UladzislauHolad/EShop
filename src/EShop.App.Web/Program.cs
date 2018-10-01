@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace EShop.App.Web
 {
+#pragma warning disable CS1591
     public class Program
     {
         public static void Main(string[] args)
@@ -15,4 +16,5 @@ namespace EShop.App.Web
                 .UseStartup<Startup>()
                 .Build();
     }
+#pragma warning restore CS1591
 }

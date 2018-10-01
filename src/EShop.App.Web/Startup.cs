@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 
 namespace EShop.App.Web
 {
@@ -71,6 +73,19 @@ namespace EShop.App.Web
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
             services.AddMvc().AddXmlSerializerFormatters();
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "EShop API"
+                });
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -85,6 +100,18 @@ namespace EShop.App.Web
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "default", template: "{controller}/{action=index}/{id}");
