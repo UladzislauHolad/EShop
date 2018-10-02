@@ -108,9 +108,19 @@ namespace EShop.Services.Services
             return await _userManager.ChangePasswordAsync(existUser, oldPassword, newPassword);
         }
 
-        public async Task SignInAsync(string id, bool isPersistent, string authenticationMethod = null)
+        public async Task SignInByIdAsync(string id, bool isPersistent, string authenticationMethod = null)
         {
             var existUser = await _userManager.FindByIdAsync(id);
+
+            if (existUser == null)
+                throw new NullReferenceException();
+
+            await _signInManager.SignInAsync(existUser, isPersistent);
+        }
+
+        public async Task SignInAsync(UserDTO user, bool isPersistent, string authenticationMethod = null)
+        {
+            var existUser = await _userManager.FindByEmailAsync(user.Email);
 
             if (existUser == null)
                 throw new NullReferenceException();

@@ -239,7 +239,7 @@ namespace EShop.Services.Tests
 
             await Assert.ThrowsAsync<NullReferenceException>(async () => 
             {
-                await service.SignInAsync(id, isPersistent);
+                await service.SignInByIdAsync(id, isPersistent);
             });
         }
 
@@ -260,7 +260,7 @@ namespace EShop.Services.Tests
                 .Returns(Task.FromResult(IdentityResult.Success));
             var service = new AccountService(mgr.Object, smgr.Object, GetMapper());
 
-            var result = service.SignInAsync(id, isPersistent).GetAwaiter().IsCompleted;
+            var result = service.SignInByIdAsync(id, isPersistent).GetAwaiter().IsCompleted;
 
             Assert.True(result);
         }

@@ -18,6 +18,10 @@ using System.Reflection;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 
 namespace EShop.App.Web
 {
@@ -40,8 +44,31 @@ namespace EShop.App.Web
             services.AddDbContext<EShopContext>(options =>
                 options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<EShopContext>();
+                .AddEntityFrameworkStores<EShopContext>()
+                .AddDefaultTokenProviders();
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(cfg =>
+                {
+                    cfg.RequireHttpsMetadata = false;
+                    cfg.SaveToken = true;
+                    cfg.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = AppConfiguration["JwtIssuer"],
+                        ValidAudience = AppConfiguration["JwtIssuer"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfiguration["JwtKey"])),
+                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                    };
+                });
             services.Configure<SecurityStampValidatorOptions>(opt =>
                 opt.ValidationInterval = TimeSpan.Zero);
             services.AddTransient<IDbContext, EShopContext>();

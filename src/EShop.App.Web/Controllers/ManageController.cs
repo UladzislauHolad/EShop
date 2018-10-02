@@ -66,7 +66,7 @@ namespace EShop.App.Web.Controllers
                 var result = await _service.ChangePasswordAsync(user.Id, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    await _service.SignInAsync(user.Id, isPersistent: false);
+                    await _service.SignInByIdAsync(user.Id, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
                 }
                 AddErrorsFromResult(result);

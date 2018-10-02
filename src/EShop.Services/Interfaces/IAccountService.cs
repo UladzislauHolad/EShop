@@ -22,7 +22,8 @@ namespace EShop.Services.Interfaces
         Task<UserDTO> FindByEmailAsync(string email);
         Task<IdentityResult> ResetPasswordAsync(string id, string code, string newPassword);
         Task<IdentityResult> ChangePasswordAsync(string id, string oldPassword, string newPassword);
-        Task SignInAsync(string id, bool isPersistent, string authenticationMethod = null);
+        Task SignInByIdAsync(string id, bool isPersistent, string authenticationMethod = null);
+        Task SignInAsync(UserDTO user, bool isPersistent, string authenticationMethod = null);
         Task<bool> HasPasswordAsync(string id);
     }
 }

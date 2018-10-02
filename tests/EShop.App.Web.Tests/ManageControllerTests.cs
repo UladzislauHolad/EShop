@@ -70,7 +70,7 @@ namespace EShop.App.Web.Tests
             service.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).Returns(Task.FromResult(user));
             service.Setup(m => m.ChangePasswordAsync(user.Id, model.OldPassword, model.NewPassword))
                 .Returns(Task.FromResult(IdentityResult.Success));
-            service.Setup(m => m.SignInAsync(user.Id, false, null)).Returns(Task.CompletedTask);
+            service.Setup(m => m.SignInByIdAsync(user.Id, false, null)).Returns(Task.CompletedTask);
             var controller = new ManageController(service.Object, GetMapper());
             controller.ControllerContext.HttpContext = http.Object;
 
@@ -99,7 +99,7 @@ namespace EShop.App.Web.Tests
             service.Setup(m => m.GetUserAsync(It.IsAny<ClaimsPrincipal>())).Returns(Task.FromResult(user));
             service.Setup(m => m.ChangePasswordAsync(user.Id, model.OldPassword, model.NewPassword))
                 .Returns(Task.FromResult(IdentityResult.Failed()));
-            service.Setup(m => m.SignInAsync(user.Id, false, null)).Returns(Task.CompletedTask);
+            service.Setup(m => m.SignInByIdAsync(user.Id, false, null)).Returns(Task.CompletedTask);
             var controller = new ManageController(service.Object, GetMapper());
             controller.ControllerContext.HttpContext = http.Object;
 
