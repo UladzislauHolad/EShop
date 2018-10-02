@@ -20,6 +20,7 @@ namespace EShop.Services.Interfaces
         Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
         Task SignOutAsync();
         Task<UserDTO> FindByEmailAsync(string email);
+        Task<UserDTO> FindByNameAsync(string userName);
         Task<IdentityResult> ResetPasswordAsync(string id, string code, string newPassword);
         Task<IdentityResult> ChangePasswordAsync(string id, string oldPassword, string newPassword);
         Task SignInByIdAsync(string id, bool isPersistent, string authenticationMethod = null);

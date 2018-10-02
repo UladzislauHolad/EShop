@@ -6,10 +6,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using EShop.App.Web.Models;
+using EShop.App.Web.Models.Angular.Account;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -22,11 +25,13 @@ namespace EShop.App.Web.Controllers
     {
         private readonly IAccountService _service;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AccountController(IAccountService service, IConfiguration configuration)
+        public AccountController(IAccountService service, IConfiguration configuration, IMapper mapper)
         {
             _service = service;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -76,39 +81,43 @@ namespace EShop.App.Web.Controllers
         }
 
         [HttpPost("api/login")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
         [AllowAnonymous]
-        public async Task<ActionResult<object>> JwtLogin([FromBody]LoginViewModel model)
+        public async Task<ActionResult<UserAngularViewModel>> JwtLogin([FromBody]LoginViewModel model)
         {
            
             var result =
             await _service.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
-                var appUser = await _service.FindByEmailAsync(model.Email);
-                return await GenerateJwtToken(model.Email, appUser);
+                var loggedUser = _mapper.Map<UserAngularViewModel>(await _service.FindByNameAsync(model.UserName));
+                loggedUser.Token = await GenerateJwtToken(loggedUser);
+                return loggedUser;
             }
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, new { Errors = new List<string>{ "Password or login is incorrect" } });
         }
 
         [HttpPost("api/register")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
         [AllowAnonymous]
         public async Task<object> JwtRegister([FromBody]CreateUserViewModel model)
         {
-            UserDTO user = new UserDTO
+            UserAngularViewModel user = new UserAngularViewModel
             {
                 UserName = model.UserName,
                 Email = model.Email
             };
-            var result = await _service.CreateUserAsync(user, model.Password);
+            var result = await _service.CreateUserAsync(_mapper.Map<UserDTO>(user), model.Password);
 
-            if (result.Succeeded)
+            if(result.Succeeded)
             {
-                await _service.SignInAsync(user, false);
-                return await GenerateJwtToken(model.Email, user);
+                return StatusCode(StatusCodes.Status200OK);
             }
 
-            throw new ApplicationException("UNKNOWN_ERROR");
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, new { Errors = result.Errors.Select(e => e.Description) });
         }
 
         private void AddErrorsFromResult(IdentityResult result)
@@ -119,11 +128,11 @@ namespace EShop.App.Web.Controllers
             }
         }
 
-        private async Task<object> GenerateJwtToken(string email, UserDTO user)
+        private async Task<string> GenerateJwtToken(UserAngularViewModel user)
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 //new Claim(ClaimTypes.NameIdentifier, user.Id)
             };

@@ -137,5 +137,10 @@ namespace EShop.Services.Services
 
             return await _userManager.HasPasswordAsync(existUser);
         }
+
+        public async Task<UserDTO> FindByNameAsync(string userName)
+        {
+            return _mapper.Map<UserDTO>(await _userManager.FindByNameAsync(userName));
+        }
     }
 }

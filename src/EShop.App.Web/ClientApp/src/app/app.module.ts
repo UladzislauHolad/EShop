@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
@@ -45,6 +45,11 @@ import { CategoryTreeComponent } from './components/catalog/category-tree/catego
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { SidenavComponent } from './components/catalog/sidenav/sidenav.component';
 import { ProductGridComponent } from './components/catalog/product-grid/product-grid.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
+import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
+import { AlertComponent } from './directives/alert/alert.component';
 
 
 @NgModule({
@@ -81,7 +86,10 @@ import { ProductGridComponent } from './components/catalog/product-grid/product-
     CatalogComponent,
     CategoryTreeComponent,
     SidenavComponent,
-    ProductGridComponent
+    ProductGridComponent,
+    LoginComponent,
+    RegisterComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +109,10 @@ import { ProductGridComponent } from './components/catalog/product-grid/product-
     MatSidenavModule,
     MatGridListModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     NewStateComponent,

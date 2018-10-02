@@ -151,7 +151,7 @@ namespace EShop.App.Web.Controllers
         /// <returns>List of ProductViewModel</returns>
         /// <response code="200">Returns the list of ProductViewModel</response>
         [HttpGet("api/products")]
-        [AllowAnonymous]
+        [ProducesResponseType(200)]
         public IEnumerable<ProductViewModel> GetProducts()
         {
             return _mapper.Map<IEnumerable<ProductViewModel>>(_service.GetProducts());
