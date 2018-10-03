@@ -10,7 +10,7 @@
     <a *ngIf="isLoggedIn" routerLink="spa/catalog" routerLinkActive="active" class="item">Catalog</a>
     <div class="right menu">
         <a *ngIf="!isLoggedIn" class="item" routerLink="spa/login" routerLinkActive="active" class="item">Login</a>
-        <a *ngIf="isLoggedIn" class="item" routerLink="spa/profile"><i class="icon user circle outline"></i></a>
+        <a *ngIf="isLoggedIn" class="item" routerLink="spa/profile"><i class="icon user circle outline"></i>{{userName}}</a>
         <a *ngIf="isLoggedIn" class="item" (click)="logout()" routerLinkActive="active" class="item">Logout</a>
     </div>
   </div>

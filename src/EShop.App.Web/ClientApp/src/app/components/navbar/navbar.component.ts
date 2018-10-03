@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
 
   isLoggedIn: boolean;
   subscription = new Subscription();
+  userName: string;
 
   constructor(
     private logginEventService: LogginEventService,
@@ -22,8 +23,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn = this.logginEventService.currentState;
+    this.getCurrentUser();
+    
     this.subscription.add(this.logginEventService.$isLoggedIn.subscribe(
-      isLoggedIn => this.isLoggedIn = isLoggedIn
+      isLoggedIn => {
+        this.isLoggedIn = isLoggedIn;
+        this.getCurrentUser()
+      }
     ));
   }
 
@@ -34,5 +40,10 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['spa/login']);
+  }
+
+  getCurrentUser() {
+    if(this.isLoggedIn)
+      this.userName = JSON.parse(localStorage.getItem('currentUser')).userName;
   }
 }
