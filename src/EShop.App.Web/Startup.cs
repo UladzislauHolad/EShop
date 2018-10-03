@@ -69,8 +69,8 @@ namespace EShop.App.Web
                         ClockSkew = TimeSpan.Zero // remove delay of token when expire
                     };
                 });
-            services.Configure<SecurityStampValidatorOptions>(opt =>
-                opt.ValidationInterval = TimeSpan.Zero);
+            //services.Configure<SecurityStampValidatorOptions>(opt =>
+            //    opt.ValidationInterval = TimeSpan.Zero);
             services.AddTransient<IDbContext, EShopContext>();
 
             services.AddTransient<IRepository<Product>, ProductRepository>();

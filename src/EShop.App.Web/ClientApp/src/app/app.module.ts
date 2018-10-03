@@ -50,6 +50,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
 import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
 import { AlertComponent } from './directives/alert/alert.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -89,7 +90,8 @@ import { AlertComponent } from './directives/alert/alert.component';
     ProductGridComponent,
     LoginComponent,
     RegisterComponent,
-    AlertComponent
+    AlertComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
