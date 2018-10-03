@@ -37,7 +37,7 @@ const routes: Routes = [
   { path: spa + '/catalog', component: CatalogComponent, canActivate: [AuthGuard] },
   { path: spa + '/login', component: LoginComponent },  
   { path: spa + '/register', component: RegisterComponent },  
-  { path: spa + '/profile', component: UserProfileComponent }
+  { path: spa + '/profile', component: UserProfileComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({
