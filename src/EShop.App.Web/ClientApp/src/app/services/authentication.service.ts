@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map, catchError, tap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { Observable, pipe } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LogginEventService } from './loggin-event.service';
+
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -29,10 +33,14 @@ export class AuthenticationService {
     }
 
     logout() {
+        return this.http.post(`api/logoff`,{j:"sd"}, httpOptions).pipe(
+            tap(() => {
+                localStorage.removeItem('currentUser');
+                this.loginEventService.logOut();
+            })
+        )
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-
-        this.loginEventService.logOut();
+        
     }
 
     register(user: User) {

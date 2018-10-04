@@ -51,6 +51,7 @@ import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
 import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
 import { AlertComponent } from './directives/alert/alert.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { UsersComponent } from './components/users/users.component';
 
 
 @NgModule({
@@ -91,7 +92,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     LoginComponent,
     RegisterComponent,
     AlertComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

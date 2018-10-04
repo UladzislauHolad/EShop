@@ -120,6 +120,14 @@ namespace EShop.App.Web.Controllers
             return StatusCode(StatusCodes.Status422UnprocessableEntity, new { Errors = result.Errors.Select(e => e.Description) });
         }
 
+        [HttpPost("api/logoff")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> JwtLogOff()
+        {
+            await _service.SignOutAsync();
+            return Ok();
+        }
+
         private void AddErrorsFromResult(IdentityResult result)
         {
             foreach (IdentityError error in result.Errors)

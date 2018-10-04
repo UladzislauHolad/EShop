@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
     this.isLoggedIn = this.logginEventService.currentState;
     this.getCurrentUser();
-    
+
     this.subscription.add(this.logginEventService.$isLoggedIn.subscribe(
       isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
@@ -38,8 +38,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logout() {
-    this.authenticationService.logout();
-    this.router.navigate(['spa/login']);
+    this.authenticationService.logout().subscribe(
+      () => this.router.navigate(['spa/login'])
+    );
   }
 
   getCurrentUser() {

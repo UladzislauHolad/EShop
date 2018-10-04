@@ -34,6 +34,13 @@ namespace EShop.Services.Services
             return _mapper.Map<IEnumerable<UserDTO>>(userDTOs);
         }
 
+        public async Task<IEnumerable<UserDTO>> GetUsersAsync()
+        {
+            var userDTOs = await _userManager.Users.ToListAsync();
+
+            return _mapper.Map<IEnumerable<UserDTO>>(userDTOs);
+        }
+
         public async Task<IdentityResult> CreateUserAsync(UserDTO user, string password)
         {
             var result = await _userManager.CreateAsync(_mapper.Map<User>(user), password);
@@ -41,11 +48,11 @@ namespace EShop.Services.Services
             return result;
         }
 
-        public async Task<IdentityResult> DeleteUserAsync(string id)
+        public async Task<IdentityResult> DeleteUserByNameAsync(string name)
         {
             IdentityResult result = null;
 
-            var existUser = await _userManager.FindByIdAsync(id);
+            var existUser = await _userManager.FindByNameAsync(name);
             
             if(existUser != null)
             {
@@ -56,6 +63,21 @@ namespace EShop.Services.Services
             return result;
         }
 
+        public async Task<IdentityResult> DeleteUserAsync(string id)
+        {
+            IdentityResult result = null;
+
+            var existUser = await _userManager.FindByIdAsync(id);
+
+            if (existUser != null)
+            {
+                await _userManager.UpdateSecurityStampAsync(existUser);
+                result = await _userManager.DeleteAsync(existUser);
+            }
+
+            return result;
+        }
+        
         public async Task<UserDTO> FindByIdAsync(string id)
         {
             var user = _mapper.Map<UserDTO>(await _userManager.FindByIdAsync(id));

@@ -12,9 +12,12 @@ namespace EShop.Services.Interfaces
     public interface IAccountService
     {
         IEnumerable<UserDTO> GetUsers();
+        Task<IEnumerable<UserDTO>> GetUsersAsync();
         Task<UserDTO> FindByIdAsync(string id);
         Task<UserDTO> GetUserAsync(ClaimsPrincipal principal);
         Task<IdentityResult> DeleteUserAsync(string id);
+        Task<IdentityResult> DeleteUserByNameAsync(string name);
+
         Task<IdentityResult> CreateUserAsync(UserDTO user, string password);
         Task<IdentityResult> UpdateUserAsync(UserDTO user);
         Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure);
