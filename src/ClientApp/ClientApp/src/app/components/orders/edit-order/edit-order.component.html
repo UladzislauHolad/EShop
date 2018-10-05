@@ -1,0 +1,7 @@
+<div class="ui container" *ngIf="order">
+  <h3 class="ui header">Edit order</h3>
+  <app-order-form *ngIf="order" [processing]="processing" [order]="order" (onFormSubmit)="onSubmit($event)"></app-order-form>
+
+  <h3 class="ui header">Product list</h3>
+  <app-product-orders *ngIf="order"></app-product-orders>
+</div>

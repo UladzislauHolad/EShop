@@ -1,0 +1,13 @@
+<div class="ui container">
+    <h3 class="ui header">Create Product order</h3>
+    <div class="ui form">
+        <div class="field">
+            <label for="product">Product:</label>
+            <select class="ui dropdown" id="product" name="product" [(ngModel)]="product">
+                <option *ngFor="let p of products" [ngValue]="p">{{p.name}}</option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <app-product-order-form *ngIf="product" [orderId]="orderId" [oldOrderCount]="orderCount" [product]="product" (onFormSubmit)="onSubmit($event)"></app-product-order-form>
+</div>

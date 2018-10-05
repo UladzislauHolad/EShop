@@ -1,0 +1,16 @@
+<div class="chart-wrapper">
+
+    <ngx-charts-pie-chart
+    *ngIf="data"
+    [view]="options.view"
+    [scheme]="options.colorScheme"
+    [results]="data"
+    [legend]="options.showLegend"
+    [legendTitle]="options.legendTitle"
+    [explodeSlices]="options.explodeSlices"
+    [labels]="options.showLabels"
+    [doughnut]="options.doughnut"
+    [gradient]="options.gradient"
+  >
+  </ngx-charts-pie-chart>
+</div>

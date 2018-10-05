@@ -1,0 +1,4 @@
+<div class="ui container">
+  <h3 class="ui header">Create order</h3>
+  <app-order-form *ngIf="order" [processing]="processing" [order]="order" (onFormSubmit)="onSubmit($event)"></app-order-form>
+</div>

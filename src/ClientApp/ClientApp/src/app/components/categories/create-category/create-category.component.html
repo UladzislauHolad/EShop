@@ -1,0 +1,4 @@
+<div class="ui container">
+  <h3 class="ui header">Create category</h3>
+  <app-category-form *ngIf="category" [processing]="processing" [category]="category" (submitForm)="onSubmit($event)"></app-category-form>
+</div>

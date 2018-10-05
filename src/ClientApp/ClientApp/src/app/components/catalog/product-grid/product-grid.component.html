@@ -1,0 +1,21 @@
+<mat-grid-list cols="2" rowHeight="2:1" gutterSize="5px">
+    <mat-grid-tile *ngFor="let p of products">
+      <mat-grid-tile-header>{{p.name}}</mat-grid-tile-header>
+      <div class="ui items pos">
+        <div class="item">
+          <div class="ui small image">
+            <img src="https://semantic-ui.com/images/wireframe/image.png">
+          </div>
+          <div class="content">
+            <div class="header">{{p.name}}</div>
+            <div class="meta">
+              <span class="price">${{p.price}}</span>
+            </div>
+            <div class="description">
+              <p>{{p.description}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-grid-tile>
+</mat-grid-list>

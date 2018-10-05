@@ -1,0 +1,5 @@
+<div class="ui container">
+  <h3 class="ui header">Edit product</h3>
+  <app-product-form *ngIf="product" [product]="product" [processing]="processing" (onFormSubmit)="onSubmit($event)">
+  </app-product-form>
+</div>

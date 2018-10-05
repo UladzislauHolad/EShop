@@ -1,0 +1,18 @@
+<div class="ui fixed inverted menu">
+  <div class="ui container">
+    <a routerLink="/spa" class="header item">
+      EShop
+    </a>
+    <a *ngIf="isLoggedIn" routerLink="spa/products" routerLinkActive="active" class="item">Products</a>
+    <a *ngIf="isLoggedIn" routerLink="spa/categories" routerLinkActive="active" class="item">Categories</a>
+    <a *ngIf="isLoggedIn" routerLink="spa/orders" routerLinkActive="active" class="item">Orders</a>
+    <a *ngIf="isLoggedIn" routerLink="spa/dashboard" routerLinkActive="active" class="item">Dashboard</a>
+    <a *ngIf="isLoggedIn" routerLink="spa/catalog" routerLinkActive="active" class="item">Catalog</a>
+    <a *ngIf="isLoggedIn" routerLink="spa/users" routerLinkActive="active" class="item">Users</a>
+    <div class="right menu">
+        <a *ngIf="!isLoggedIn" class="item" routerLink="spa/login" routerLinkActive="active" class="item">Login</a>
+        <a *ngIf="isLoggedIn" class="item" routerLink="spa/profile"><i class="icon user circle outline"></i>{{userName}}</a>
+        <a *ngIf="isLoggedIn" class="item" (click)="logout()" routerLinkActive="active" class="item">Logout</a>
+    </div>
+  </div>
+</div>

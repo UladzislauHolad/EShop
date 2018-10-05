@@ -1,0 +1,40 @@
+<div *ngIf="profile" class="ui container">
+  <h1 class="ui header">Profile</h1>
+  <div class="ui divider"></div>
+  <table class="ui celled striped table">
+    <thead>
+      <tr>
+        <th colspan="3">
+          <i class="icon info circle"></i> Info
+        </th>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="collapsing">
+          Username
+        </td>
+        <td>{{profile.userName}}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          Email
+        </td>
+        <td>{{profile.email}}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+          HasPassword
+        </td>
+        <td *ngIf="profile.hasPassword">Yes
+        </td>
+        <td class="center aligned two wide">
+          <div class="ui small basic icon buttons">
+            <button class="ui button"><i class="pencil alternate icon"></i></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
