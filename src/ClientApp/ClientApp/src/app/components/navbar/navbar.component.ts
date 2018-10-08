@@ -37,10 +37,12 @@ export class NavbarComponent implements OnInit {
     this.subscription.unsubscribe();
   }
 
+  login() {
+    this.authenticationService.login();
+  }
+
   logout() {
-    this.authenticationService.logout().subscribe(
-      () => this.router.navigate(['spa/login'])
-    );
+    this.authenticationService.logout();
   }
 
   getCurrentUser() {
