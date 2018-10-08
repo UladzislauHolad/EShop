@@ -52,6 +52,8 @@ import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
 import { AlertComponent } from './directives/alert/alert.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { AutoLoginComponent } from './auto-login/auto-login.component';
 
 
 @NgModule({
@@ -94,6 +96,8 @@ import { UsersComponent } from './components/users/users.component';
     AlertComponent,
     UserProfileComponent,
     UsersComponent
+    UnauthorizedComponent,
+    AutoLoginComponent
   ],
   imports: [
     BrowserModule,

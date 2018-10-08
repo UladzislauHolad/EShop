@@ -18,29 +18,30 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
-
-const spa = 'spa';
+import { AutoLoginComponent } from './auto-login/auto-login.component';
+import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 const routes: Routes = [
-  { path: spa + '', redirectTo: spa + '/products', pathMatch: 'full', canActivate: [AuthGuard] },
-  { path: spa + '/products', component: ProductsComponent, canActivate: [AuthGuard] },
-  { path: spa + '/products/new', component: CreateProductComponent, canActivate: [AuthGuard] },
-  { path: spa + '/products/:id', component: EditProductComponent, canActivate: [AuthGuard] },
-  { path: spa + '/categories', component: CategoriesComponent, canActivate: [AuthGuard] },
-  { path: spa + '/categories/new', component: CreateCategoryComponent, canActivate: [AuthGuard] },
-  { path: spa + '/categories/:id', component: EditCategoryComponent, canActivate: [AuthGuard] },
-  { path: spa + '/orders', component: OrdersComponent, canActivate: [AuthGuard] },
-  { path: spa + '/orders/new', component: CreateOrderComponent, canActivate: [AuthGuard] },
-  { path: spa + '/orders/:id', component: EditOrderComponent, canActivate: [AuthGuard] },
-  { path: spa + '/orders/:id/details', component: OrderInfoComponent, canActivate: [AuthGuard] },
-  { path: spa + '/orders/:id/products/new', component: CreateProductOrderComponent, canActivate: [AuthGuard] },
-  { path: spa + '/dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
-  { path: spa + '/catalog', component: CatalogComponent, canActivate: [AuthGuard] },
-  { path: spa + '/login', component: LoginComponent },  
-  { path: spa + '/register', component: RegisterComponent },  
-  { path: spa + '/profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-  { path: spa + '/users', component: UsersComponent, canActivate: [AuthGuard] }
-
+  { path: '', redirectTo: 'products', pathMatch: 'full', canActivate: [AuthGuard] },
+  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+  { path: 'products/new', component: CreateProductComponent, canActivate: [AuthGuard] },
+  { path: 'products/:id', component: EditProductComponent, canActivate: [AuthGuard] },
+  { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
+  { path: 'categories/new', component: CreateCategoryComponent, canActivate: [AuthGuard] },
+  { path: 'categories/:id', component: EditCategoryComponent, canActivate: [AuthGuard] },
+  { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
+  { path: 'orders/new', component: CreateOrderComponent, canActivate: [AuthGuard] },
+  { path: 'orders/:id', component: EditOrderComponent, canActivate: [AuthGuard] },
+  { path: 'orders/:id/details', component: OrderInfoComponent, canActivate: [AuthGuard] },
+  { path: 'orders/:id/products/new', component: CreateProductOrderComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },  
+  { path: 'register', component: RegisterComponent },  
+  { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'autologin', component: AutoLoginComponent }
 ];
 
 @NgModule({
