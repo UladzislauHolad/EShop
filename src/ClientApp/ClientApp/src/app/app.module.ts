@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
@@ -8,6 +8,7 @@ import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule } from '@angular/material';
+import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
 
 
 
@@ -24,7 +25,7 @@ import { CategoryFormComponent } from './components/categories/category-form/cat
 import { OrdersComponent } from './components/orders/orders.component';
 import { CreateOrderComponent } from './components/orders/create-order/create-order.component';
 import { OrderFormComponent } from './components/orders/order-form/order-form.component';
-import { ProductOrdersComponent } from './components/orders/order-form/product-orders/product-orders.component';  
+import { ProductOrdersComponent } from './components/orders/order-form/product-orders/product-orders.component';
 import { ProductOrderFormComponent } from './components/orders/order-form/product-orders/product-order-form/product-order-form.component';
 import { EditOrderComponent } from './components/orders/edit-order/edit-order.component';
 import { CreateProductOrderComponent } from './components/orders/order-form/product-orders/create-product-order/create-product-order.component';
@@ -55,6 +56,11 @@ import { UsersComponent } from './components/users/users.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 
+export function loadConfig(oidcConfigService: OidcConfigService) {
+  console.log('APP_INITIALIZER STARTING');
+  return () => oidcConfigService.load(`${window.location.origin}/api/config/configuration`);
+  //return () => oidcConfigService.load_using_custom_stsServer('https://localhost:5000/well-known-openid-configuration.json');
+}
 
 @NgModule({
   declarations: [
@@ -95,13 +101,13 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
     RegisterComponent,
     AlertComponent,
     UserProfileComponent,
-    UsersComponent
+    UsersComponent,
     UnauthorizedComponent,
     AutoLoginComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule, 
+    BrowserAnimationsModule,
     NgxChartsModule,
     HttpClientModule,
     AppRoutingModule,
@@ -115,11 +121,20 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
     MatProgressBarModule,
     MatButtonModule,
     MatSidenavModule,
-    MatGridListModule
+    MatGridListModule,
+    AuthModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    OidcSecurityService,
+    OidcConfigService,
+    {
+		  provide: APP_INITIALIZER,
+		  useFactory: loadConfig,
+		  deps: [OidcConfigService],
+		  multi: true
+    }
   ],
   bootstrap: [AppComponent],
   entryComponents: [
