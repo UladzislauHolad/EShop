@@ -34,17 +34,17 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(user: User) {
-    this.authenticationService.register(user)
-    .pipe(first())
-    .subscribe(
-      data => {
-          this.alertService.success('Registration successful', true);
-          this.router.navigate(['spa/login']);
-      },
-      error => {
-          this.serverErrors = error.errors;
-      }
-    );
+    // this.authenticationService.register(user)
+    // .pipe(first())
+    // .subscribe(
+    //   data => {
+    //       this.alertService.success('Registration successful', true);
+    //       this.router.navigate(['spa/login']);
+    //   },
+    //   error => {
+    //       this.serverErrors = error.errors;
+    //   }
+    // );
   }
   createForm() {
     this.registerForm = this.formBuilder.group({
