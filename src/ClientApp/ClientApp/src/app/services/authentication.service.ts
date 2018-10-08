@@ -2,48 +2,86 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError, tap } from 'rxjs/operators';
 import { User } from '../models/user';
-import { Observable, pipe } from 'rxjs';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { LogginEventService } from './loggin-event.service';
+import { OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthorizationResult } from 'angular-auth-oidc-client';
+import { Router } from '@angular/router';
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
+};
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
     constructor(
         private http: HttpClient,
-        private loginEventService: LogginEventService
-    ) { }
+        private loginEventService: LogginEventService,
+        public oidcSecurityService: OidcSecurityService,
+        private router: Router
+    ) {
+        if (this.oidcSecurityService.moduleSetup) {
+            this.onOidcModuleSetup();
+        } else {
+            this.oidcSecurityService.onModuleSetup.subscribe(() => {
+                this.onOidcModuleSetup();
+            });
+        }
 
-    login(username: string, password: string) {
-        return this.http.post<any>(`api/login`, { username, password }).pipe(
-            map(user => {
-                // login successful if there's a jwt token in the response
-                if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    this.loginEventService.logIn();
-                }
+        this.oidcSecurityService.onAuthorizationResult.subscribe(
+            (authorizationResult: AuthorizationResult) => {
+                this.onAuthorizationResultComplete(authorizationResult);
+            });
+    }
 
-                return user;
-            })
-        );
+    ngOnDestroy(): void {
+        this.oidcSecurityService.onModuleSetup.unsubscribe();
+    }
+
+    login() {
+        console.log('start login');
+        this.oidcSecurityService.authorize();
+    }
+
+    refreshSession() {
+        console.log('start refreshSession');
+        this.oidcSecurityService.authorize();
     }
 
     logout() {
-        return this.http.post(`api/logoff`,{j:"sd"}, httpOptions).pipe(
-            tap(() => {
-                localStorage.removeItem('currentUser');
-                this.loginEventService.logOut();
-            })
-        )
-        // remove user from local storage to log user out
-        
+        console.log('start logoff');
+        this.oidcSecurityService.logoff();
     }
 
-    register(user: User) {
-        return this.http.post('api/register', user);
+    private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
+        console.log('AppComponent:onAuthorizationResultComplete');
+        const path = this.read('redirect');
+        if (authorizationResult === AuthorizationResult.authorized) {
+            this.router.navigate([path]);
+        } else {
+            this.router.navigate(['']);
+        }
+    }
+
+    private onOidcModuleSetup() {
+        if (window.location.hash) {
+            this.oidcSecurityService.authorizedCallback();
+        } else {
+            if ('/autologin' !== window.location.pathname) {
+                this.write('redirect', window.location.pathname);
+            }
+            console.log('AppComponent:onModuleSetup');
+        }
+    }
+
+    private read(key: string): any {
+        const data = localStorage.getItem(key);
+        if (data != null) {
+            return JSON.parse(data);
+        }
+
+        return;
+    }
+
+    private write(key: string, value: any): void {
+        localStorage.setItem(key, JSON.stringify(value));
     }
 }
