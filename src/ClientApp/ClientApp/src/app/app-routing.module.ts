@@ -22,8 +22,8 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'products', pathMatch: 'full', canActivate: [AuthGuard] },
-  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: 'products', pathMatch: 'full'},
+  { path: 'products', component: ProductsComponent },
   { path: 'products/new', component: CreateProductComponent, canActivate: [AuthGuard] },
   { path: 'products/:id', component: EditProductComponent, canActivate: [AuthGuard] },
   { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },

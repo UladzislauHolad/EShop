@@ -59,7 +59,6 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
   return () => oidcConfigService.load(`${window.location.origin}/api/config/configuration`);
-  //return () => oidcConfigService.load_using_custom_stsServer('https://localhost:5000/well-known-openid-configuration.json');
 }
 
 @NgModule({
@@ -184,7 +183,7 @@ export class AppModule {
         this.oidcConfigService.clientConfiguration.max_id_token_iat_offset_allowed_in_seconds;
 
       this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
-
+      console.dir(openIDImplicitFlowConfiguration);
       this.oidcSecurityService.setCustomRequestParameters(this.oidcConfigService.clientConfiguration.additional_login_parameters);
     });
     console.log('APP STARTING');

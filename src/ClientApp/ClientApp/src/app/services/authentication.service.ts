@@ -12,10 +12,7 @@ const httpOptions = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    constructor(
-        private http: HttpClient,
-        private loginEventService: LogginEventService,
-        public oidcSecurityService: OidcSecurityService,
+    constructor(public oidcSecurityService: OidcSecurityService,
         private router: Router
     ) {
         if (this.oidcSecurityService.moduleSetup) {
@@ -30,6 +27,9 @@ export class AuthenticationService {
             (authorizationResult: AuthorizationResult) => {
                 this.onAuthorizationResultComplete(authorizationResult);
             });
+    }
+
+    ngOnInit() {
     }
 
     ngOnDestroy(): void {
@@ -51,16 +51,6 @@ export class AuthenticationService {
         this.oidcSecurityService.logoff();
     }
 
-    private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
-        console.log('AppComponent:onAuthorizationResultComplete');
-        const path = this.read('redirect');
-        if (authorizationResult === AuthorizationResult.authorized) {
-            this.router.navigate([path]);
-        } else {
-            this.router.navigate(['']);
-        }
-    }
-
     private onOidcModuleSetup() {
         if (window.location.hash) {
             this.oidcSecurityService.authorizedCallback();
@@ -69,6 +59,21 @@ export class AuthenticationService {
                 this.write('redirect', window.location.pathname);
             }
             console.log('AppComponent:onModuleSetup');
+            this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
+                if (!authorized) {
+                    this.router.navigate(['/autologin']);
+                }
+            });
+        }
+    }
+
+    private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
+        console.log('AppComponent:onAuthorizationResultComplete');
+        const path = this.read('redirect');
+        if (authorizationResult === AuthorizationResult.authorized) {
+            this.router.navigate([path]);
+        } else {
+            this.router.navigate(['/unauthorized']);
         }
     }
 

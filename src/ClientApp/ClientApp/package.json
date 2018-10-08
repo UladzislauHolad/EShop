@@ -27,6 +27,7 @@
     "@swimlane/ngx-charts": "^9.0.0",
     "@toverux/ngx-sweetalert2": "^4.0.0",
     "angular-auth-oidc-client": "^6.0.11",
+    "angular-oauth2-oidc": "^4.0.3",
     "core-js": "^2.5.4",
     "jsrsasign": "^8.0.12",
     "ng-http-loader": "^3.0.0",
