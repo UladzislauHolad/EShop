@@ -38,15 +38,15 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(user: User) {
-    this.authenticationService.login(user.userName, user.password)
-      .pipe(first())
-      .subscribe(
-        data => {
-            this.router.navigate([this.returnUrl]);
-        },
-        error => {
-          this.serverErrors = error.errors;
-      });
+    // this.authenticationService.login(user.userName, user.password)
+    //   .pipe(first())
+    //   .subscribe(
+    //     data => {
+    //         this.router.navigate([this.returnUrl]);
+    //     },
+    //     error => {
+    //       this.serverErrors = error.errors;
+    //   });
   }
 
   createForm() {
