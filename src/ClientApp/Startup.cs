@@ -21,7 +21,17 @@ namespace ClientApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder =>
+                    {
+                        builder
+                            .AllowAnyOrigin()
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
+            });
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -41,6 +51,8 @@ namespace ClientApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
