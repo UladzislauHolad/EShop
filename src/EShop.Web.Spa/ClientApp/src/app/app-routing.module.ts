@@ -36,8 +36,7 @@ const routes: Routes = [
   { path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-  { path: 'callback', component: CallbackComponent },
-  { path: 'autologin', component: AutoLoginComponent }
+  { path: 'callback', component: CallbackComponent }
 ];
 
 @NgModule({

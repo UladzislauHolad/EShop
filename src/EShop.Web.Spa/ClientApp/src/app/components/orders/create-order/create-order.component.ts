@@ -58,7 +58,7 @@ export class CreateOrderComponent implements OnInit {
   createOrder(order: Order) {
     this.orderService.createOrder(order).subscribe(
       order => {
-        this.router.navigate([`spa/orders/${order.orderId}`]);
+        this.router.navigate([`orders/${order.orderId}`]);
       },
       error => {
         this.processing = false;

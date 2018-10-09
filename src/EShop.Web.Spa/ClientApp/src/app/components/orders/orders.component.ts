@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ComponentFactory, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
 import { ButtonEventService } from './buttons/button-event.service';
@@ -66,11 +66,11 @@ export class OrdersComponent implements OnInit {
   }
 
   info(order: Order) {
-    this.router.navigate([`spa/orders/${order.orderId}/details`]);
+    this.router.navigate([`orders/${order.orderId}/details`]);
   }
 
   edit(order: Order) {
-    this.router.navigate([`spa/orders/${order.orderId}`]);
+    this.router.navigate([`orders/${order.orderId}`]);
   }
 
   changeState(order: Order) {

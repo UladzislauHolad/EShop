@@ -50,7 +50,7 @@ export class CreateProductOrderComponent implements OnInit {
     this.productOrderService.createProductOrder(productOrder).subscribe(
       () => {
         this.show("Done!", "success");
-        this.router.navigate([`spa/orders/${this.orderId}`]);
+        this.router.navigate([`orders/${this.orderId}`]);
       },
       error => this.show(error, "error")
     );

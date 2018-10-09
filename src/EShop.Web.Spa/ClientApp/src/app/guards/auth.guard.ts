@@ -3,8 +3,6 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
-import { tap } from 'rxjs/operators';
-import { Route } from '@angular/compiler/src/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -29,11 +27,7 @@ export class AuthGuard implements CanActivate {
           }
   
           this.router.navigate(['/callback']);
-          if (!window.location.hash) {
-           console.log('AuthorizationGuard auto login');
-           this.router.navigate(['/autologin']);
-          }
-  
+
           return false;
         })
       );

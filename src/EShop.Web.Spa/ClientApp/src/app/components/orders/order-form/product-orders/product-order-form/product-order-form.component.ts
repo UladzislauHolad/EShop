@@ -33,6 +33,6 @@ export class ProductOrderFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate([`spa/orders/${this.orderId}`]);
+    this.router.navigate([`orders/${this.orderId}`]);
   }
 }

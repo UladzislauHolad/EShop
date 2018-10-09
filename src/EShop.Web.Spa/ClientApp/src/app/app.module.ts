@@ -122,10 +122,10 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     OidcSecurityService,
     OidcConfigService,
     {
-		  provide: APP_INITIALIZER,
-		  useFactory: loadConfig,
-		  deps: [OidcConfigService],
-		  multi: true
+      provide: APP_INITIALIZER,
+      useFactory: loadConfig,
+      deps: [OidcConfigService],
+      multi: true
     }
   ],
   bootstrap: [AppComponent],

@@ -33,6 +33,6 @@ export class OrderInfoComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate([`spa/orders`])
+    this.router.navigate([`orders`])
   }
 }
