@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, catchError, tap } from 'rxjs/operators';
-import { User } from '../models/user';
-import { LogginEventService } from './loggin-event.service';
-import { OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthorizationResult } from 'angular-auth-oidc-client';
+import { HttpHeaders } from '@angular/common/http';
+import { OidcSecurityService, AuthorizationResult } from 'angular-auth-oidc-client';
 import { Router } from '@angular/router';
 
 const httpOptions = {
