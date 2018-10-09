@@ -10,8 +10,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule } from '@angular/material';
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
 
-
-
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -46,15 +44,13 @@ import { CategoryTreeComponent } from './components/catalog/category-tree/catego
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { SidenavComponent } from './components/catalog/sidenav/sidenav.component';
 import { ProductGridComponent } from './components/catalog/product-grid/product-grid.component';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
 import { JwtInterceptor } from 'src/app/helpers/jwt.interceptor';
-import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
 import { AlertComponent } from './directives/alert/alert.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CallbackComponent } from './components/callback/callback.component';
+import { ConfigService } from './services/config.service';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
@@ -96,8 +92,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     CategoryTreeComponent,
     SidenavComponent,
     ProductGridComponent,
-    LoginComponent,
-    RegisterComponent,
     AlertComponent,
     UserProfileComponent,
     UsersComponent,
@@ -125,7 +119,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     OidcSecurityService,
     OidcConfigService,
     {
@@ -149,6 +142,7 @@ export class AppModule {
   constructor(
     private oidcSecurityService: OidcSecurityService,
     private oidcConfigService: OidcConfigService,
+    private configService: ConfigService
   ) {
     this.oidcConfigService.onConfigurationLoaded.subscribe(() => {
 
@@ -185,7 +179,11 @@ export class AppModule {
       this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
       console.dir(openIDImplicitFlowConfiguration);
       this.oidcSecurityService.setCustomRequestParameters(this.oidcConfigService.clientConfiguration.additional_login_parameters);
+
+      this.configService.setApiUrl(this.oidcConfigService.clientConfiguration.apiUrl);
     });
+
+
     console.log('APP STARTING');
   }
 }

@@ -22,6 +22,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using IdentityServer4.AccessTokenValidation;
 
 namespace EShop.App.Web
 {
@@ -49,28 +50,17 @@ namespace EShop.App.Web
                 .AddEntityFrameworkStores<EShopContext>()
                 .AddDefaultTokenProviders();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
-            services
-                .AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(cfg =>
-                {
-                    cfg.RequireHttpsMetadata = false;
-                    cfg.SaveToken = true;
-                    cfg.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidIssuer = AppConfiguration["JwtIssuer"],
-                        ValidAudience = AppConfiguration["JwtIssuer"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfiguration["JwtKey"])),
-                        ClockSkew = TimeSpan.Zero // remove delay of token when expire
-                    };
-                });
-            //services.Configure<SecurityStampValidatorOptions>(opt =>
-            //    opt.ValidationInterval = TimeSpan.Zero);
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.Authority = AppConfiguration["IdentityServerAddress"];
+                o.Audience = "http://localhost:5000/resources";
+                o.RequireHttpsMetadata = false;
+            });
+
             services.AddTransient<IDbContext, EShopContext>();
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
@@ -95,6 +85,18 @@ namespace EShop.App.Web
             services.AddTransient<IPickupPointService, PickupPointService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(Services.Profiles.CustomerDTOProfile).Assembly);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("default", policy =>
+                {
+                    policy.WithOrigins("*")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+
             services.AddMvc()
                 .AddFluentValidation(fvc => 
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
@@ -129,6 +131,8 @@ namespace EShop.App.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("default");
+
             app.UseAuthentication();
             app.UseDeveloperExceptionPage();
             app.UseStaticFiles();

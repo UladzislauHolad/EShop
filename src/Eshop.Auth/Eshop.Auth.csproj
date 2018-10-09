@@ -29,4 +29,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Configuration\ConfigurationDb\" />
+    <Folder Include="Data\Configuration\PersistedGrantDb\" />
+    <Folder Include="Data\Users\Migrations\" />
+  </ItemGroup>
+
 </Project>

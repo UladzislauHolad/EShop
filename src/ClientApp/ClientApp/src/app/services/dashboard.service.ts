@@ -4,17 +4,18 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { LineItem } from '../components/dashboard/models/line-item';
+import { ConfigService } from './config.service';
 
-const categoriesUrl = 'api/categories-chart';
-const dashboardUrl = 'api/dashboard/';
-const lineChartStates = new Array<string> (
+let categoriesUrl = 'api/categories-chart';
+let dashboardUrl = 'api/dashboard/';
+const lineChartStates = new Array<string>(
   'New',
   'Confirmed',
   'Paid',
   'Packed',
   'OnDelivering',
   'Completed'
-);      
+);
 
 
 @Injectable({
@@ -23,7 +24,12 @@ const lineChartStates = new Array<string> (
 export class DashboardService {
   private errorHandler: errorHandler = new errorHandler();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    categoriesUrl = this.configService.getApiUrl().concat(categoriesUrl);
+    dashboardUrl = this.configService.getApiUrl().concat(dashboardUrl);
   }
 
   getCategoryChartInfo(): Observable<Object> {
@@ -39,12 +45,12 @@ export class DashboardService {
       }
     }).pipe(
       map(list => list.map(item => {
-          item.series = item.series.map(s => {
-            s.name = new Date(s.name);
-            return s; 
-          });
-          return item;
-        })      
+        item.series = item.series.map(s => {
+          s.name = new Date(s.name);
+          return s;
+        });
+        return item;
+      })
       ),
       catchError(this.errorHandler.handleError)
     );

@@ -4,8 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PickupPoint } from '../models/pickupPoint';
 import { catchError } from 'rxjs/operators';
+import { ConfigService } from './config.service';
 
-const pickupsUrl = 'api/pickups'
+let pickupsUrl = 'api/pickups'
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,12 @@ export class PickupService {
 
   errorHandler: errorHandler = new errorHandler();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    pickupsUrl = this.configService.getApiUrl().concat(pickupsUrl);
+  }
 
   getPickups(): Observable<PickupPoint[]> {
     return this.http.get<PickupPoint[]>(pickupsUrl).pipe(

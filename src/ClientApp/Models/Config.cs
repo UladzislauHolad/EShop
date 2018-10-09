@@ -10,6 +10,7 @@ namespace ClientApp.Models
 
         public OIDCConfig() { _additionalLoginParameters = new Dictionary<string, string>(); }
 
+        public string apiUrl { get; set; }
         public string stsServer { get; set; }
         public string redirect_url { get; set; }
         public string client_id { get; set; }

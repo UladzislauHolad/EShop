@@ -4,8 +4,9 @@ import { Observable } from 'rxjs';
 import { Category } from '../models/category';
 import { errorHandler } from './errorHandler';
 import { catchError } from 'rxjs/operators';
+import { ConfigService } from './config.service';
 
-const categoriesUrl = 'api/categories';
+let categoriesUrl = 'api/categories';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -19,7 +20,12 @@ export class CategoryService {
 
   private errorHandler: errorHandler = new errorHandler();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    categoriesUrl = this.configService.getApiUrl().concat(categoriesUrl);
+  }
 
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(categoriesUrl).pipe(

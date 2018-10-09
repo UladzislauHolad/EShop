@@ -4,8 +4,9 @@ import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { errorHandler } from './errorHandler';
 import { DeliveryMethod } from '../models/deliveryMethod';
+import { ConfigService } from './config.service';
 
-const deliveriesUrl = '/api/deliveries';
+let deliveriesUrl = '/api/deliveries';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,12 @@ const deliveriesUrl = '/api/deliveries';
 export class DeliveryService {
   private errorHandler: errorHandler = new errorHandler();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    deliveriesUrl = this.configService.getApiUrl().concat(deliveriesUrl);
+  }
 
   getDeliveries(): Observable<DeliveryMethod[]> {
     return this.http.get<DeliveryMethod[]>(deliveriesUrl).pipe(

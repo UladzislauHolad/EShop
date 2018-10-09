@@ -120,7 +120,15 @@ namespace ClientApp.Controllers
             {
                 config.additional_login_parameters["prompt"] = _configuration["oidc:prompt"];
             }
+
+            config.apiUrl = _configuration["apiUrl"];
             return config;
+        }
+
+        [HttpGet("apiUrl")]
+        public string ApiUrl()
+        {
+            return _configuration["apiUrl"];
         }
     }
 }

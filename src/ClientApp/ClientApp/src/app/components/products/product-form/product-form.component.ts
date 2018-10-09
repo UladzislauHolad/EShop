@@ -115,6 +115,6 @@ export class ProductFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['spa/products'])
+    this.router.navigate(['products'])
   }
 }

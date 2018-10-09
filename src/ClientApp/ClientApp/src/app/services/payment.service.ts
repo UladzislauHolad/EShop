@@ -4,9 +4,9 @@ import { PaymentMethod } from '../models/paymentMethod';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { errorHandler } from './errorHandler';
+import { ConfigService } from './config.service';
 
-const paymentsUrl = '/api/payments';
-
+let paymentsUrl = '/api/payments';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,13 @@ const paymentsUrl = '/api/payments';
 export class PaymentService {
 
   private errorHandler: errorHandler = new errorHandler();
-
-  constructor(private http: HttpClient) { }
+ 
+  constructor(
+    private http: HttpClient,
+    private configService: ConfigService
+  ) {
+    paymentsUrl = this.configService.getApiUrl().concat(paymentsUrl);
+  }
 
   getPayments(): Observable<PaymentMethod[]> {
     return this.http.get<PaymentMethod[]>(paymentsUrl).pipe(
