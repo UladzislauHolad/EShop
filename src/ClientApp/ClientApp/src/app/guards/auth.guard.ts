@@ -17,7 +17,9 @@ export class AuthGuard implements CanActivate {
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
       console.log(route + '' + state);
       console.log('AuthorizationGuard, canActivate');
-  
+      console.log("waiting");
+
+      setTimeout(null, 10000);
       return this.oidcSecurityService.getIsAuthorized().pipe(
         map((isAuthorized: boolean) => {
           console.log('AuthorizationGuard, canActivate isAuthorized: ' + isAuthorized);

@@ -22,8 +22,8 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'products', pathMatch: 'full'},
-  { path: 'products', component: ProductsComponent },
+  { path: '', redirectTo: 'unauthorized', pathMatch: 'full'},
+  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
   { path: 'products/new', component: CreateProductComponent, canActivate: [AuthGuard] },
   { path: 'products/:id', component: EditProductComponent, canActivate: [AuthGuard] },
   { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard] },
@@ -36,8 +36,8 @@ const routes: Routes = [
   { path: 'orders/:id/products/new', component: CreateProductOrderComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent },  
-  { path: 'register', component: RegisterComponent },  
+  // { path: 'login', component: LoginComponent },  
+  // { path: 'register', component: RegisterComponent },  
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: 'unauthorized', component: UnauthorizedComponent },

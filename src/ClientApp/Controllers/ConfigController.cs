@@ -93,7 +93,7 @@ namespace ClientApp.Controllers
 
             string protocol = Request.IsHttps ? "https://" : "http://";
             config.stsServer = $"{protocol}{Request.Host.ToUriComponent()}/api/config";
-            config.redirect_url = $"{protocol}{Request.Host.ToUriComponent()}/";
+            config.redirect_url = $"{protocol}{Request.Host.ToUriComponent()}/products";
             config.client_id = _configuration["oidc:client_id"];
             config.response_type = "id_token token";
             if (!String.IsNullOrEmpty(_configuration["oidc:scope"]))
@@ -104,7 +104,7 @@ namespace ClientApp.Controllers
             {
                 config.scope = "openid profile email https://graph.microsoft.com/User.Read";
             }
-            config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/";
+            config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/unauthorized";
             config.post_login_route = "/home";
             config.forbidden_route = "/home";
             config.unauthorized_route = "/home";
