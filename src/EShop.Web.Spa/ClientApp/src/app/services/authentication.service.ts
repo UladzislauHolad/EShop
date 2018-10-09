@@ -35,7 +35,6 @@ export class AuthenticationService {
     }
 
     login() {
-        console.log('start login');
         this.oidcSecurityService.authorize();
     }
 
@@ -45,7 +44,6 @@ export class AuthenticationService {
     }
 
     logout() {
-        console.log('start logoff');
         this.oidcSecurityService.logoff();
     }
 
@@ -53,13 +51,10 @@ export class AuthenticationService {
         if (window.location.hash) {
             this.oidcSecurityService.authorizedCallback();
         } else {
-            if ('/autologin' !== window.location.pathname) {
-                this.write('redirect', window.location.pathname);
-            }
-            console.log('AppComponent:onModuleSetup');
+            this.write('redirect', window.location.pathname);
             this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
                 if (!authorized) {
-                    this.router.navigate(['/autologin']);
+                    this.router.navigate(['/callback']);
                 }
             });
         }
