@@ -14,15 +14,13 @@ import { OrderInfoComponent } from './components/orders/order-info/order-info.co
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
 import { AuthGuard } from './guards/auth.guard';
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'unauthorized', pathMatch: 'full'},
+  { path: '', redirectTo: 'callback', pathMatch: 'full'},
   { path: 'products', component: ProductsComponent, canActivate: [AuthGuard] },
   { path: 'products/new', component: CreateProductComponent, canActivate: [AuthGuard] },
   { path: 'products/:id', component: EditProductComponent, canActivate: [AuthGuard] },
@@ -36,11 +34,9 @@ const routes: Routes = [
   { path: 'orders/:id/products/new', component: CreateProductOrderComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard] },
-  // { path: 'login', component: LoginComponent },  
-  // { path: 'register', component: RegisterComponent },  
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
-  { path: 'unauthorized', component: UnauthorizedComponent },
+  { path: 'callback', component: CallbackComponent },
   { path: 'autologin', component: AutoLoginComponent }
 ];
 

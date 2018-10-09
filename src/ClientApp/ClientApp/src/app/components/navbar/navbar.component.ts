@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { LogginEventService } from '../../services/loggin-event.service';
 import { AuthenticationService } from '../../services/authentication.service';
 import { Router } from '@angular/router';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-navbar',
@@ -18,19 +19,18 @@ export class NavbarComponent implements OnInit {
   constructor(
     private logginEventService: LogginEventService,
     private authenticationService: AuthenticationService,
-    private router: Router
+    private router: Router,
+    public oidcSecurityService: OidcSecurityService
   ) { }
 
   ngOnInit() {
-    this.isLoggedIn = this.logginEventService.currentState;
-    this.getCurrentUser();
-
-    this.subscription.add(this.logginEventService.$isLoggedIn.subscribe(
+    this.oidcSecurityService.getIsAuthorized().subscribe(
       isLoggedIn => {
         this.isLoggedIn = isLoggedIn;
-        this.getCurrentUser()
+        console.log("loggedIn");
+        console.dir(this.isLoggedIn);
       }
-    ));
+    );
   }
 
   ngOnDestroy() {
@@ -43,10 +43,5 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     this.authenticationService.logout();
-  }
-
-  getCurrentUser() {
-    if(this.isLoggedIn)
-      this.userName = JSON.parse(localStorage.getItem('currentUser')).userName;
   }
 }

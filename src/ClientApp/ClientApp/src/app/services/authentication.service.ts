@@ -12,7 +12,8 @@ const httpOptions = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    constructor(public oidcSecurityService: OidcSecurityService,
+    constructor(
+        public oidcSecurityService: OidcSecurityService,
         private router: Router
     ) {
         if (this.oidcSecurityService.moduleSetup) {
@@ -73,7 +74,7 @@ export class AuthenticationService {
         if (authorizationResult === AuthorizationResult.authorized) {
             this.router.navigate([path]);
         } else {
-            this.router.navigate(['/unauthorized']);
+            this.router.navigate(['/callback']);
         }
     }
 

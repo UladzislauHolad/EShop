@@ -332,3 +332,6 @@ src/IdentityApp/identityserver4_log.txt
 src/IdentityApp/IdentityServer.db
 src/IdentityApp/AspIdUsers.db
 src/IdentityApp/tempkey.rsa
+src/Eshop.Auth/identityserver4_log.txt
+src/Eshop.Auth/IdentityServer.db
+src/Eshop.Auth/AspIdUsers.db

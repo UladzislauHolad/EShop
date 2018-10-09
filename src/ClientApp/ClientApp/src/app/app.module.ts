@@ -53,8 +53,8 @@ import { ErrorInterceptor } from 'src/app/helpers/error.interceptor';
 import { AlertComponent } from './directives/alert/alert.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UsersComponent } from './components/users/users.component';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
+import { CallbackComponent } from './components/callback/callback.component';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
@@ -101,8 +101,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     AlertComponent,
     UserProfileComponent,
     UsersComponent,
-    UnauthorizedComponent,
-    AutoLoginComponent
+    AutoLoginComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule,

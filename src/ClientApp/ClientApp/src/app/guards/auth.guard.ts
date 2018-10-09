@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
             return true;
           }
   
-          this.router.navigate(['/unauthorized']);
+          this.router.navigate(['/callback']);
           if (!window.location.hash) {
            console.log('AuthorizationGuard auto login');
            this.router.navigate(['/autologin']);
