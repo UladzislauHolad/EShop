@@ -18,6 +18,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { UsersComponent } from './components/users/users.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CallbackComponent } from './components/callback/callback.component';
+import { CreateUserComponent } from './components/users/create-user/create-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'callback', pathMatch: 'full'},
@@ -36,6 +37,7 @@ const routes: Routes = [
   { path: 'catalog', component: CatalogComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: 'users/new', component: CreateUserComponent, canActivate: [AuthGuard] },
   { path: 'callback', component: CallbackComponent }
 ];
 

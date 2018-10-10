@@ -3,6 +3,7 @@ using AutoMapper;
 using IdentityModel;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -39,7 +40,7 @@ namespace Eshop.Auth.Quickstart.Users
 
 
         [HttpDelete("users/{name}")]
-        public async Task<bool> DeleteUserAsync([FromRoute]string name)
+        public async Task<ActionResult> DeleteUserAsync([FromRoute]string name)
         {
             var claim = User.Claims.SingleOrDefault(c => c.Type == JwtClaimTypes.ClientId);
             var users = await _userManager.GetUsersForClaimAsync(claim);
@@ -47,7 +48,33 @@ namespace Eshop.Auth.Quickstart.Users
 
             var result = await _userManager.DeleteAsync(deletingUser);
 
-            return result.Succeeded;
+            if (result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status201Created);
+            }
+
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, result.Errors.Select(e => e.Description).ToList());
+        }
+
+        [HttpPost("users")]
+        public async Task<ActionResult> CreateUserAsync([FromBody]CreateUserModel userModel)
+        {
+            var clientIdClaim = User.Claims.SingleOrDefault(c => c.Type == JwtClaimTypes.ClientId);
+            var user = new ApplicationUser
+            {
+                UserName = userModel.UserName,
+                Email = userModel.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, userModel.Password);
+
+            if(result.Succeeded)
+            {
+                await _userManager.AddClaimAsync(user, clientIdClaim);
+                return StatusCode(StatusCodes.Status201Created);
+            }
+
+            return StatusCode(StatusCodes.Status422UnprocessableEntity,result.Errors.Select(e => e.Description).ToList());
         }
     }
 }

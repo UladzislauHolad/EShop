@@ -51,6 +51,7 @@ import { UsersComponent } from './components/users/users.component';
 import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { ConfigService } from './services/config.service';
+import { CreateUserComponent } from './components/users/create-user/create-user.component';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   console.log('APP_INITIALIZER STARTING');
@@ -96,7 +97,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     UserProfileComponent,
     UsersComponent,
     AutoLoginComponent,
-    CallbackComponent
+    CallbackComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,

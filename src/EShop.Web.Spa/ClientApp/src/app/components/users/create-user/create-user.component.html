@@ -1,0 +1,63 @@
+<div class="ui container">
+  <form *ngIf="myForm" [formGroup]="myForm" class="ui attached segment form" (ngSubmit)="onSubmit(myForm.value)">
+    <div class="field" [class.error]="!userName.valid && userName.dirty">
+      <label for="userName">Username:</label>
+      <div class="ui input">
+        <input type="text" placeholder="Username" [formControl]="myForm.controls['userName']">
+      </div>
+      <div *ngIf="!userName.valid && userName.dirty" class="ui mini negative message">
+        <div *ngIf="userName.errors.required">
+          Username is required
+        </div>
+        <div *ngIf="userName.errors.minlength">
+          Username must be at least 3 characters long
+        </div>
+        <div *ngIf="userName.errors.maxlength">
+          Username must be less than 21 characters long
+        </div>
+      </div>
+    </div>
+  
+    <div class="field" [class.error]="!email.valid && email.dirty">
+      <label for="email">Email:</label>
+      <div class="ui input">
+        <input type="email" placeholder="email" [formControl]="myForm.controls['email']">
+      </div>
+      <div *ngIf="!email.valid && email.dirty" class="ui mini negative message">
+        <div *ngIf="email.errors.required">
+          Email is required
+        </div>
+        <div *ngIf="email.errors.email">
+          Wrong email format
+        </div>
+      </div>
+    </div>
+  
+    <div class="field" [class.error]="!password.valid && password.dirty">
+      <label for="password">Password:</label>
+      <div class="ui input">
+        <input type="password" placeholder="password" [formControl]="myForm.controls['password']">
+      </div>
+      <div *ngIf="!password.valid && password.dirty" class="ui mini negative message">
+        <div *ngIf="password.errors.required">
+          Password is required
+        </div>
+        <div *ngIf="password.errors.minlength">
+          Password must be at least 8 characters long
+        </div>
+      </div>
+    </div>
+  
+    <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
+    <button class="ui button" (click)="goBack()" type="button">Cancel</button>
+  </form>
+  <div *ngIf="errors" class="ui bottom attached warning message">
+    <div class="header">
+      <i class="icon exclamation"></i>
+      Errors:
+    </div>
+    <ul>
+      <li *ngFor="let e of errors">{{e}}</li>
+    </ul>
+  </div>
+</div>
