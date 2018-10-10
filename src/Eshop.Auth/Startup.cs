@@ -4,6 +4,7 @@
 
 using Arch.IS4Host.Data;
 using Arch.IS4Host.Models;
+using AutoMapper;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -42,6 +43,26 @@ namespace Arch.IS4Host
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+           services.AddCors(options =>
+            {
+                options.AddPolicy("default", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+            services.AddAuthentication()
+               .AddJwtBearer(jwt =>
+               {
+                   jwt.Authority = "http://localhost:5000";
+                   jwt.RequireHttpsMetadata = false;
+                   jwt.Audience = "http://localhost:5000/resources";
+               });
+
+            services.AddAutoMapper(typeof(Startup).Assembly);
+
             services.AddMvc();                
 
             services.Configure<IISOptions>(iis =>
@@ -50,7 +71,9 @@ namespace Arch.IS4Host
                 iis.AutomaticAuthentication = false;
             });
 
-            var builder = services.AddIdentityServer()
+            var builder = services.AddIdentityServer(options =>
+                options.Discovery.CustomEntries.Add("custom_endpoint", "~/users")
+                )
                 // Настройка хранилища конфигураций
                 .AddConfigurationStore(configDb =>
                     configDb.ConfigureDbContext = db =>
@@ -64,7 +87,7 @@ namespace Arch.IS4Host
                         sql => sql.MigrationsAssembly(migrationsAssembly))
                 )
                 .AddAspNetIdentity<ApplicationUser>();
-
+            
             if (Environment.IsDevelopment())
             {
                 builder.AddDeveloperSigningCredential();
@@ -88,6 +111,7 @@ namespace Arch.IS4Host
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseCors("default");
 
             app.UseStaticFiles();
             app.UseIdentityServer();

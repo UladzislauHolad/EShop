@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserTableInfo } from '../models/user-table-info';
 
-const usersUrl = 'api/users'
+const usersUrl = 'http://localhost:5000/users'
 
 @Injectable({
   providedIn: 'root'
