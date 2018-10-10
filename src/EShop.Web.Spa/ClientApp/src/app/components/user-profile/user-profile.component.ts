@@ -16,8 +16,7 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const id = JSON.parse(localStorage.getItem('currentUser')).id;
-    this.profileService.getProfile(id).subscribe(
+    this.profileService.getProfile().subscribe(
       profile => this.profile = profile
     );
   }

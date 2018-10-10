@@ -1,6 +1,7 @@
 export class Profile {
-    id: string;
-    userName: string;
-    email: string;
-    hasPassword: boolean;
+    sub: string;
+    name: string;
+    given_name: string;
+    family_name: string;
+    preferred_username: string;
 }

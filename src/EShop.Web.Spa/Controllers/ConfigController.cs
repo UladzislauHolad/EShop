@@ -104,7 +104,7 @@ namespace ClientApp.Controllers
             {
                 config.scope = "openid profile email https://graph.microsoft.com/User.Read";
             }
-            config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/autologin";
+            config.post_logout_redirect_uri = $"{protocol}{Request.Host.ToUriComponent()}/";
             config.post_login_route = "/home";
             config.forbidden_route = "/home";
             config.unauthorized_route = "/home";

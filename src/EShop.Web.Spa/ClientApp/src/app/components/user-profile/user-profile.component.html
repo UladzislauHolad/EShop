@@ -11,28 +11,22 @@
     <tbody>
       <tr>
         <td class="collapsing">
+          First name
+        </td>
+        <td>{{profile.given_name}}</td>
+      </tr>
+      <tr>
+        <td>
+          Last name
+        </td>
+        <td>{{profile.family_name}}</td>
+      </tr>
+      <tr>
+        <td>
           Username
         </td>
-        <td>{{profile.userName}}</td>
-        <td></td>
-      </tr>
-      <tr>
         <td>
-          Email
-        </td>
-        <td>{{profile.email}}</td>
-        <td></td>
-      </tr>
-      <tr>
-        <td>
-          HasPassword
-        </td>
-        <td *ngIf="profile.hasPassword">Yes
-        </td>
-        <td class="center aligned two wide">
-          <div class="ui small basic icon buttons">
-            <button class="ui button"><i class="pencil alternate icon"></i></button>
-          </div>
+          {{profile.preferred_username}}
         </td>
       </tr>
     </tbody>
