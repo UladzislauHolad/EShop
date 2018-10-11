@@ -46,20 +46,20 @@ namespace EShop.App.Web
                 options
                 .UseSqlServer(AppConfiguration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthorization();
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<EShopContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.Authority = AppConfiguration["IdentityServerAddress"];
-                o.Audience = "http://localhost:5000/resources";
-                o.RequireHttpsMetadata = false;
-            });
+            services.AddAuthentication("Bearer")
+               .AddIdentityServerAuthentication(options =>
+               {
+                   options.Authority = "http://localhost:5000";
+                   options.ApiName = "apiApp";
+                   //options.ApiSecret = "secret";
+                   options.RequireHttpsMetadata = false;
+               });
+
 
             services.AddTransient<IDbContext, EShopContext>();
 

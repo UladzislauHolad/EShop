@@ -53,13 +53,13 @@ namespace Arch.IS4Host
                 });
             });
 
-            services.AddAuthentication()
-               .AddJwtBearer(jwt =>
-               {
-                   jwt.Authority = "http://localhost:5000";
-                   jwt.RequireHttpsMetadata = false;
-                   jwt.Audience = "http://localhost:5000/resources";
-               });
+            //services.AddAuthentication()
+            //   .AddJwtBearer(jwt =>
+            //   {
+            //       jwt.Authority = "http://localhost:5000";
+            //       jwt.RequireHttpsMetadata = false;
+            //       jwt.Audience = "http://localhost:5000/resources";
+            //   });
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
