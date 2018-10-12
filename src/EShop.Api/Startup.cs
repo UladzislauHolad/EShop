@@ -89,6 +89,8 @@ namespace EShop.Api
             });
 
             services.AddMvc()
+                .AddFluentValidation(fvc =>
+                    fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSwaggerGen(c =>
             {
