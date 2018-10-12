@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace EShop.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/products")]
     [Produces("application/json")]
     public class ProductsController : ControllerBase
     {
@@ -171,7 +171,6 @@ namespace EShop.Api.Controllers
         /// <param name="id"></param>
         /// <returns>Product</returns>
         /// <response code="200">Returns list of Products by category id</response>
-        //[Route("api/categories")]
         [HttpGet("/api/categories/{id}/products")]
         [ProducesResponseType(200)]
         public IEnumerable<ProductTableViewModel> GetProductOfCategory([FromRoute]int id)

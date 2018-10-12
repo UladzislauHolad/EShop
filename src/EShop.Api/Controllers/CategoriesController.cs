@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace EShop.Api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/categories")]
     [Produces("application/json")]
     public class CategoriesController : ControllerBase
     {
