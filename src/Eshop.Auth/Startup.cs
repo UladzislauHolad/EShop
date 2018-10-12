@@ -54,14 +54,6 @@ namespace Arch.IS4Host
                 });
             });
 
-            //services.AddAuthentication()
-            //   .AddJwtBearer(jwt =>
-            //   {
-            //       jwt.Authority = "http://localhost:5000";
-            //       jwt.RequireHttpsMetadata = false;
-            //       jwt.Audience = "http://localhost:5000/resources";
-            //   });
-
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                  .AddIdentityServerAuthentication(options =>
                  {
@@ -82,13 +74,11 @@ namespace Arch.IS4Host
             });
 
             var builder = services.AddIdentityServer()
-                // Настройка хранилища конфигураций
                 .AddConfigurationStore(configDb =>
                     configDb.ConfigureDbContext = db =>
                         db.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly))
                 )
-                
                 .AddOperationalStore(operationalDb =>
                     operationalDb.ConfigureDbContext = db =>
                         db.UseSqlServer(connectionString,
