@@ -5,7 +5,7 @@ import { tap } from 'rxjs/operators';
 import { CategoryNestedNode } from '../components/catalog/category-tree/category-nested-node';
 import { ConfigService } from './config.service';
 
-let catalogUrl = "/api/catalog"
+let catalogUrl = "api/catalog"
 
 @Injectable({
   providedIn: 'root'
