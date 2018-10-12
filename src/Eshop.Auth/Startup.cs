@@ -71,9 +71,7 @@ namespace Arch.IS4Host
                 iis.AutomaticAuthentication = false;
             });
 
-            var builder = services.AddIdentityServer(options =>
-                options.Discovery.CustomEntries.Add("custom_endpoint", "~/users")
-                )
+            var builder = services.AddIdentityServer()
                 // Настройка хранилища конфигураций
                 .AddConfigurationStore(configDb =>
                     configDb.ConfigureDbContext = db =>

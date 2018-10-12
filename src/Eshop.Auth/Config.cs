@@ -23,6 +23,12 @@ namespace Arch.IS4Host
             return new ApiResource[]
             {
                 new ApiResource("apiApp", "My API")
+                {
+                    ApiSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    }
+                }
             };
         }
 
@@ -47,7 +53,7 @@ namespace Arch.IS4Host
                     ClientName = "Angular Client",
                     AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
                     AllowAccessTokensViaBrowser = true,
-                    //AccessTokenType = AccessTokenType.Reference,
+                    AccessTokenType = AccessTokenType.Reference,
                     RedirectUris = { "http://localhost:5002/" },
                     PostLogoutRedirectUris = { "http://localhost:5002/" },
                     AllowedCorsOrigins = { "http://localhost:5002" },
