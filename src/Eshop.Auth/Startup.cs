@@ -5,6 +5,7 @@
 using Arch.IS4Host.Data;
 using Arch.IS4Host.Models;
 using AutoMapper;
+using IdentityServer4.AccessTokenValidation;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +61,15 @@ namespace Arch.IS4Host
             //       jwt.RequireHttpsMetadata = false;
             //       jwt.Audience = "http://localhost:5000/resources";
             //   });
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                 .AddIdentityServerAuthentication(options =>
+                 {
+                     options.Authority = "http://localhost:5000";
+                     options.RequireHttpsMetadata = false;
+                     options.ApiName = "apiApp";
+                     options.ApiSecret = "secret";
+                 });
 
             services.AddAutoMapper(typeof(Startup).Assembly);
 
