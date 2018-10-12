@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EShop.Api.MappingProfiles.ProductsMappingProfiles
+namespace EShop.Api.MappingProfiles
 {
-    public class ProductTableViewModelProfile : Profile
+    public class ProductsProfile : Profile
     {
-        public ProductTableViewModelProfile()
+        public ProductsProfile()
         {
+            CreateMap<ProductViewModel, ProductDTO>();
+            CreateMap<ProductViewModel, ProductDTO>().ReverseMap();
+
             CreateMap<ProductDTO, ProductTableViewModel>();
             CreateMap<ProductDTO, ProductTableViewModel>().ReverseMap();
         }
