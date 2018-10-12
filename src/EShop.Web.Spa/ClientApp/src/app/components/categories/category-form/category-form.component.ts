@@ -3,6 +3,7 @@ import { CategoryService } from '../../../services/category.service';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Category } from '../../../models/category';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-form',
@@ -28,8 +29,8 @@ export class CategoryFormComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private location: Location,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -73,6 +74,6 @@ export class CategoryFormComponent implements OnInit {
   }
 
   goBack(){
-    this.location.back();
+    this.router.navigate(['/categories'])
   }
 }

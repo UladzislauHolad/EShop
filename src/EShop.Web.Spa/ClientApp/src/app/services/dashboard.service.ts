@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { LineItem } from '../components/dashboard/models/line-item';
 import { ConfigService } from './config.service';
 
-let categoriesUrl = 'api/categories-chart';
+let categoriesUrl = 'api/categories/pie-chart';
 let dashboardUrl = 'api/dashboard/';
 const lineChartStates = new Array<string>(
   'New',

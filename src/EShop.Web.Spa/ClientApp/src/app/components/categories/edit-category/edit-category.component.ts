@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Category } from '../../../models/category';
 import { CategoryService } from '../../../services/category.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-category',
@@ -16,8 +16,8 @@ export class EditCategoryComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +49,6 @@ export class EditCategoryComponent implements OnInit {
   }
 
   goBack() {
-    this.location.back();
+    this.router.navigate(['/categories'])
   }
 }

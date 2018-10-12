@@ -60,8 +60,10 @@ namespace EShop.Api
             services.AddTransient<IDbContext, EShopContext>();
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IRepository<Category>, CategoryRepository>();
 
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<ICategoryService, CategoryService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(Services.Profiles.CustomerDTOProfile).Assembly);
 
