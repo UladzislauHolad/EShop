@@ -8,7 +8,5 @@ namespace EShop.Services.DTO
     {
         public int PaymentMethodId { get; set; }
         public string Name { get; set; }
-
-        public virtual ICollection<OrderDTO> Orders { get; set; }
     }
 }
