@@ -39,7 +39,6 @@ export class AuthenticationService {
     }
 
     refreshSession() {
-        console.log('start refreshSession');
         this.oidcSecurityService.authorize();
     }
 
@@ -61,7 +60,6 @@ export class AuthenticationService {
     }
 
     private onAuthorizationResultComplete(authorizationResult: AuthorizationResult) {
-        console.log('AppComponent:onAuthorizationResultComplete');
         const path = this.read('redirect');
         if (authorizationResult === AuthorizationResult.authorized) {
             this.router.navigate([path]);

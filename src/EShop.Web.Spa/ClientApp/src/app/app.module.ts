@@ -177,15 +177,9 @@ export class AppModule {
       // limiting the amount of time that nonces need to be stored to prevent attacks.The acceptable range is Client specific.
       openIDImplicitFlowConfiguration.max_id_token_iat_offset_allowed_in_seconds =
         this.oidcConfigService.clientConfiguration.max_id_token_iat_offset_allowed_in_seconds;
-
       this.oidcSecurityService.setupModule(openIDImplicitFlowConfiguration, authWellKnownEndpoints);
-      console.dir(openIDImplicitFlowConfiguration);
       this.oidcSecurityService.setCustomRequestParameters(this.oidcConfigService.clientConfiguration.additional_login_parameters);
-
       this.configService.setApiUrl(this.oidcConfigService.clientConfiguration.apiUrl);
     });
-
-
-    console.log('APP STARTING');
   }
 }
