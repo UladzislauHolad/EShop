@@ -61,9 +61,18 @@ namespace EShop.Api
 
             services.AddTransient<IRepository<Product>, ProductRepository>();
             services.AddTransient<IRepository<Category>, CategoryRepository>();
+            services.AddTransient<IRepository<Order>, OrderRepository>();
+            services.AddTransient<IRepository<PaymentMethod>, PaymentMethodRepository>();
+            services.AddTransient<IRepository<DeliveryMethod>, DeliveryMethodRepository>();
+            services.AddTransient<IRepository<PickupPoint>, PickupPointRepository>();
+            services.AddTransient<IRepository<Customer>, CustomerRepository>();
 
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IPaymentMethodService, PaymentMethodService>();
+            services.AddTransient<IDeliveryMethodService, DeliveryMethodService>();
+            services.AddTransient<IPickupPointService, PickupPointService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(Services.Profiles.CustomerDTOProfile).Assembly);
 

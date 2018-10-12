@@ -6,7 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { errorHandler } from './errorHandler';
 import { ConfigService } from './config.service';
 
-let paymentsUrl = '/api/payments';
+let paymentsUrl = 'api/payments';
 
 @Injectable({
   providedIn: 'root'

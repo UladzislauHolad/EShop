@@ -9,7 +9,7 @@ import { ConfigService } from './config.service';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-let ordersUrl = '/api/orders';
+let ordersUrl = 'api/orders';
 
 @Injectable({
   providedIn: 'root'

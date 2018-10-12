@@ -6,7 +6,7 @@ import { errorHandler } from './errorHandler';
 import { DeliveryMethod } from '../models/deliveryMethod';
 import { ConfigService } from './config.service';
 
-let deliveriesUrl = '/api/deliveries';
+let deliveriesUrl = 'api/deliveries';
 
 @Injectable({
   providedIn: 'root'
