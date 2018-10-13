@@ -12,6 +12,7 @@ using EShop.Data.Interfaces;
 using EShop.Data.Repositories;
 using EShop.Services.Interfaces;
 using EShop.Services.Services;
+using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
