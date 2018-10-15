@@ -62,9 +62,10 @@ namespace EShop.Api.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        public OrderDTO GetOrder([FromRoute]int id)
+        public OrderViewModel GetOrder([FromRoute]int id)
         {
-            return _service.GetOrder(id);
+            var order = _mapper.Map<OrderViewModel>(_service.GetOrder(id));
+            return order;
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace EShop.Api.Controllers
             try
             {
                 var result = _service.ChangeState(id);
-                return Ok(_mapper.Map<OrderViewModel>(result));
+                return Ok(_mapper.Map<OrderTableViewModel>(result));
             }
             catch (InvalidOperationException ex)
             {
