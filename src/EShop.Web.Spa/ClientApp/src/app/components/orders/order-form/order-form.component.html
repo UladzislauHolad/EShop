@@ -8,6 +8,12 @@
       <div *ngIf="firstName.errors.required">
         First name is required
       </div>
+      <div *ngIf="firstName.errors?.minlength">
+        Minimum 2 characters
+      </div>
+      <div *ngIf="firstName.errors?.maxlength">
+        Maximum 20 characters
+      </div>
     </div>
   </div>
 
@@ -20,6 +26,12 @@
       <div *ngIf="lastName.errors.required">
         Last name is required
       </div>
+      <div *ngIf="lastName.errors?.minlength">
+        Minimum 2 characters
+      </div>
+      <div *ngIf="lastName.errors?.maxlength">
+        Maximum 20 characters
+      </div>
     </div>
   </div>
 
@@ -31,6 +43,12 @@
     <div *ngIf="!patronymic.valid && patronymic.dirty" class="ui mini negative message">
       <div *ngIf="patronymic.errors.required">
         Patronymic is required
+      </div>
+      <div *ngIf="patronymic.errors?.minlength">
+        Minimum 2 characters
+      </div>
+      <div *ngIf="patronymic.errors?.maxlength">
+        Maximum 20 characters
       </div>
     </div>
   </div>
@@ -56,6 +74,12 @@
       <div *ngIf="address.errors.required">
         Address is required
       </div>
+      <div *ngIf="address.errors?.minlength">
+        Minimum 10 characters
+      </div>
+      <div *ngIf="address.errors?.maxlength">
+        Maximum 50 characters
+      </div>
     </div>
   </div>
 
@@ -67,6 +91,12 @@
     <div *ngIf="!comment.valid && comment.dirty" class="ui mini negative message">
       <div *ngIf="comment.errors.required">
         Comment is required
+      </div>
+      <div *ngIf="comment.errors?.minlength">
+        Minimum 10 characters
+      </div>
+      <div *ngIf="comment.errors?.maxlength">
+        Maximum 50 characters
       </div>
     </div>
   </div>

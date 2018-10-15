@@ -89,19 +89,25 @@ export class OrderFormComponent implements OnInit {
       'firstName': [
         order.customer.firstName,
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20)
         ]
       ],
       'lastName': [
         order.customer.lastName,
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20)
         ]
       ],
       'patronymic': [
         order.customer.patronymic,
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(20)
         ]
       ],
       'phone': [
@@ -113,13 +119,17 @@ export class OrderFormComponent implements OnInit {
       'address': [
         order.customer.address,
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(50)
         ]
       ],
       'comment': [
         order.comment,
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(50)
         ]
       ],
       'payment': [
@@ -129,7 +139,7 @@ export class OrderFormComponent implements OnInit {
         ]
       ],
       'delivery': [
-        ,
+        order.deliveryMethodId,
         [
           Validators.required
         ]
@@ -137,7 +147,7 @@ export class OrderFormComponent implements OnInit {
       'pickup': [
         order.pickupPointId,
         [
-          Validators.required,
+          Validators.required
         ]
       ]
     });
