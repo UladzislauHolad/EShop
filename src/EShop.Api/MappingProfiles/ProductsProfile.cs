@@ -19,6 +19,8 @@ namespace EShop.Api.MappingProfiles
             CreateMap<ProductTableViewModel, ProductDTO>().ReverseMap();
 
             CreateMap<CreateProductViewModel, ProductDTO>();
+
+            CreateMap<UpdateProductViewModel, ProductDTO>();
         }
     }
 }

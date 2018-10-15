@@ -129,14 +129,15 @@ namespace EShop.Api.Controllers
         [HttpPatch("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(422)]
-        public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
+        public ActionResult UpdateProduct([FromRoute]int id, [FromBody]UpdateProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 _service.Update((_mapper.Map<ProductDTO>(product)));
                 return NoContent();
             }
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>
