@@ -15,6 +15,9 @@ namespace EShop.Api.MappingProfiles
             CreateMap<OrderDTO, OrderViewModel>();
             CreateMap<OrderDTO, OrderViewModel>().ReverseMap();
 
+            CreateMap<OrderDTO, OrderTableViewModel>();
+            CreateMap<OrderDTO, OrderTableViewModel>().ReverseMap();
+
             CreateMap<ModifyOrderViewModel, OrderDTO>();
             CreateMap<ModifyOrderViewModel, OrderDTO>().ReverseMap();
 
