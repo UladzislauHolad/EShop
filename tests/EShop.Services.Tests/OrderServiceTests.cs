@@ -77,44 +77,44 @@ namespace EShop.Services.Tests
             orderRepository.Verify(m => m.Create(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once);
         }
 
-        [Fact]
-        public void Update_UpdateOrder_OrderIsUpdated()
-        {
-            var order = new Order
-            {
-                OrderId = 1,
-                ProductOrders = new List<ProductOrder>
-                {
-                    new ProductOrder
-                    {
-                        OrderId = 1,
-                        ProductId = 1,
-                        Name = "P1",
-                        Description = "Des1",
-                        Price = 1,
-                        OrderCount = 1,
-                        Product = new Product
-                        {
-                            ProductId = 1,
-                            Name = "P1",
-                            Description = "Des1",
-                            Price = 1,
-                            Count = 1
-                        }
-                    }
-                }
-            };
+        //[Fact]
+        //public void Update_UpdateOrder_OrderIsUpdated()
+        //{
+        //    var order = new Order
+        //    {
+        //        OrderId = 1,
+        //        ProductOrders = new List<ProductOrder>
+        //        {
+        //            new ProductOrder
+        //            {
+        //                OrderId = 1,
+        //                ProductId = 1,
+        //                Name = "P1",
+        //                Description = "Des1",
+        //                Price = 1,
+        //                OrderCount = 1,
+        //                Product = new Product
+        //                {
+        //                    ProductId = 1,
+        //                    Name = "P1",
+        //                    Description = "Des1",
+        //                    Price = 1,
+        //                    Count = 1
+        //                }
+        //            }
+        //        }
+        //    };
 
-            var customerRepository = new Mock<IRepository<Customer>>();
-            var orderRepository = new Mock<IRepository<Order>>();
-            orderRepository.Setup(m => m.Update(order));
-            var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
-            var mapper = GetMapper();
+        //    var customerRepository = new Mock<IRepository<Customer>>();
+        //    var orderRepository = new Mock<IRepository<Order>>();
+        //    orderRepository.Setup(m => m.Update(order));
+        //    var service = new OrderService(orderRepository.Object, customerRepository.Object, GetMapper());
+        //    var mapper = GetMapper();
 
-            service.Update(mapper.Map<OrderDTO>(order));
+        //    service.Update(mapper.Map<OrderDTO>(order));
 
-            orderRepository.Verify(m => m.Update(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once());
-        }
+        //    orderRepository.Verify(m => m.Update(It.Is<Order>(o => o.OrderId == order.OrderId)), Times.Once());
+        //}
 
         [Fact]
         public void Delete_InvokeWithValidId_OrderUpdateStatusToDeleted()

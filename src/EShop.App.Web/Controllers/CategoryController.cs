@@ -69,16 +69,16 @@ namespace EShop.App.Web.Controllers
             return View(category);
         }
 
-        [HttpPost("Categories/{id}")]
-        public IActionResult Edit(CategoryViewModel category)
-        {
-            if (ModelState.IsValid)
-            {
-                _service.Update((_mapper.Map<CategoryDTO>(category)));
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
+        //[HttpPost("Categories/{id}")]
+        //public IActionResult Edit(CategoryViewModel category)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _service.Update((_mapper.Map<CategoryDTO>(category)));
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View();
+        //}
 
         [HttpDelete("Categories/{id}")]
         public ActionResult Delete([FromRoute]int id)
@@ -187,27 +187,27 @@ namespace EShop.App.Web.Controllers
             return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
-        /// <summary>
-        /// Update category
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="category"></param>
-        /// <returns></returns>
-        /// <response code="204">Category was updated</response>
-        /// <response code="422">Model is invalid</response>
-        [HttpPatch("api/categories/{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(422)]
-        public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
-        {
-            if (ModelState.IsValid)
-            {
-                _service.Update(_mapper.Map<CategoryDTO>(category));
-                return StatusCode(StatusCodes.Status204NoContent);
-            }
+        ///// <summary>
+        ///// Update category
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <param name="category"></param>
+        ///// <returns></returns>
+        ///// <response code="204">Category was updated</response>
+        ///// <response code="422">Model is invalid</response>
+        //[HttpPatch("api/categories/{id}")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(422)]
+        //public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _service.Update(_mapper.Map<CategoryDTO>(category));
+        //        return StatusCode(StatusCodes.Status204NoContent);
+        //    }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
-        }
+        //    return StatusCode(StatusCodes.Status422UnprocessableEntity);
+        //}
 
         /// <summary>
         /// Delete category

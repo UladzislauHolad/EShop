@@ -75,41 +75,41 @@ namespace EShop.App.Web.Tests
             Assert.Equal("P21", result.Name);
         }
 
-        [Fact]
-        public void Edit_UpdateProduct_ProductUpdated()
-        {
-            ProductViewModel productVM = new ProductViewModel
-            {
-                ProductId = 1,
-                Name = "name",
-                Price = 321,
-                Description = "desc",
-                CategoriesId = new List<int> { 1, 2, 3 }
-            };
-            var mapper = GetMapper();
-            var product = mapper.Map<Product>(mapper.Map<ProductDTO>(productVM));
-            var mock = new Mock<IRepository<Product>>();
-            mock.Setup(m => m.Update(product));
-            var service = new ProductService(mock.Object, GetMapper());
-            ProductController controller = new ProductController(service, mapper);
+        //[Fact]
+        //public void Edit_UpdateProduct_ProductUpdated()
+        //{
+        //    ProductViewModel productVM = new ProductViewModel
+        //    {
+        //        ProductId = 1,
+        //        Name = "name",
+        //        Price = 321,
+        //        Description = "desc",
+        //        CategoriesId = new List<int> { 1, 2, 3 }
+        //    };
+        //    var mapper = GetMapper();
+        //    var product = mapper.Map<Product>(mapper.Map<ProductDTO>(productVM));
+        //    var mock = new Mock<IRepository<Product>>();
+        //    mock.Setup(m => m.Update(product));
+        //    var service = new ProductService(mock.Object, GetMapper());
+        //    ProductController controller = new ProductController(service, mapper);
 
-            controller.Edit(productVM);
+        //    controller.Edit(productVM);
 
-            mock.Verify(m => m.Update(It.Is<Product>(p => p.ProductId == 1)), Times.Once());
-        }
+        //    mock.Verify(m => m.Update(It.Is<Product>(p => p.ProductId == 1)), Times.Once());
+        //}
 
-        [Fact]
-        public void Edit_UpdateNotValidModel_ReturnView()
-        {
-            var mock = new Mock<IProductService>();
-            ProductController controller = new ProductController(mock.Object, GetMapper());
-            var invalidProduct = new ProductViewModel();
-            controller.ModelState.AddModelError("", "");
+        //[Fact]
+        //public void Edit_UpdateNotValidModel_ReturnView()
+        //{
+        //    var mock = new Mock<IProductService>();
+        //    ProductController controller = new ProductController(mock.Object, GetMapper());
+        //    var invalidProduct = new ProductViewModel();
+        //    controller.ModelState.AddModelError("", "");
 
-            var result = controller.Edit(invalidProduct);
+        //    var result = controller.Edit(invalidProduct);
 
-            Assert.True(result is ViewResult);
-        }
+        //    Assert.True(result is ViewResult);
+        //}
 
         [Fact]
         public void Delete_DeleteProduct_ProductDeleted()

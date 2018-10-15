@@ -167,17 +167,17 @@ namespace EShop.App.Web.Controllers
             return BadRequest();
         }
 
-        [HttpPost("Orders/{orderId}")]
-        public ActionResult Modify([FromRoute]int orderId, OrderViewModel order)
-        {
-            if (ModelState.IsValid)
-            {
-                order.Status = StatusStates.New.ToString();
-                _service.Update(_mapper.Map<OrderDTO>(order));
-                return RedirectToAction("Modify", new { orderId = orderId });
-            }
-            return View(order);
-        }
+        //[HttpPost("Orders/{orderId}")]
+        //public ActionResult Modify([FromRoute]int orderId, OrderViewModel order)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        order.Status = StatusStates.New.ToString();
+        //        _service.Update(_mapper.Map<OrderDTO>(order));
+        //        return RedirectToAction("Modify", new { orderId = orderId });
+        //    }
+        //    return View(order);
+        //}
 
         [HttpPatch("Orders/api/{orderId}")]
         public ActionResult ChangeState(int orderId)
@@ -271,28 +271,28 @@ namespace EShop.App.Web.Controllers
             return StatusCode(StatusCodes.Status422UnprocessableEntity);
         }
 
-        /// <summary>
-        /// Update order
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        /// <response code="204">Order was updated</response>
-        /// <response code="422">Invalid model</response>
-        [HttpPatch("api/orders/{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(422)]
-        [AllowAnonymous]
-        public ActionResult UpdateOrder([FromRoute]int id, [FromBody]ModifyOrderAngularViewModel order)
-        {
-            if(ModelState.IsValid)
-            {
-                _service.Update(_mapper.Map<OrderDTO>(order));
-                return NoContent();
-            }
+        ///// <summary>
+        ///// Update order
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <param name="order"></param>
+        ///// <returns></returns>
+        ///// <response code="204">Order was updated</response>
+        ///// <response code="422">Invalid model</response>
+        //[HttpPatch("api/orders/{id}")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(422)]
+        //[AllowAnonymous]
+        //public ActionResult UpdateOrder([FromRoute]int id, [FromBody]ModifyOrderAngularViewModel order)
+        //{
+        //    if(ModelState.IsValid)
+        //    {
+        //        _service.Update(_mapper.Map<OrderDTO>(order));
+        //        return NoContent();
+        //    }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
-        }
+        //    return StatusCode(StatusCodes.Status422UnprocessableEntity);
+        //}
 
         /// <summary>
         /// Change order state
