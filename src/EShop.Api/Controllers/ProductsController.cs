@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShop.Api.Infrastructure;
 using EShop.Api.Models.ProductsViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
@@ -51,7 +52,7 @@ namespace EShop.Api.Controllers
         /// <param name="id"></param>
         /// <returns>ProductViewModel</returns>
         [HttpGet("{id}")]
-        public ProductViewModel GetProducts([FromRoute]int id)
+        public ProductViewModel GetProduct([FromRoute]int id)
         {
             return _mapper.Map<ProductViewModel>(_service.GetProduct(id));
         }
@@ -86,14 +87,15 @@ namespace EShop.Api.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(422)]
-        public ActionResult<ProductViewModel> CreateProduct([FromBody]ProductViewModel product)
+        public ActionResult CreateProduct([FromBody]CreateProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 _service.Add(_mapper.Map<ProductDTO>(product));
                 return StatusCode(StatusCodes.Status201Created);
             }
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>
