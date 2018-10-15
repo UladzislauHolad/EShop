@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShop.Api.Infrastructure;
 using EShop.Api.Models.CategoriesViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
@@ -84,7 +85,7 @@ namespace EShop.Api.Controllers
                 return StatusCode(StatusCodes.Status201Created);
             }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>
@@ -100,13 +101,20 @@ namespace EShop.Api.Controllers
         [ProducesResponseType(422)]
         public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _service.Update(_mapper.Map<CategoryDTO>(category));
-                return StatusCode(StatusCodes.Status204NoContent);
-            }
+                if (ModelState.IsValid)
+                {
+                    _service.Update(id, _mapper.Map<CategoryDTO>(category));
+                    return StatusCode(StatusCodes.Status204NoContent);
+                }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+            }
         }
 
         /// <summary>
