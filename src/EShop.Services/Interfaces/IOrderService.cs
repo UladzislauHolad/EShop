@@ -12,7 +12,7 @@ namespace EShop.Services.Interfaces
         IEnumerable<OrderDTO> GetOrders();
         OrderDTO Create(OrderDTO orderDTO);
         OrderDTO GetOrder(int id);
-        void Update(OrderDTO orderDTO);
+        void Update(int id, OrderDTO orderDTO);
         void Delete(int id);
         object GetCountOfConfirmedProducts();
         object GetCountOfConfirmedOrdersByDate();
