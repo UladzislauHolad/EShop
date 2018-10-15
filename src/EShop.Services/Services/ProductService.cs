@@ -7,6 +7,7 @@ using EShop.Services.Infrastructure;
 using AutoMapper;
 using System.Linq;
 using System;
+using EShop.Services.Infrastructure.Exceptions;
 
 namespace EShop.Services.Services
 {
@@ -51,7 +52,7 @@ namespace EShop.Services.Services
                 _repository.Update(_mapper.Map<ProductDTO, Product>(productDTO));
             }
             else
-                throw new ArgumentOutOfRangeException($"Product with id {id} is not exist");
+                throw new EntityNotExistException($"Product with id {id} is not exist");
         }
 
         public void Delete(int id)

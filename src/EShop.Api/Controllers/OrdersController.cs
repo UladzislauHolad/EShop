@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShop.Api.Infrastructure;
 using EShop.Api.Models.OrdersViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
@@ -88,7 +89,7 @@ namespace EShop.Api.Controllers
                 return StatusCode(StatusCodes.Status201Created, _mapper.Map<ModifyOrderViewModel>(result));
             }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace EShop.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                _service.Update(_mapper.Map<OrderDTO>(order));
+                _service.Update(id, _mapper.Map<OrderDTO>(order));
                 return NoContent();
             }
 

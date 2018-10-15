@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using EShop.Api.Infrastructure.Middleware;
 using EShop.Data.EF;
 using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
@@ -95,6 +96,7 @@ namespace EShop.Api
                 .AddFluentValidation(fvc =>
                     fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
@@ -120,6 +122,8 @@ namespace EShop.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseEntityExistExceptionHandlerMiddleware();
 
             app.UseMvc();
         }

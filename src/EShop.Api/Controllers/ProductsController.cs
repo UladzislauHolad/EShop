@@ -131,20 +131,13 @@ namespace EShop.Api.Controllers
         [ProducesResponseType(422)]
         public ActionResult UpdateProduct([FromRoute]int id, [FromBody]UpdateProductViewModel product)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
-                {
-                    _service.Update(id, _mapper.Map<ProductDTO>(product));
-                    return NoContent();
-                }
+                _service.Update(id, _mapper.Map<ProductDTO>(product));
+                return NoContent();
+            }
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
-            }
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>

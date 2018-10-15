@@ -101,20 +101,14 @@ namespace EShop.Api.Controllers
         [ProducesResponseType(422)]
         public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _service.Update(id, _mapper.Map<CategoryDTO>(category));
-                    return StatusCode(StatusCodes.Status204NoContent);
-                }
 
-                return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
-            }
-            catch (ArgumentOutOfRangeException ex)
+            if (ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                _service.Update(id, _mapper.Map<CategoryDTO>(category));
+                return StatusCode(StatusCodes.Status204NoContent);
             }
+
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>

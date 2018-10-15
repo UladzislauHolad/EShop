@@ -2,6 +2,7 @@
 using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
+using EShop.Services.Infrastructure.Exceptions;
 using EShop.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -65,7 +66,7 @@ namespace EShop.Services.Services
                 _repository.Update(_mapper.Map<CategoryDTO, Category>(categoryDTO));
             }
             else
-                throw new ArgumentOutOfRangeException($"Category with id {id} is not exist");
+                throw new EntityNotExistException($"Category with id {id} is not exist");
         }
 
         public IEnumerable<CategoryNestedNodeDTO> GetCategoryNestedNodes()

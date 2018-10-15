@@ -4,6 +4,7 @@ using EShop.Data.Interfaces;
 using EShop.Services.DTO;
 using EShop.Services.Infrastructure;
 using EShop.Services.Infrastructure.Enums;
+using EShop.Services.Infrastructure.Exceptions;
 using EShop.Services.Interfaces;
 using EShop.Services.Profiles;
 using System;
@@ -94,11 +95,12 @@ namespace EShop.Services.Services
             return orders;
         }
 
-        public void Update(OrderDTO orderDTO)
+        public void Update(int id, OrderDTO orderDTO)
         {
-            var existOrder = _orderRepository.Get(orderDTO.OrderId);
+            var existOrder = _orderRepository.Get(id);
             if(existOrder != null)
             {
+                orderDTO.OrderId = id;
                 var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
 
                 if (!orderDTO.Customer.Equals(existCustomer))
@@ -111,6 +113,8 @@ namespace EShop.Services.Services
 
                 _orderRepository.Update(_mapper.Map<Order>(orderDTO));
             }
+            else
+                throw new EntityNotExistException($"Order with id {id} is not exist");
         }
 
         private void AddStatusChanges(Order order, string status)
