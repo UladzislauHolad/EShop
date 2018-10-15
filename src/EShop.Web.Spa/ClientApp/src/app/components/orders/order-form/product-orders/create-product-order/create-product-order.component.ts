@@ -4,13 +4,11 @@ import { ProductOrder } from '../../../../../models/productOrder';
 import { Product } from '../../../../../models/product';
 import { ProductService } from '../../../../../services/product.service';
 import { ProductOrderService } from '../../../../../services/product-order.service';
-import { NotificationService } from 'ng2-notify-popup';
 
 @Component({
   selector: 'app-create-product-order',
   templateUrl: './create-product-order.component.html',
   styleUrls: ['./create-product-order.component.css'],
-  providers: [NotificationService]
 })
 export class CreateProductOrderComponent implements OnInit {
 
@@ -24,7 +22,6 @@ export class CreateProductOrderComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private productOrderService: ProductOrderService,
-    private notify: NotificationService
   ) { }
 
   ngOnInit() {
@@ -49,14 +46,8 @@ export class CreateProductOrderComponent implements OnInit {
   createProductOrder(productOrder: ProductOrder) {
     this.productOrderService.createProductOrder(productOrder).subscribe(
       () => {
-        this.show("Done!", "success");
         this.router.navigate([`orders/${this.orderId}`]);
       },
-      error => this.show(error, "error")
     );
-  }
-
-  show(text: string, type: string): void {
-    this.notify.show(text, { position:'bottom', duration:'2000', type: type, location: '#notification' });
   }
 }
