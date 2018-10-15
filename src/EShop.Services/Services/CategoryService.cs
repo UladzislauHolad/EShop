@@ -3,6 +3,7 @@ using EShop.Data.Entities;
 using EShop.Data.Interfaces;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,9 +55,17 @@ namespace EShop.Services.Services
             return _mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(categories);
         }
 
-        public void Update(CategoryDTO categoryDTO)
+        public void Update(int id, CategoryDTO categoryDTO)
         {
-            _repository.Update(_mapper.Map<CategoryDTO, Category>(categoryDTO));
+            bool isCategoryExist = _repository.GetAll().Any(c => c.CategoryId == id);
+
+            if (isCategoryExist)
+            {
+                categoryDTO.CategoryId = id;
+                _repository.Update(_mapper.Map<CategoryDTO, Category>(categoryDTO));
+            }
+            else
+                throw new ArgumentOutOfRangeException($"Category with id {id} is not exist");
         }
 
         public IEnumerable<CategoryNestedNodeDTO> GetCategoryNestedNodes()

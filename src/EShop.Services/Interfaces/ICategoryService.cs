@@ -8,7 +8,7 @@ namespace EShop.Services.Interfaces
         IEnumerable<CategoryDTO> GetCategories();
         void Create(CategoryDTO categoryDTO);
         void Delete(int id);
-        void Update(CategoryDTO categoryDTO);
+        void Update(int id, CategoryDTO categoryDTO);
         IEnumerable<CategoryDTO> GetChildCategories(int id);
         CategoryDTO GetCategory(int id);
         IEnumerable<CategoryPieChartInfoDTO> GetCategoryNameWithCountOfProducts();
