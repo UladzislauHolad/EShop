@@ -46,7 +46,6 @@ export class ProductFormComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
     this.productService.getProduct(id)
       .subscribe(product => {
-        console.dir(product);
         this.product = product;
         this.createForm(product);
         this.getCategories();
