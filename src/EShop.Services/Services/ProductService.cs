@@ -6,6 +6,7 @@ using EShop.Data.Entities;
 using EShop.Services.Infrastructure;
 using AutoMapper;
 using System.Linq;
+using System;
 
 namespace EShop.Services.Services
 {
@@ -41,9 +42,16 @@ namespace EShop.Services.Services
             _repository.Create(_mapper.Map<ProductDTO, Product>(productDTO));
         }
 
-        public void Update(ProductDTO productDTO)
+        public void Update(int id, ProductDTO productDTO)
         {
-            _repository.Update(_mapper.Map<ProductDTO, Product>(productDTO));
+            bool isProductExist = _repository.GetAll().Any(p => p.ProductId == id);
+            if (isProductExist)
+            {
+                productDTO.ProductId = id;
+                _repository.Update(_mapper.Map<ProductDTO, Product>(productDTO));
+            }
+            else
+                throw new ArgumentOutOfRangeException($"Product with id {id} is not exist");
         }
 
         public void Delete(int id)

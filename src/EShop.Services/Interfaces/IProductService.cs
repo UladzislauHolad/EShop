@@ -9,7 +9,7 @@ namespace EShop.Services.Interfaces
         IEnumerable<ProductDTO> GetProducts();
         void Add(ProductDTO product);
         void Delete(int id);
-        void Update(ProductDTO product);
+        void Update(int id, ProductDTO product);
         IEnumerable<ProductDTO> GetProductsByCategoryId(int id);
         List<object> GetCategoriesWithCountOfProducts();
     }

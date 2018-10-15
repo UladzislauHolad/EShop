@@ -11,9 +11,6 @@ namespace EShop.Api.Validators.Products
     {
         public UpdateProductViewModelValidator()
         {
-            RuleFor(prod => prod.ProductId).NotNull();
-            RuleFor(prod => prod.ProductId).GreaterThan(0);
-
             RuleFor(prod => prod.Name).NotNull();
             RuleFor(prod => prod.Name).MinimumLength(4);
             RuleFor(prod => prod.Name).MaximumLength(50);

@@ -74,24 +74,24 @@ namespace EShop.App.Web.Controllers
             return View(product);
         }
 
-        [HttpPost("Products/{id}")]
-        public IActionResult Edit(ProductViewModel product)
-        {
-            if(ModelState.IsValid)
-            {
-                if(product.CategoriesId != null)
-                {
-                    product.Categories = new List<CategoryViewModel>();
-                    foreach (var categoryId in product.CategoriesId)
-                    {
-                        product.Categories.Add(new CategoryViewModel { CategoryId = categoryId });
-                    }
-                }
-                _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
+        //[HttpPost("Products/{id}")]
+        //public IActionResult Edit(ProductViewModel product)
+        //{
+        //    if(ModelState.IsValid)
+        //    {
+        //        if(product.CategoriesId != null)
+        //        {
+        //            product.Categories = new List<CategoryViewModel>();
+        //            foreach (var categoryId in product.CategoriesId)
+        //            {
+        //                product.Categories.Add(new CategoryViewModel { CategoryId = categoryId });
+        //            }
+        //        }
+        //        _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(product);
+        //}
 
         [HttpDelete("Products/{id}")]
         public IActionResult Delete([FromRoute]int id)
@@ -217,47 +217,47 @@ namespace EShop.App.Web.Controllers
             return BadRequest();
         }
 
-        /// <summary>
-        /// Update instance of ProductViewModel
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// Sample request:
-        /// 
-        ///     Patch api/products/1
-        ///     {
-        ///         "name": "Product",
-        ///         "price": 122,
-        ///         "description": "Description",
-        ///         "count": 2,
-        ///         "categories": [
-        ///             {
-        ///                 "categoryId": 0,
-        ///                 "name": "string",
-        ///                 "parentId": 0
-        ///             }
-        ///         ]
-        ///     }
-        /// 
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <param name="product"></param>
-        /// <returns></returns>
-        /// <response code="204">ProductViewModel is updated</response>
-        /// <response code="400">ProductViewModel is not valid</response>
-        [HttpPatch("api/products/{id}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        [AllowAnonymous]
-        public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
-        {
-            if (ModelState.IsValid)
-            {
-                _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
-                return NoContent();
-            }
-            return BadRequest();
-        }
+        ///// <summary>
+        ///// Update instance of ProductViewModel
+        ///// </summary>
+        ///// <remarks>
+        ///// 
+        ///// Sample request:
+        ///// 
+        /////     Patch api/products/1
+        /////     {
+        /////         "name": "Product",
+        /////         "price": 122,
+        /////         "description": "Description",
+        /////         "count": 2,
+        /////         "categories": [
+        /////             {
+        /////                 "categoryId": 0,
+        /////                 "name": "string",
+        /////                 "parentId": 0
+        /////             }
+        /////         ]
+        /////     }
+        ///// 
+        ///// </remarks>
+        ///// <param name="id"></param>
+        ///// <param name="product"></param>
+        ///// <returns></returns>
+        ///// <response code="204">ProductViewModel is updated</response>
+        ///// <response code="400">ProductViewModel is not valid</response>
+        //[HttpPatch("api/products/{id}")]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+        //[AllowAnonymous]
+        //public ActionResult UpdateProduct([FromRoute]int id, [FromBody]ProductViewModel product)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _service.Update((_mapper.Map<ProductViewModel, ProductDTO>(product)));
+        //        return NoContent();
+        //    }
+        //    return BadRequest();
+        //}
 
         /// <summary>
         /// Delete ProductViewModel by id
