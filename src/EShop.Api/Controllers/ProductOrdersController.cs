@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EShop.Api.Infrastructure;
 using EShop.Api.Models.OrdersViewModels;
 using EShop.Api.Models.ProductOrdersViewModels;
 using EShop.Services.DTO;
@@ -83,6 +84,11 @@ namespace EShop.Api.Controllers
         [ProducesResponseType(400)]
         public ActionResult CreateProductOrder([FromRoute]int orderId, [FromBody]CreateProductOrderViewModel productOrderCreateModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
+            }
+
             var order = _mapper.Map<OrderViewModel>(_orderService.GetOrder(orderId));
             if (order != null && ModelState.IsValid && orderId == productOrderCreateModel.OrderId)
             {
@@ -149,14 +155,16 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="204">ProductOrder was updated</response>
         /// <response code="400">Wrong parameters</response>
+        /// <response code="422">Wrong model</response>
         [HttpPatch("{orderId}/products/{productOrderId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
         public ActionResult UpdateProductOrder([FromRoute]int orderId, [FromRoute]int productOrderId, [FromBody]NewOrderCount OrderCount)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new { Message = "Wrong data" });
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
             }
 
             var order = _orderService.GetOrder(orderId);
