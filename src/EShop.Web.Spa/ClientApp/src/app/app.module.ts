@@ -9,6 +9,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule } from '@angular/material';
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
+import { ODataModule } from 'odata-v4-ng';
 
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -118,6 +119,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     MatSidenavModule,
     MatGridListModule,
     AuthModule.forRoot(),
+    ODataModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
