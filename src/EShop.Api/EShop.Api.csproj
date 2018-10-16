@@ -21,6 +21,7 @@
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="1.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
   </ItemGroup>
 

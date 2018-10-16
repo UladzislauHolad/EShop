@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -15,14 +16,21 @@ using EShop.Services.Interfaces;
 using EShop.Services.Services;
 using FluentValidation.AspNetCore;
 using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OData.Edm;
 using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace EShop.Api
 {
@@ -43,7 +51,18 @@ namespace EShop.Api
                 options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvcCore()
+            services.AddOData();
+
+            services.AddMvcCore(options => {
+                foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new Microsoft.Net.Http.Headers.MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+                foreach (var inputFormatter in options.InputFormatters.OfType<ODataInputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    inputFormatter.SupportedMediaTypes.Add(new Microsoft.Net.Http.Headers.MediaTypeHeaderValue("application/prs.odatatestxx-odata"));
+                }
+            })
                 .AddAuthorization()
                 .AddJsonFormatters();
 
@@ -123,9 +142,23 @@ namespace EShop.Api
                 c.RoutePrefix = string.Empty;
             });
 
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<Category>(nameof(Category));
             app.UseEntityExistExceptionHandlerMiddleware();
 
-            app.UseMvc();
+            app.UseMvc(routebuilder =>
+            {
+                routebuilder.MapODataServiceRoute("odata", "api", GetEdmModel());
+                routebuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
+                routebuilder.EnableDependencyInjection();
+            });
+        }
+
+        private static IEdmModel GetEdmModel()
+        {
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            builder.EntitySet<Category>("Categories");
+            return builder.GetEdmModel();
         }
     }
 }

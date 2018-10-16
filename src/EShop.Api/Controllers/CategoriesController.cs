@@ -3,6 +3,8 @@ using EShop.Api.Infrastructure;
 using EShop.Api.Models.CategoriesViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Routing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,9 +49,10 @@ namespace EShop.Api.Controllers
         /// <response code="200">Returns list of categories</response>
         [HttpGet]
         [ProducesResponseType(200)]
-        public IEnumerable<CategoryViewModel> GetCategories()
+        [EnableQuery]
+        public IActionResult GetCategories()
         {
-            return _mapper.Map<IEnumerable<CategoryViewModel>>(_service.GetCategories());
+            return Ok(_mapper.Map<IEnumerable<CategoryViewModel>>(_service.GetCategories()).AsQueryable());
         }
 
         /// <summary>
