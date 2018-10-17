@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule } from '@angular/material';
+import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule, MatTableModule, MatPaginator, MatPaginatorModule, MatTableDataSource, MatSortModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
 import { ODataModule } from 'odata-v4-ng';
 
@@ -118,6 +118,11 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     MatButtonModule,
     MatSidenavModule,
     MatGridListModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatSortModule,
+    MatInputModule,
     AuthModule.forRoot(),
     ODataModule
   ],
