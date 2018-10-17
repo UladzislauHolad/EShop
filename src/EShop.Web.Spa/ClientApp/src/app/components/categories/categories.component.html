@@ -24,18 +24,22 @@
 </div> -->
 <div class="ui container">
   <div class="mat-elevation-z8">
-    <mat-form-field>
+    <!-- <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-    </mat-form-field>
-    <table mat-table [dataSource]="dataSource" matSort>
+    </mat-form-field> -->
+    <!-- <table mat-table [dataSource]="dataSource" matSort> -->
+    <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let category"> {{category.name}} </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+        <mat-spinner></mat-spinner>
+      </div>
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator> -->
   </div>
 </div>
