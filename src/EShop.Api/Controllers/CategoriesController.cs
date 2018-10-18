@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 namespace EShop.Api.Controllers
 {
     [Authorize]
-    [Route("api/categories")]
     [Produces("application/json")]
     public class CategoriesController : ControllerBase
     {
@@ -62,7 +61,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="200">Return category</response>
         /// <response code="204">Return no content</response>
-        [HttpGet("{id}")]
+        [HttpGet("api/categories/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         public CategoryViewModel GetCategory([FromRoute]int id)
@@ -77,7 +76,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="201">Category was created</response>
         /// <response code="422">Invalid model</response>
-        [HttpPost]
+        [HttpPost("api/categories")]
         [ProducesResponseType(201)]
         [ProducesResponseType(422)]
         public ActionResult CreateCategory([FromBody]CategoryViewModel category)
@@ -99,7 +98,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="204">Category was updated</response>
         /// <response code="422">Model is invalid</response>
-        [HttpPatch("{id}")]
+        [HttpPatch("api/categories/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(422)]
         public ActionResult UpdateCategory([FromRoute]int id, [FromBody]CategoryViewModel category)
@@ -120,7 +119,7 @@ namespace EShop.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         /// <response code="200">Category was deleted</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("api/categories/{id}")]
         [ProducesResponseType(200)]
         public ActionResult DeleteCategory([FromRoute]int id)
         {
