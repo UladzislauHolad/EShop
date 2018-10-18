@@ -46,6 +46,6 @@ export class CreateCategoryComponent implements OnInit{
   }
 
   goBack() {
-    this.router.navigate(['/categories'])
+    this.router.navigate(['categories'])
   }
 }

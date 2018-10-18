@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
             return true;
           }
   
-          this.router.navigate(['/callback']);
+          this.router.navigate(['callback']);
 
           return false;
         })

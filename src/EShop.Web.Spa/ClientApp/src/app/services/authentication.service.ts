@@ -53,7 +53,7 @@ export class AuthenticationService {
             this.write('redirect', window.location.pathname);
             this.oidcSecurityService.getIsAuthorized().subscribe((authorized: boolean) => {
                 if (!authorized) {
-                    this.router.navigate(['/callback']);
+                    this.router.navigate(['callback']);
                 }
             });
         }
@@ -64,7 +64,7 @@ export class AuthenticationService {
         if (authorizationResult === AuthorizationResult.authorized) {
             this.router.navigate([path]);
         } else {
-            this.router.navigate(['/callback']);
+            this.router.navigate(['callback']);
         }
     }
 
