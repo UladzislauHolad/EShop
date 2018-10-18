@@ -32,13 +32,6 @@ export class CategoryService implements IPagingService<Category[]>{
     return this.http.get<Category[]>(categoriesUrl, { params: params });
   }
 
-  getOdataCategories(pageSize): Observable<Category[]> {
-    console.log('getOdata');
-    const params = new HttpParams()
-      .set('$top', pageSize.toString())
-    return this.http.get<Category[]>(categoriesUrl, { params: params });
-  }
-
   getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(categoriesUrl).pipe(
       catchError(this.errorHandler.handleError)
