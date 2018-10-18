@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
-import { ODataQuery, ODataService, ODataResponse } from 'odata-v4-ng';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
-import { CategoriesDataSource } from './CategoriesDataSource';
+import { OdataDataSource } from './odata-data-source';
 
 @Component({
   selector: 'app-categories',
@@ -13,7 +12,7 @@ import { CategoriesDataSource } from './CategoriesDataSource';
 export class CategoriesComponent implements OnInit {
   // categories: Category[];
   columnsToDisplay = ['name'];
-  dataSource: CategoriesDataSource;
+  dataSource;
 
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort) sort: MatSort;
@@ -25,7 +24,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataSource = new CategoriesDataSource(this.categoryService);
+    this.dataSource = new OdataDataSource<Category>(this.categoryService);
     this.dataSource.loadCategories(5);
   }
   // ngAfterViewInit() {

@@ -5,7 +5,7 @@ import { Category } from '../models/category';
 import { errorHandler } from './errorHandler';
 import { catchError } from 'rxjs/operators';
 import { ConfigService } from './config.service';
-import { ODataService, ODataQuery, ODataResponse } from 'odata-v4-ng';
+import { IPagingService } from './IPagingService';
 
 let categoriesUrl = 'api/categories';
 const httpOptions = {
@@ -17,8 +17,8 @@ let odataQuery;
   providedIn: 'root'
 })
 
-export class CategoryService {
-
+export class CategoryService implements IPagingService<Category[]>{
+  
   private errorHandler: errorHandler = new errorHandler();
 
   constructor(
@@ -26,6 +26,10 @@ export class CategoryService {
     private configService: ConfigService,
   ) {
     categoriesUrl = this.configService.getApiUrl().concat(categoriesUrl);
+  }
+
+  getPaggedData(params: HttpParams): Observable<Category[]> {
+    return this.http.get<Category[]>(categoriesUrl, { params: params });
   }
 
   getOdataCategories(pageSize): Observable<Category[]> {
