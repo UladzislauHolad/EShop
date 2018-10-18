@@ -40,9 +40,9 @@ export class CategoryFormComponent implements OnInit {
 
   getCategories() {
     this.categoryService.getCategories().subscribe(
-      categories => {
-        this.existCategories = categories
-        this.existCategories.push(this.noParentCategory);
+      data => {
+        this.existCategories = (data as any).value;
+        this.existCategories.unshift(this.noParentCategory);
         console.dir(this.existCategories);
       }
     );
@@ -74,6 +74,6 @@ export class CategoryFormComponent implements OnInit {
   }
 
   goBack(){
-    this.router.navigate(['/categories'])
+    this.router.navigate(['categories'])
   }
 }

@@ -15,7 +15,7 @@ import { fromEvent } from 'rxjs';
   styleUrls: ['./categories.component.css'],
 })
 export class CategoriesComponent implements OnInit {
-  columnsToDisplay = ['name'];
+  columnsToDisplay = ['name', 'actions'];
   dataSource: OdataDataSource<Category>;
   total: number;
 
@@ -24,10 +24,7 @@ export class CategoriesComponent implements OnInit {
   @ViewChild('input') input: ElementRef;
 
   constructor(
-    private categoryService: CategoryService,
-  ) {
-
-  }
+    private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.dataSource = new OdataDataSource<Category>(this.categoryService);
@@ -59,8 +56,10 @@ export class CategoriesComponent implements OnInit {
   ngOnDestroy() {
   }
 
-  delete(category: Category) {
-
+  delete(category) {
+    this.categoryService.deleteCategory(category.CategoryId).subscribe(
+      () => this.loadPage()
+    );
   }
 
   loadPage() {
