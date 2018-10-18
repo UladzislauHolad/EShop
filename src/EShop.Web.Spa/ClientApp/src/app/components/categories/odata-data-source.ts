@@ -1,16 +1,19 @@
 import { CollectionViewer, DataSource } from "@angular/cdk/collections";
-import { Observable, BehaviorSubject, of } from "rxjs";
-import { catchError, finalize } from "rxjs/operators";
+import { Observable, BehaviorSubject, of, Subject } from "rxjs";
+import { catchError, finalize, map } from "rxjs/operators";
 import { OdataService } from "src/app/services/odata.service";
 import { IPagingService } from "src/app/services/IPagingService";
+import { TableData } from "src/app/models/table-data";
 
 export class OdataDataSource<T> implements DataSource<T> {
 
     private dataSubject = new BehaviorSubject<T[]>([]);
     private loadingSubject = new BehaviorSubject<boolean>(false);
+    private totalSubject = new Subject<number>();
     private odataService: OdataService<T[]>;
 
     public loading$ = this.loadingSubject.asObservable();
+    public total$ = this.totalSubject.asObservable();
 
     constructor(private pagingService: IPagingService<T[]>) {
         this.odataService = new OdataService<T[]>(this.pagingService);
@@ -28,17 +31,35 @@ export class OdataDataSource<T> implements DataSource<T> {
         this.loadingSubject.complete();
     }
 
-    loadCategories(pageSize: number) {
+    loadData(
+        filterField: string,
+        filter: string,
+        pageIndex: number,
+        pageSize: number, 
+        sortField: string, 
+        sortDirection: string) {
         console.log('load');
         this.loadingSubject.next(true);
 
-        this.odataService.getPaggedData()
+        this.odataService.getPaggedData(
+            filterField,
+            filter,
+            pageIndex,
+            pageSize,
+            sortField, 
+            sortDirection)
             .pipe(
+                map(odata => {
+                    let data = ( odata as any ).value;
+                    let total = parseInt( odata[ '@odata.count' ]);
+                    return new TableData<T>( data, total );
+                }),
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
-            ).subscribe(data => {
-                console.dir(data);
-                this.dataSubject.next(data);
+            ).subscribe(tableData => {
+                console.dir(tableData);
+                this.totalSubject.next((tableData as TableData<T>).total)
+                this.dataSubject.next((tableData as TableData<T>).data);
             });
     }
 }
