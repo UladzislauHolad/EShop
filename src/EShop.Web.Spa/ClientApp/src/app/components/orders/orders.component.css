@@ -20,7 +20,3 @@ table {
 th.mat-sort-header-sorted {
     color: black;
 }
-
-.hoverable:hover { 
-    color: rgb(89, 93, 88);
-}
