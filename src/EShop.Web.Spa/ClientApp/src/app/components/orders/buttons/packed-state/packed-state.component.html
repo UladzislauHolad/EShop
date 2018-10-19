@@ -1,3 +1,9 @@
-<button class="ui button" (click)="info(order)"><i class="info circle icon"></i></button>
-<button *ngIf="order.deliveryMethodName === 'Courier'" class="ui button" (click)="nextState(order)"><i class="truck icon"></i></button>
-<button *ngIf="order.deliveryMethodName === 'Pickup'" class="ui button" (click)="nextState(order)"><i class="flag checkered icon"></i></button>
+<a class="hoverable" mat-icon-button matTooltip="Order info" (click)="info(order)">
+    <mat-icon>info</mat-icon>
+</a>
+<button *ngIf="order.deliveryMethodName === 'Pickup'" class="hoverable" mat-icon-button matTooltip="Complete" (click)="nextState(order)">
+    <mat-icon>assignment_turned_in</mat-icon>
+</button>
+<button *ngIf="order.deliveryMethodName === 'Courier'" class="hoverable" mat-icon-button matTooltip="Deliver" (click)="nextState(order)">
+    <mat-icon>local_shipping</mat-icon>
+</button>

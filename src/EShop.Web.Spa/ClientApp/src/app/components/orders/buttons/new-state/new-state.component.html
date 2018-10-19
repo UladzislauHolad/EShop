@@ -1,3 +1,9 @@
-<button class="ui button" (click)="edit(order)"><i class="pencil alternate icon"></i></button>
-<button class="ui button" (click)="delete(order)"><i class="trash icon"></i></button>
-<button class="ui button" (click)="confirm(order)"><i class="file alternate outline icon"></i></button>
+<a class="hoverable" mat-icon-button matTooltip="Edit order" (click)="edit(order)">
+    <mat-icon>edit</mat-icon>
+</a>
+<button class="hoverable" mat-icon-button matTooltip="Confirm order" (click)="confirm(order)">
+    <mat-icon>assignment</mat-icon>
+</button>
+<button class="hoverable" mat-icon-button matTooltip="Delete order" (click)="delete(order)">
+    <mat-icon>delete</mat-icon>
+</button>

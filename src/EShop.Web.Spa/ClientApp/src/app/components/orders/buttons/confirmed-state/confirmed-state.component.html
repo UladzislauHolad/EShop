@@ -1,2 +1,6 @@
-<button class="ui button" (click)="info(order)"><i class="info circle icon"></i></button>
-<button class="ui button" (click)="pay(order)"><i class="credit card outline icon"></i></button>
+<a class="hoverable" mat-icon-button matTooltip="Order info" (click)="info(order)">
+    <mat-icon>info</mat-icon>
+</a>
+<button class="hoverable" mat-icon-button matTooltip="Pay" (click)="pay(order)">
+    <mat-icon>monetization_on</mat-icon>
+</button>
