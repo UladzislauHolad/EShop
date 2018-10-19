@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EShop.Api.Infrastructure.Middleware;
 using EShop.Api.Models.CategoriesViewModels;
+using EShop.Api.Models.OrdersViewModels;
 using EShop.Api.Models.ProductsViewModels;
 using EShop.Data.EF;
 using EShop.Data.EF.Interfaces;
@@ -144,8 +145,6 @@ namespace EShop.Api
                 c.RoutePrefix = string.Empty;
             });
 
-            var builder = new ODataConventionModelBuilder();
-            builder.EntitySet<Category>(nameof(Category));
             app.UseEntityExistExceptionHandlerMiddleware();
 
             app.UseMvc(routebuilder =>
@@ -161,6 +160,8 @@ namespace EShop.Api
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<CategoryViewModel>("Categories").EntityType.Name = "Category";
             builder.EntitySet<ProductTableViewModel>("Products").EntityType.Name = "Product";
+            builder.EntitySet<OrderTableViewModel>("Orders").EntityType.Name = "Order";
+            builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
         }
     }

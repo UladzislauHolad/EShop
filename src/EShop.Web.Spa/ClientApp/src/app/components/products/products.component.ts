@@ -64,7 +64,7 @@ export class ProductsComponent implements OnInit {
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this.sort.active,
-      this.sort.direction,
+      this.sort.direction
     );
   }
 }
