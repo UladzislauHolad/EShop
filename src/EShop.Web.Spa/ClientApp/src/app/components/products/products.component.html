@@ -30,10 +30,10 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let product"> 
           <div class="actions">
-              <a class="hoverable" mat-icon-button routerLink="{{product.productId}}">
+              <a class="hoverable" mat-icon-button matToolTip="Edit" routerLink="{{product.productId}}">
                   <mat-icon>edit</mat-icon>
               </a>
-              <button class="hoverable" mat-icon-button (click)="delete(product)">
+              <button class="hoverable" mat-icon-button matTooltip="Delete" (click)="delete(product)">
                   <mat-icon>delete</mat-icon>
               </button>
           </div>

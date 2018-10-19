@@ -14,10 +14,10 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let category"> 
           <div class="actions">
-              <a class="hoverable" mat-icon-button routerLink="{{category.categoryId}}">
+              <a class="hoverable" mat-icon-button matTooltip="Edit" routerLink="{{category.categoryId}}">
                   <mat-icon>edit</mat-icon>
               </a>
-              <button class="hoverable" mat-icon-button (click)="delete(category)">
+              <button class="hoverable" mat-icon-button matTooltip="delete" (click)="delete(category)">
                   <mat-icon>delete</mat-icon>
               </button>
           </div>
