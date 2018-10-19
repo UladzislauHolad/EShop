@@ -3,6 +3,7 @@ using EShop.Api.Infrastructure;
 using EShop.Api.Models.ProductsViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ using System.Threading.Tasks;
 namespace EShop.Api.Controllers
 {
     [Authorize]
-    [Route("api/products")]
     [Produces("application/json")]
     public class ProductsController : ControllerBase
     {
@@ -34,9 +34,10 @@ namespace EShop.Api.Controllers
         /// <response code="200">Returns the list of ProductViewModel</response>
         [HttpGet]
         [ProducesResponseType(200)]
-        public IEnumerable<ProductTableViewModel> GetProducts()
+        [EnableQuery]
+        public IActionResult Get()
         {
-            return _mapper.Map<IEnumerable<ProductTableViewModel>>(_service.GetProducts());
+            return Ok(_mapper.Map<IEnumerable<ProductTableViewModel>>(_service.GetProducts()).AsQueryable());
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace EShop.Api.Controllers
         /// </remarks>
         /// <param name="id"></param>
         /// <returns>ProductViewModel</returns>
-        [HttpGet("{id}")]
+        [HttpGet("api/products/{id}")]
         public ProductViewModel GetProduct([FromRoute]int id)
         {
             return _mapper.Map<ProductViewModel>(_service.GetProduct(id));
@@ -84,7 +85,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="201">Product is created</response>
         /// <response code="422">Product is not valid</response>
-        [HttpPost]
+        [HttpPost("api/products")]
         [ProducesResponseType(201)]
         [ProducesResponseType(422)]
         public ActionResult CreateProduct([FromBody]CreateProductViewModel product)
@@ -126,7 +127,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="204">Product is updated</response>
         /// <response code="422">Product is not valid</response>
-        [HttpPatch("{id}")]
+        [HttpPatch("api/products/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(422)]
         public ActionResult UpdateProduct([FromRoute]int id, [FromBody]UpdateProductViewModel product)
@@ -153,7 +154,7 @@ namespace EShop.Api.Controllers
         /// <param name="id"></param>
         /// <returns>ProductViewModel</returns>
         /// <response code="200">Product is deleted</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("api/products/{id}")]
         [ProducesResponseType(200)]
         public ActionResult DeleteProduct([FromRoute]int id)
         {

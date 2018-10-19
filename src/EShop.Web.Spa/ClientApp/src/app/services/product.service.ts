@@ -1,10 +1,11 @@
 import { Injectable, ErrorHandler, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { Product } from '../models/product';
 import { catchError, map, tap } from 'rxjs/operators';
 import { errorHandler } from './errorHandler';
 import { ConfigService } from './config.service';
+import { IPagingService } from './IPagingService';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,16 +17,21 @@ let productsUrl = 'api/products';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class ProductService implements IPagingService<Product[]> {
+
   private errorHandler: errorHandler = new errorHandler();
 
   constructor(
     private http: HttpClient,
     private configService: ConfigService
-    ) {
-      productsUrl = this.configService.getApiUrl().concat(productsUrl);
-      categoriesUrl = this.configService.getApiUrl().concat(categoriesUrl);
-    }
+  ) {
+    productsUrl = this.configService.getApiUrl().concat(productsUrl);
+    categoriesUrl = this.configService.getApiUrl().concat(categoriesUrl);
+  }
+
+  getPaggedData(params: HttpParams): Observable<Product[]> {
+    return this.http.get<Product[]>(productsUrl, { params: params });
+  }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${productsUrl}`).pipe(

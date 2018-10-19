@@ -1,0 +1,42 @@
+table {
+    width: 100%;
+}
+  
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    padding: 5px;
+}
+
+th.mat-sort-header-sorted {
+    color: black;
+}
+
+.hoverable:hover { 
+    color: rgb(89, 93, 88);
+}
+
+.actions {
+    float: right; 
+    display: inline-flex;
+}
+
+.mat-column-name {
+    width: 20%;
+}
+
+.mat-column-price {
+    width: 10%;
+}
+
+.mat-column-count {
+    width: 10%;
+}
+
+.mat-column-description {
+    width: 50%;
+}
+
+.mat-column-actions {
+    width: 10%;
+}

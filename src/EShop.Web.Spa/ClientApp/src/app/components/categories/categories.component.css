@@ -1,4 +1,3 @@
-/* Structure */
 table {
     width: 100%;
 }
@@ -25,4 +24,9 @@ th.mat-sort-header-sorted {
 
 .hoverable:hover { 
     color: rgb(89, 93, 88);
+}
+
+.actions {
+    float: right; 
+    display: inline-flex;
 }

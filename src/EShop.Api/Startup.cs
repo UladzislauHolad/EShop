@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EShop.Api.Infrastructure.Middleware;
 using EShop.Api.Models.CategoriesViewModels;
+using EShop.Api.Models.ProductsViewModels;
 using EShop.Data.EF;
 using EShop.Data.EF.Interfaces;
 using EShop.Data.Entities;
@@ -159,6 +160,7 @@ namespace EShop.Api
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<CategoryViewModel>("Categories").EntityType.Name = "Category";
+            builder.EntitySet<ProductTableViewModel>("Products").EntityType.Name = "Product";
             return builder.GetEdmModel();
         }
     }
