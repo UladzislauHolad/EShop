@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order';
 import { ButtonEventService } from './buttons/button-event.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, fromEvent, merge } from 'rxjs';
+import { OdataDataSource } from '../categories/odata-data-source';
+import { MatPaginator, MatSort } from '@angular/material';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-orders',
@@ -12,13 +15,16 @@ import { Subscription } from 'rxjs';
 })
 export class OrdersComponent implements OnInit {
 
-  orders: Order[];
   subscriptions = new Subscription();
-  
+  columnsToDisplay = ['orderId', 'status', 'date', 'actions'];
+  dataSource: OdataDataSource<Order>;
+  total: number;
 
-  order = {
-    name: 'name'
-  }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input') input: ElementRef;
+
+ 
 
   constructor(
     private orderService: OrderService,
@@ -45,23 +51,54 @@ export class OrdersComponent implements OnInit {
         order => this.edit(order)
       )
     );
+
   }
 
   ngOnInit() {
-    this.getOrders();
+    this.dataSource = new OdataDataSource<Order>(this.orderService);
+    this.dataSource.loadData('Status', '', 0, 5, 'OrderId', 'asc');
+    this.dataSource.total$.subscribe(total => this.total = total);
+  }
+
+  ngAfterViewInit() {
+
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(250),
+        distinctUntilChanged(),
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.loadPage();
+        })
+      )
+      .subscribe();
+
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page).pipe(
+      tap(() => this.loadPage())
+    )
+      .subscribe();
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
+  loadPage() {
+    this.dataSource.loadData(
+      "Status",
+      this.input.nativeElement.value,
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction
+    );
+  }
+
   delete(order: Order) {
     this.orderService.deleteOrder(order.orderId).subscribe(
-      () => {
-        this.getOrders();
-      },
-      error => {
-      }
+      () => this.loadPage()
     );
   }
 
@@ -75,19 +112,8 @@ export class OrdersComponent implements OnInit {
 
   changeState(order: Order) {
     this.orderService.changeState(order).subscribe(
-      () => {
-        this.getOrders();
-      },
-      error => {
-      }
+      () => this.loadPage()
     );
   }
 
-  getOrders() {
-    this.orderService.getOrders().subscribe(
-      orders => {
-        this.orders = orders
-      },
-    );
-  }
 }

@@ -3,6 +3,7 @@ using EShop.Api.Infrastructure;
 using EShop.Api.Models.OrdersViewModels;
 using EShop.Services.DTO;
 using EShop.Services.Interfaces;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,6 @@ using System.Threading.Tasks;
 namespace EShop.Api.Controllers
 {
     [Authorize]
-    [Route("api/orders")]
     [Produces("application/json")]
     public class OrdersController : ControllerBase
     {
@@ -41,9 +41,10 @@ namespace EShop.Api.Controllers
         /// <response code="200">Returns list of orders</response>
         [HttpGet]
         [ProducesResponseType(200)]
-        public IEnumerable<OrderViewModel> GetOrders()
+        [EnableQuery]
+        public IQueryable<OrderTableViewModel> Get()
         {
-            return _mapper.Map<IEnumerable<OrderViewModel>>(_service.GetOrders());
+            return _mapper.Map<IEnumerable<OrderTableViewModel>>(_service.GetOrders()).AsQueryable();
         }
 
         /// <summary>
@@ -60,7 +61,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="200">Returns order</response>
         /// <response code="204">Returns no content</response>
-        [HttpGet("{id}")]
+        [HttpGet("api/orders/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         public OrderViewModel GetOrder([FromRoute]int id)
@@ -76,7 +77,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="201">Order was created</response>
         /// <response code="422">Invalid model</response>
-        [HttpPost]
+        [HttpPost("api/orders")]
         [ProducesResponseType(201)]
         [ProducesResponseType(422)]
         public ActionResult CreateOrder([FromBody]ModifyOrderViewModel order)
@@ -100,7 +101,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="204">Order was updated</response>
         /// <response code="422">Invalid model</response>
-        [HttpPatch("{id}")]
+        [HttpPatch("api/orders/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(422)]
         public ActionResult UpdateOrder([FromRoute]int id, [FromBody]ModifyOrderViewModel order)
@@ -121,7 +122,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="200">Order state is changed</response>
         /// <response code="422">Can not change state of this order</response>
-        [HttpPut("{id}")]
+        [HttpPut("api/orders/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         public ActionResult ChangeOrderState([FromRoute]int id)
@@ -144,7 +145,7 @@ namespace EShop.Api.Controllers
         /// <returns></returns>
         /// <response code="200">Order was deleted</response>
         /// <response code="422">Can not delete this order</response>
-        [HttpDelete("{id}")]
+        [HttpDelete("api/orders/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         public ActionResult DeleteOrder([FromRoute]int id)
