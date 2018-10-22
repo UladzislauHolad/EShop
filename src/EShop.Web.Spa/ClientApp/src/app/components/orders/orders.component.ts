@@ -22,10 +22,15 @@ export class OrdersComponent implements OnInit {
   dataSource: OdataDataSource<Order>;
   total: number;
   filters = new Array<Filter>();
+  maxStartDate: Date;
+  minEndDate: Date;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('input') statusFilter: ElementRef;
+  @ViewChild('status') statusFilter: ElementRef;
+  @ViewChild('startDate') startDate: ElementRef;
+  @ViewChild('endDate') endDate: ElementRef;
+
 
   constructor(
     private orderService: OrderService,
@@ -52,7 +57,10 @@ export class OrdersComponent implements OnInit {
         order => this.edit(order)
       )
     );
-
+    
+    // this.maxStartDate = new Date(2020, 1);
+    // this.minEndDate = new Date(this.maxStartDate);
+    // this.minEndDate.setDate(this.maxStartDate.getDate() + 1);
   }
 
   ngOnInit() {
@@ -84,6 +92,20 @@ export class OrdersComponent implements OnInit {
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
+  }
+
+  startDateChange(currentStartDate: Date) {
+    this.minEndDate = new Date(currentStartDate);
+    this.minEndDate.setDate(currentStartDate.getDate() + 1);
+    if(currentStartDate >= this.endDate.nativeElement)
+      this.endDate.nativeElement.value = null;
+  }  
+
+  endDateChange(currentEndDate: Date) {
+    this.maxStartDate = new Date(currentEndDate);
+    this.maxStartDate.setDate(currentEndDate.getDate() - 1);
+    if(currentEndDate <= this.startDate.nativeElement)
+      this.startDate.nativeElement.value = null;
   }
 
   loadPage() {

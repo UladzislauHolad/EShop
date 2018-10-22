@@ -1,15 +1,35 @@
 <div class="ui container">
-    <a mat-raised-button routerLink color="primary" routerLink="new">Create</a>
+  <a mat-raised-button routerLink color="primary" routerLink="new">Create</a>
   <div class="mat-elevation-z8">
-    <mat-form-field>
-      <input matInput placeholder="Search" #input>
-    </mat-form-field>
-
-    <table mat-table [dataSource]="dataSource" matSort matSortActive="Status" matSortDirection="asc" matSortDisableClear>
-        <ng-container matColumnDef="orderId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
-            <td mat-cell *matCellDef="let order"> {{order.orderId}} </td>
-          </ng-container>
+    <table>
+      <tr>
+        <td>
+          <mat-form-field>
+            <input matInput placeholder="Status" #status>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input #startDate matInput [max]="maxStartDate" [matDatepicker]="dpStart" (dateChange)="startDateChange($event.value)" placeholder="Choose a date" disabled>
+            <mat-datepicker-toggle matSuffix [for]="dpStart"></mat-datepicker-toggle>
+            <mat-datepicker #dpStart disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field>
+            <input #endDate matInput [min]="minEndDate" [matDatepicker]="dpEnd" (dateChange)="endDateChange($event.value)" placeholder="Choose a date" disabled>
+            <mat-datepicker-toggle matSuffix [for]="dpEnd"></mat-datepicker-toggle>
+            <mat-datepicker #dpEnd disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <table mat-table [dataSource]="dataSource" matSort matSortActive="Status" matSortDirection="asc"
+      matSortDisableClear>
+      <ng-container matColumnDef="orderId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id </th>
+        <td mat-cell *matCellDef="let order"> {{order.orderId}} </td>
+      </ng-container>
 
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
@@ -25,7 +45,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let order">
           <div class="actions">
-              <app-buttons [order]="order"></app-buttons>
+            <app-buttons [order]="order"></app-buttons>
           </div>
         </td>
       </ng-container>
