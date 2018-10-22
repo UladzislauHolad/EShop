@@ -101,6 +101,7 @@ namespace EShop.Api
             services.AddTransient<IPickupPointService, PickupPointService>();
             services.AddTransient<IOrderStatusChangeService, OrderStatusChangeService>();
             services.AddTransient<IProductOrderService, ProductOrderService>();
+            services.AddTransient<ICustomerService, СustomerService>();
 
             services.AddAutoMapper(typeof(Startup).Assembly, typeof(Services.Profiles.CustomerDTOProfile).Assembly);
 
