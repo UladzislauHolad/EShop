@@ -24,7 +24,7 @@ namespace EShop.Api.Validators.Orders
             RuleFor(order => order.PaymentMethodId).NotEmpty();
 
             RuleFor(order => order.PickupPointId)
-                .Must(p => p != 0).When(order => order.DeliveryMethodId == 2)
+                .Must(p => p != 0).When(order => order.DeliveryMethodId == 1)
                 .WithMessage("This delivery method must have pickup point");
 
             RuleFor(order => order.Comment).NotEmpty();

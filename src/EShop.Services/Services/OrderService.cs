@@ -29,12 +29,15 @@ namespace EShop.Services.Services
 
         public OrderDTO Create(OrderDTO orderDTO)
         {
-            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.CustomerId));
+            var existCustomer = _mapper.Map<CustomerDTO>(_customerRepository.Get(orderDTO.Customer.CustomerId));
 
             if (!orderDTO.Customer.Equals(existCustomer))
-                orderDTO.CustomerId = 0;
+                orderDTO.Customer.CustomerId = 0;
             else
+            {
+                orderDTO.CustomerId = existCustomer.CustomerId;
                 orderDTO.Customer = null;
+            }
 
             if (orderDTO.PickupPointId == 0)
                 orderDTO.PickupPointId = null;

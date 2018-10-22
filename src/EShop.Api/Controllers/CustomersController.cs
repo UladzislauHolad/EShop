@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EShop.Api.Models.CustomersViewModels;
+using EShop.Api.Models.OrdersViewModels;
 using EShop.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace EShop.Api.Controllers
         [HttpGet("api/customers")]
         public IActionResult Get()
         {
-            return Ok(_mapper.Map<IEnumerable<CustomerListViewModel>>(_service.GetCustomers()));
+            return Ok(_mapper.Map<IEnumerable<CustomerViewModel>>(_service.GetCustomers()));
         }
     }
 }

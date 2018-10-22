@@ -23,10 +23,10 @@ namespace EShop.Api.Validators.Orders
             RuleFor(c => c.Patronymic).MinimumLength(2);
             RuleFor(c => c.Patronymic).MaximumLength(20);
 
-            RuleFor(c => c.Patronymic).NotEmpty();
-            RuleFor(c => c.Phone).Matches(@"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/");
+            RuleFor(c => c.Phone).NotEmpty();
+            //RuleFor(c => c.Phone).Matches(@"/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/");
 
-            RuleFor(c => c.Patronymic).NotEmpty();
+            RuleFor(c => c.Address).NotEmpty();
             RuleFor(c => c.Address).MinimumLength(10);
             RuleFor(c => c.Address).MaximumLength(50);
         }

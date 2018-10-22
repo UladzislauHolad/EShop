@@ -1,8 +1,15 @@
+<mat-form-field>
+    <mat-select (selectionChange)="customerChange($event.value)" placeholder="Customer">
+      <mat-option *ngFor="let customer of existCustomers" [value]="customer">
+        {{customer.firstName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 <form *ngIf="myForm" [formGroup]="myForm" class="ui equal width form" (ngSubmit)="onSubmit()">
   <div class="field" [class.error]="!firstName.valid && firstName.dirty">
     <label for="firstName">First name:</label>
     <div class="ui input">
-      <input type="text" placeholder="First name" [formControl]="firstName" (input)="order.customer.firstName = $event.target.value">
+      <input type="text" placeholder="First name" [formControl]="firstName" [(ngModel)]="order.customer.firstName">
     </div>
     <div *ngIf="!firstName.valid && firstName.dirty" class="ui mini negative message">
       <div *ngIf="firstName.errors.required">
@@ -20,7 +27,7 @@
   <div class="field" [class.error]="!lastName.valid && lastName.dirty">
     <label for="lastName">Last name:</label>
     <div class="ui input">
-      <input type="text" placeholder="Last name" [formControl]="lastName" (input)="order.customer.lastName = $event.target.value">
+      <input type="text" placeholder="Last name" [formControl]="lastName" [(ngModel)]="order.customer.lastName">
     </div>
     <div *ngIf="!lastName.valid && lastName.dirty" class="ui mini negative message">
       <div *ngIf="lastName.errors.required">
@@ -38,7 +45,7 @@
   <div class="field" [class.error]="!patronymic.valid && patronymic.dirty">
     <label for="patronymic">Patronymic:</label>
     <div class="ui input">
-      <input type="text" placeholder="Patronymic" [formControl]="patronymic" (input)="order.customer.patronymic = $event.target.value">
+      <input type="text" placeholder="Patronymic" [formControl]="patronymic" [(ngModel)]="order.customer.patronymic">
     </div>
     <div *ngIf="!patronymic.valid && patronymic.dirty" class="ui mini negative message">
       <div *ngIf="patronymic.errors.required">
@@ -56,7 +63,7 @@
   <div class="field" [class.error]="!phone.valid && phone.dirty">
     <label for="phone">Phone:</label>
     <div class="ui input">
-      <input type="text" placeholder="Phone" [formControl]="phone" (input)="order.customer.phone = $event.target.value">
+      <input type="text" placeholder="Phone" [formControl]="phone" [(ngModel)]="order.customer.phone">
     </div>
     <div *ngIf="!phone.valid && phone.dirty" class="ui mini negative message">
       <div *ngIf="phone.errors.required">
@@ -68,7 +75,7 @@
   <div class="field" [class.error]="!address.valid && address.dirty">
     <label for="address">Address:</label>
     <div class="ui input">
-      <input type="text" placeholder="Address" [formControl]="address" (input)="order.customer.address = $event.target.value">
+      <input type="text" placeholder="Address" [formControl]="address" [(ngModel)]="order.customer.address">
     </div>
     <div *ngIf="!address.valid && address.dirty" class="ui mini negative message">
       <div *ngIf="address.errors.required">
@@ -104,8 +111,8 @@
   <div class="fields">
     <div class="field">
       <label for="payment">Payment method:</label>
-      <ng-select [items]="existPayments" bindValue="paymentMethodId" bindLabel="name" labelForId="payment" formControlName="payment" notFoundText="No payment methods"
-        markFirst="true" (change)="order.paymentMethodId = $event?.paymentMethodId">
+      <ng-select [items]="existPayments" bindValue="paymentMethodId" bindLabel="name" labelForId="payment"
+        formControlName="payment" notFoundText="No payment methods" markFirst="true" (change)="order.paymentMethodId = $event?.paymentMethodId">
       </ng-select>
       <div *ngIf="!payment.valid && delivery.dirty" class="ui mini negative message">
         <div *ngIf="payment.errors.required">
@@ -127,17 +134,17 @@
     </div>
 
     <div class="field">
-        <label for="pickup">Pickup point:</label>
-        <ng-select [items]="existPickups" bindValue="pickupPointId" bindLabel="name" labelForId="pickup" formControlName="pickup"
-          notFoundText="No pickup methods" markFirst="true" (change)="order.pickupPointId = $event.pickupPointId">
-        </ng-select>
-        <div *ngIf="!pickup.valid && pickup.dirty && pickup.enabled" class="ui mini negative message">
-          <div *ngIf="pickup.errors?.required">
-            Pickup point is required
-          </div>
+      <label for="pickup">Pickup point:</label>
+      <ng-select [items]="existPickups" bindValue="pickupPointId" bindLabel="name" labelForId="pickup" formControlName="pickup"
+        notFoundText="No pickup methods" markFirst="true" (change)="order.pickupPointId = $event.pickupPointId">
+      </ng-select>
+      <div *ngIf="!pickup.valid && pickup.dirty && pickup.enabled" class="ui mini negative message">
+        <div *ngIf="pickup.errors?.required">
+          Pickup point is required
         </div>
       </div>
-  </div>  
+    </div>
+  </div>
 
   <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
   <button class="ui button" (click)="goBack()" type="button">Back</button>

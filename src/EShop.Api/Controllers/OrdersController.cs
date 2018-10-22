@@ -112,7 +112,7 @@ namespace EShop.Api.Controllers
                 return NoContent();
             }
 
-            return StatusCode(StatusCodes.Status422UnprocessableEntity);
+            return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
         }
 
         /// <summary>

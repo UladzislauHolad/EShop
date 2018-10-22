@@ -8,6 +8,8 @@ import { DeliveryMethod } from '../../../models/deliveryMethod';
 import { PickupService } from '../../../services/pickup.service';
 import { PickupPoint } from '../../../models/pickupPoint';
 import { Router } from '@angular/router';
+import { Customer } from 'src/app/models/customer';
+import { CustomerService } from 'src/app/services/customer.service';
 
 
 @Component({
@@ -24,6 +26,7 @@ export class OrderFormComponent implements OnInit {
   existPayments: PaymentMethod[];
   existDeliveries: DeliveryMethod[];
   existPickups: PickupPoint[];
+  existCustomers: Customer[];
 
   myForm: FormGroup;
   customerId: AbstractControl;
@@ -44,12 +47,14 @@ export class OrderFormComponent implements OnInit {
     private paymentService: PaymentService,
     private deliveryService: DeliveryService,
     private pickupService: PickupService,
+    private customerService: CustomerService
   ) { }
 
   ngOnInit() {
     this.getPayments();
     this.getDeliveries();
     this.getPickups();
+    this.getCustomers();
     this.createForm(this.order);
   }
 
@@ -58,9 +63,9 @@ export class OrderFormComponent implements OnInit {
   }
 
   onDeliveryChange() {
-    if(this.delivery.value !== null) {
+    if (this.delivery.value !== null) {
       this.order.deliveryMethodId = this.delivery.value.deliveryMethodId;
-      if(this.delivery.value.name === 'Pickup') {
+      if (this.delivery.value.name === 'Pickup') {
         this.pickup.enable();
         this.order.pickupPointId = this.pickup.value;
       }
@@ -157,7 +162,7 @@ export class OrderFormComponent implements OnInit {
     this.delivery = this.myForm.controls['delivery'];
     this.pickup = this.myForm.controls['pickup'];
 
-    if(this.existDeliveries === null || this.order.deliveryMethodId === null)
+    if (this.existDeliveries === null || this.order.deliveryMethodId === null)
       this.pickup.disable();
     else {
       this.pickup.disable();
@@ -183,6 +188,18 @@ export class OrderFormComponent implements OnInit {
     this.pickupService.getPickups().subscribe(
       pickups => this.existPickups = pickups,
     );
+  }
+
+  getCustomers() {
+    this.customerService.getCustomersToList().subscribe(
+      customers => {
+        this.existCustomers = customers;
+      }
+    )
+  }
+
+  customerChange(customer: Customer) {
+    this.order.customer = customer;
   }
 
   goBack() {

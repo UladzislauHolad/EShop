@@ -7,6 +7,7 @@ namespace EShop.Api.Models.OrdersViewModels
 {
     public class ModifyOrderViewModel
     {
+        public int OrderId { get; set; }
         public DateTime Date { get; set; }
         public string Status { get; set; }
         public string Comment { get; set; }
