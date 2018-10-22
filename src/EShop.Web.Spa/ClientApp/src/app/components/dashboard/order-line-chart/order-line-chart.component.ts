@@ -34,7 +34,6 @@ export class OrderLineChartComponent implements OnInit {
 
   ngOnInit() {
     this.options.legendTitle = 'Status';
-    console.dir(this.data);    
   }
 
 }

@@ -54,13 +54,10 @@ export class OrderFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.dir(this.order);
     this.onFormSubmit.emit(this.order);
   }
 
   onDeliveryChange() {
-    console.dir(this.delivery.value);
-    console.dir(this.pickup.value);
     if(this.delivery.value !== null) {
       this.order.deliveryMethodId = this.delivery.value.deliveryMethodId;
       if(this.delivery.value.name === 'Pickup') {
@@ -77,8 +74,6 @@ export class OrderFormComponent implements OnInit {
       this.order.pickupPointId = null;
       this.order.deliveryMethodId = null;
     }
-
-    console.dir(this.order);
   }
 
   createForm(order: Order) {

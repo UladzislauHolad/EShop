@@ -55,7 +55,6 @@ import { ConfigService } from './services/config.service';
 import { CreateUserComponent } from './components/users/create-user/create-user.component';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
-  console.log('APP_INITIALIZER STARTING');
   return () => oidcConfigService.load(`${window.location.origin}/api/config/configuration`);
 }
 

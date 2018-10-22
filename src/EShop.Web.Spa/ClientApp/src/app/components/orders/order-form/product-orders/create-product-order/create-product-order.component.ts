@@ -29,8 +29,6 @@ export class CreateProductOrderComponent implements OnInit {
   }
 
   onSubmit(productOrder: ProductOrder) {
-    console.log("create");
-    console.dir(productOrder);
     this.createProductOrder(productOrder);
   }
   

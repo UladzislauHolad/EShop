@@ -6,7 +6,6 @@ import { MatSort, MatPaginator } from '@angular/material';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Filter } from 'src/app/helpers/filters/filter';
-import { FilterTypes } from 'src/app/models/filter-types';
 import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
 
 @Component({

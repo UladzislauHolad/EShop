@@ -22,12 +22,10 @@ export class OdataDataSource<T> implements DataSource<T> {
 
 
     connect(collectionViewer: CollectionViewer): Observable<T[]> {
-        console.log('connect');
         return this.dataSubject.asObservable();
     }
 
     disconnect(collectionViewer: CollectionViewer): void {
-        console.log('disconnect');
         this.dataSubject.complete();
         this.loadingSubject.complete();
     }
@@ -56,7 +54,6 @@ export class OdataDataSource<T> implements DataSource<T> {
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
             ).subscribe(tableData => {
-                console.dir(tableData);
                 this.totalSubject.next((tableData as TableData<T>).total)
                 this.dataSubject.next((tableData as TableData<T>).data);
             });

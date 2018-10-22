@@ -43,7 +43,6 @@ export class CategoryFormComponent implements OnInit {
       data => {
         this.existCategories = (data as any).value;
         this.existCategories.unshift(this.noParentCategory);
-        console.dir(this.existCategories);
       }
     );
   }

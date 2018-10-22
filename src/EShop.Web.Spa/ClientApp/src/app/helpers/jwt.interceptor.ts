@@ -11,7 +11,6 @@ export class JwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         let token = this.oidcSecurityService.getToken();
-        console.log('token');
         console.dir(token);
         if (token) {
             request = request.clone({
@@ -20,7 +19,6 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             });
         }
-        console.dir(request);
 
         return next.handle(request);
     }

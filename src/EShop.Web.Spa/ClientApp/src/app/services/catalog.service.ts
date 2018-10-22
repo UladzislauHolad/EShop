@@ -20,8 +20,6 @@ export class CatalogService {
     }
   
   getCategoryNestedNodes(): Observable<CategoryNestedNode[]> {
-    return this.http.get<CategoryNestedNode[]>(`${catalogUrl}/category-nodes`).pipe(
-      tap(data => console.dir(data))
-    )
+    return this.http.get<CategoryNestedNode[]>(`${catalogUrl}/category-nodes`);
   }
 }

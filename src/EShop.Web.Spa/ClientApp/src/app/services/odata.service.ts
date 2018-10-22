@@ -18,7 +18,6 @@ export class OdataService<T> {
     sortField: string = '',
     sortDirection: string = ''): Observable<T> {
     
-    console.dir(filters);
     let params = new HttpParams()
       .set('$skip', (pageIndex * pageSize).toString())
       .set('$top', pageSize.toString())

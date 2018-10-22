@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
     this.dashboardService.getOrderLineChartInfo().subscribe(
       data => {
         this.orderLineChartData = data;
-        console.dir(this.orderLineChartData);
       }
     )
   }

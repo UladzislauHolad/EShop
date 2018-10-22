@@ -42,7 +42,6 @@ export class ProductOrdersComponent implements OnInit {
 
   save(productOrder: ProductOrder)
   {
-    console.dir(productOrder);
     this.productOrderService.updateProductOrder(this.orderId, productOrder).subscribe(
       () => {
         productOrder.isEditing = !productOrder.isEditing;

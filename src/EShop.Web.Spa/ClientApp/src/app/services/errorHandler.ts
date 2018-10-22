@@ -18,7 +18,6 @@ export class errorHandler {
 
         if(error.error.message)
           message = error.error.message;
-        // return an observable with a user-facing error message
         return throwError(message);
       };
 }
