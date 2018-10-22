@@ -9,6 +9,9 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Filter } from 'src/app/helpers/filters/filter';
 import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
+import { GreaterThanFilter } from 'src/app/helpers/filters/greater-than-filter';
+import { LessThanFilter } from 'src/app/helpers/filters/less-than-filter';
+import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-orders',
@@ -30,7 +33,6 @@ export class OrdersComponent implements OnInit {
   @ViewChild('status') statusFilter: ElementRef;
   @ViewChild('startDate') startDate: ElementRef;
   @ViewChild('endDate') endDate: ElementRef;
-
 
   constructor(
     private orderService: OrderService,
@@ -57,10 +59,6 @@ export class OrdersComponent implements OnInit {
         order => this.edit(order)
       )
     );
-    
-    // this.maxStartDate = new Date(2020, 1);
-    // this.minEndDate = new Date(this.maxStartDate);
-    // this.minEndDate.setDate(this.maxStartDate.getDate() + 1);
   }
 
   ngOnInit() {
@@ -70,7 +68,6 @@ export class OrdersComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-
     fromEvent(this.statusFilter.nativeElement, 'keyup')
       .pipe(
         debounceTime(250),
@@ -99,6 +96,9 @@ export class OrdersComponent implements OnInit {
     this.minEndDate.setDate(currentStartDate.getDate() + 1);
     if(currentStartDate >= this.endDate.nativeElement)
       this.endDate.nativeElement.value = null;
+    
+    this.paginator.pageIndex = 0;
+    this.loadPage();
   }  
 
   endDateChange(currentEndDate: Date) {
@@ -106,10 +106,18 @@ export class OrdersComponent implements OnInit {
     this.maxStartDate.setDate(currentEndDate.getDate() - 1);
     if(currentEndDate <= this.startDate.nativeElement)
       this.startDate.nativeElement.value = null;
+
+    this.paginator.pageIndex = 0;
+    this.loadPage();
   }
 
   loadPage() {
-    this.filters.push(new ContainsFilter("Status", this.statusFilter.nativeElement.value));
+    if(this.startDate.nativeElement.value)
+      this.filters.push(new GreaterThanFilter('Date', new Date(this.startDate.nativeElement.value).toISOString()));
+    if(this.endDate.nativeElement.value)
+      this.filters.push(new LessThanFilter('Date', new Date(this.endDate.nativeElement.value).toISOString()));
+    
+    this.filters.push(new ContainsFilter('Status', this.statusFilter.nativeElement.value));
 
     this.dataSource.loadData(
       this.filters,
