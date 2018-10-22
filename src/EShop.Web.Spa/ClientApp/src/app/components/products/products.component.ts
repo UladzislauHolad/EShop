@@ -5,6 +5,9 @@ import { OdataDataSource } from '../categories/odata-data-source';
 import { MatSort, MatPaginator } from '@angular/material';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Filter } from 'src/app/helpers/filters/filter';
+import { FilterTypes } from 'src/app/models/filter-types';
+import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
 
 @Component({
   selector: 'app-products',
@@ -16,23 +19,28 @@ export class ProductsComponent implements OnInit {
   columnsToDisplay = ['name', 'count', 'price', 'description', 'actions'];
   dataSource: OdataDataSource<Product>;
   total: number;
+  filters = new Array<Filter>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('input') input: ElementRef;
+  @ViewChild('nameInput') nameFilter: ElementRef;
+  @ViewChild('descInput') descFilter: ElementRef;
 
   constructor(
     private productService: ProductService) { }
 
   ngOnInit() {
     this.dataSource = new OdataDataSource<Product>(this.productService);
-    this.dataSource.loadData('Name', '', 0, 5, 'ProductId', 'asc');
+    this.dataSource.loadData(this.filters, 0, 5, 'ProductId', 'asc');
     this.dataSource.total$.subscribe(total => this.total = total);
   }
 
   ngAfterViewInit() {
-
-    fromEvent(this.input.nativeElement, 'keyup')
+  
+    merge(
+      fromEvent(this.nameFilter.nativeElement, 'keyup'),
+      fromEvent(this.descFilter.nativeElement, 'keyup')
+      )
       .pipe(
         debounceTime(250),
         distinctUntilChanged(),
@@ -58,13 +66,17 @@ export class ProductsComponent implements OnInit {
   }
 
   loadPage() {
+    this.filters.push(new ContainsFilter("Name", this.nameFilter.nativeElement.value));
+    this.filters.push(new ContainsFilter("Description", this.descFilter.nativeElement.value));
+
     this.dataSource.loadData(
-      "Name",
-      this.input.nativeElement.value,
+      this.filters,
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction
     );
+
+    this.filters = [];
   }
 }

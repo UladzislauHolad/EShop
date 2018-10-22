@@ -8,6 +8,8 @@ import { DataSource } from '@angular/cdk/table';
 import { tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { merge } from 'rxjs/internal/observable/merge';
 import { fromEvent } from 'rxjs';
+import { Filter } from 'src/app/helpers/filters/filter';
+import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
 
 @Component({
   selector: 'app-categories',
@@ -18,23 +20,24 @@ export class CategoriesComponent implements OnInit {
   columnsToDisplay = ['name', 'actions'];
   dataSource: OdataDataSource<Category>;
   total: number;
+  filters = new Array<Filter>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('input') input: ElementRef;
+  @ViewChild('input') nameFilter: ElementRef;
 
   constructor(
     private categoryService: CategoryService) { }
 
   ngOnInit(): void {
     this.dataSource = new OdataDataSource<Category>(this.categoryService);
-    this.dataSource.loadData('Name', '', 0, 5, 'CategoryId', 'asc');
+    this.dataSource.loadData(this.filters, 0, 5, 'CategoryId', 'asc');
     this.dataSource.total$.subscribe(total => this.total = total);
   }
 
   ngAfterViewInit() {
 
-    fromEvent(this.input.nativeElement, 'keyup')
+    fromEvent(this.nameFilter.nativeElement, 'keyup')
       .pipe(
         debounceTime(250),
         distinctUntilChanged(),
@@ -63,14 +66,17 @@ export class CategoriesComponent implements OnInit {
   }
 
   loadPage() {
+    this.filters.push(new ContainsFilter("Name", this.nameFilter.nativeElement.value));
+
     this.dataSource.loadData(
-      "Name",
-      this.input.nativeElement.value,
+      this.filters,
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       );
+    
+    this.filters = [];
   }
 }
 

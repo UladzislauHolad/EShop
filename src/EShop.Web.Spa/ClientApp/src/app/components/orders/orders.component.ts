@@ -7,6 +7,8 @@ import { Subscription, fromEvent, merge } from 'rxjs';
 import { OdataDataSource } from '../categories/odata-data-source';
 import { MatPaginator, MatSort } from '@angular/material';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import { Filter } from 'src/app/helpers/filters/filter';
+import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
 
 @Component({
   selector: 'app-orders',
@@ -19,12 +21,11 @@ export class OrdersComponent implements OnInit {
   columnsToDisplay = ['orderId', 'status', 'date', 'actions'];
   dataSource: OdataDataSource<Order>;
   total: number;
+  filters = new Array<Filter>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('input') input: ElementRef;
-
- 
+  @ViewChild('input') statusFilter: ElementRef;
 
   constructor(
     private orderService: OrderService,
@@ -56,13 +57,13 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource = new OdataDataSource<Order>(this.orderService);
-    this.dataSource.loadData('Status', '', 0, 5, 'OrderId', 'asc');
+    this.dataSource.loadData(this.filters, 0, 5, 'OrderId', 'asc');
     this.dataSource.total$.subscribe(total => this.total = total);
   }
 
   ngAfterViewInit() {
 
-    fromEvent(this.input.nativeElement, 'keyup')
+    fromEvent(this.statusFilter.nativeElement, 'keyup')
       .pipe(
         debounceTime(250),
         distinctUntilChanged(),
@@ -86,14 +87,17 @@ export class OrdersComponent implements OnInit {
   }
 
   loadPage() {
+    this.filters.push(new ContainsFilter("Status", this.statusFilter.nativeElement.value));
+
     this.dataSource.loadData(
-      "Status",
-      this.input.nativeElement.value,
+      this.filters,
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction
     );
+
+    this.filters = [];
   }
 
   delete(order: Order) {

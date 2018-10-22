@@ -4,6 +4,7 @@ import { catchError, finalize, map } from "rxjs/operators";
 import { OdataService } from "src/app/services/odata.service";
 import { IPagingService } from "src/app/services/IPagingService";
 import { TableData } from "src/app/models/table-data";
+import { Filter } from "src/app/helpers/filters/filter";
 
 export class OdataDataSource<T> implements DataSource<T> {
 
@@ -32,18 +33,16 @@ export class OdataDataSource<T> implements DataSource<T> {
     }
 
     loadData(
-        filterField: string,
-        filter: string,
+        filters: Filter[],
         pageIndex: number,
         pageSize: number, 
         sortField: string, 
         sortDirection: string) {
-        console.log('load');
+
         this.loadingSubject.next(true);
 
         this.odataService.getPaggedData(
-            filterField,
-            filter,
+            filters,
             pageIndex,
             pageSize,
             sortField, 
