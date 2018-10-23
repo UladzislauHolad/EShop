@@ -199,7 +199,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   customerChange(customer: Customer) {
-    this.order.customer = customer;
+    this.order.customer = Object.assign({}, customer)
   }
 
   goBack() {
