@@ -1,0 +1,17 @@
+<mat-form-field class="chip-list">
+  <mat-chip-list #chipList [formControl]="chipsCtrl" required>
+    <mat-chip *ngFor="let category of categories" [selectable]="selectable" [removable]="removable" (removed)="remove(category)">
+      {{category.name}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
+  <mat-error *ngIf="chipsCtrl.errors?.required">This field is required</mat-error>
+  <input placeholder="Categories" #categoryInput [formControl]="categoryCtrl" [matAutocomplete]="auto"
+    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur">
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+      {{category.name}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

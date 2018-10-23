@@ -1,84 +1,39 @@
-<form *ngIf="myForm" [formGroup]="myForm" class="ui form" (ngSubmit)="onSubmit(myForm.value)">
-  <div class="field" [class.error]="!name.valid && name.dirty">
-    <label for="name">Product name:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Product name" [formControl]="myForm.controls['name']">
-    </div>
-    <div *ngIf="!name.valid && name.dirty" class="ui mini negative message">
-      <div *ngIf="name.errors.required">
-        Name is required
-      </div>
-      <div *ngIf="name.errors.minlength">
-        Name must be at least 4 characters long
-      </div>
-      <div *ngIf="name.errors.maxlength">
-        Name must be less than 51 characters long
-      </div>
-    </div>
-  </div>
+<form class="form" *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="onSubmit(myForm.value)">
+  <mat-form-field class="input-full-width">
+    <mat-label>Product name</mat-label>
+    <input matInput [formControl]="name" maxlength="50" placeholder="Provide product name" required>
+    <mat-hint align="end">{{name.value.length}} / 50</mat-hint>
+    <mat-error *ngIf="name.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="name.errors?.minlength">Minimum 4 characters</mat-error>
+  </mat-form-field>
 
-  <div class="field" [class.error]="!price.valid && price.dirty">
-    <label for="price">Price:</label>
-    <div class="ui input">
-      <input type="number" placeholder="Price" [formControl]="myForm.controls['price']">
-    </div>
-    <div *ngIf="!price.valid && price.dirty" class="ui mini negative message">
-      <div *ngIf="price.errors.required">
-        Price is required
-      </div>
-      <div *ngIf="price.errors?.min">
-        Minimum valid price is 0.01
-      </div>
-    </div>
-  </div>
+  <mat-form-field class="input-full-width">
+    <mat-label>Product price</mat-label>
+    <input matInput [formControl]="price" type="number" min="0.01" step="0.01" placeholder="Provide product price"
+      required>
+    <span matSuffix>$&nbsp;</span>
+    <mat-error *ngIf="price.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="price.errors?.min">Minimum valid price is 0.01</mat-error>
+  </mat-form-field>
 
-  <div class="field" [class.error]="!count.valid && count.dirty">
-    <label for="count">Count:</label>
-    <div class="ui input">
-      <input type="number" placeholder="Count" [formControl]="myForm.controls['count']">
-    </div>
-    <div *ngIf="!count.valid && count.dirty" class="ui mini negative message">
-      <div *ngIf="count.errors.required">
-        count is required
-      </div>
-      <div *ngIf="count.errors?.min">
-        Minimum valid count is 1
-      </div>
-    </div>
-  </div>
+  <mat-form-field class="input-full-width">
+    <mat-label>Product count</mat-label>
+    <input matInput [formControl]="count" type="number" min="1" step="1" placeholder="Provide product count" required>
+    <mat-error *ngIf="count.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="count.errors?.min">Minimum valid count is 1</mat-error>
+  </mat-form-field>
 
-  <div class="field" [class.error]="!description.valid && description.dirty">
-    <label for="description">Description:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Description" [formControl]="myForm.controls['description']">
-    </div>
-    <div *ngIf="!description.valid && description.dirty" class="ui mini negative message">
-      <div *ngIf="description.errors.required">
-        Description is required
-      </div>
-      <div *ngIf="description.errors.minlength">
-        Description must be at least 20 characters long
-      </div>
-      <div *ngIf="description.errors.maxlength">
-        Description must be less than 501 characters long
-      </div>
-    </div>
-  </div>
+  <mat-form-field class="input-full-width">
+    <mat-label>Product description</mat-label>
+    <textarea matInput [formControl]="description" maxlength="500" placeholder="Provide product description"></textarea>
+    <mat-hint align="end">{{description.value.length}} / 500</mat-hint>
+    <mat-error *ngIf="description.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="description.errors?.minlength">Minimum 20 characters</mat-error>
+  </mat-form-field>
 
+  <app-category-chips *ngIf="existCategories && categories" [chipsCtrl]="categories" [categories]="product.categories"
+    [existCategories]="existCategories"></app-category-chips>
 
-  <div class="field" [class.error]="!categories.valid && categories.dirty">
-    <ng-select [items]="existCategories" bindLabel="name" [multiple]="true" placeholder="Select categories"
-      clearAllText="Clear" formControlName="categories" [closeOnSelect]="false">
-    </ng-select>
-    <div *ngIf="!categories.valid && categories.dirty" class="ui mini negative message">
-      <div *ngIf="categories.errors.required">
-        Categories is required
-      </div>
-    </div>
-  </div>
-
-
-  <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
-  <button class="ui button" (click)="goBack()" type="button">Cancel</button>
-  <div *ngIf="!myForm.valid && myForm.dirty" class="ui negative message">Form is Invalid</div>
+  <button type="submit" mat-flat-button [disabled]="!myForm.valid" color="primary">Submit</button>
+  <a mat-flat-button color="basic" routerLink="/products">Back</a>
 </form>

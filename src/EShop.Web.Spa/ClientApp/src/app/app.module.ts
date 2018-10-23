@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AppRoutingModule } from './/app-routing.module';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule, MatTableModule, MatPaginator, MatPaginatorModule, MatTableDataSource, MatSortModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule } from '@angular/material';
+import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule, MatTableModule, MatPaginator, MatPaginatorModule, MatTableDataSource, MatSortModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatChipsModule, MatAutocompleteModule } from '@angular/material';
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
 import { ODataModule } from 'odata-v4-ng';
 
@@ -53,6 +53,7 @@ import { AutoLoginComponent } from './auto-login/auto-login.component';
 import { CallbackComponent } from './components/callback/callback.component';
 import { ConfigService } from './services/config.service';
 import { CreateUserComponent } from './components/users/create-user/create-user.component';
+import { CategoryChipsComponent } from './components/products/product-form/category-chips/category-chips.component';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   return () => oidcConfigService.load(`${window.location.origin}/api/config/configuration`);
@@ -98,7 +99,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     UsersComponent,
     AutoLoginComponent,
     CallbackComponent,
-    CreateUserComponent
+    CreateUserComponent,
+    CategoryChipsComponent
   ],
   imports: [
     BrowserModule,
@@ -126,6 +128,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     MatProgressSpinnerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatChipsModule,
+    MatAutocompleteModule,
     MatSelectModule,
     AuthModule.forRoot(),
     ODataModule

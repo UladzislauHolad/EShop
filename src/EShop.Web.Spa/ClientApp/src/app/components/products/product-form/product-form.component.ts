@@ -7,13 +7,14 @@ import { Category } from '../../../models/category';
 import { Product } from '../../../models/product';
 import { Location } from '@angular/common';
 
+
+
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit {
-
   @Input() product: Product;
   @Input() processing: boolean;
 
@@ -60,8 +61,8 @@ export class ProductFormComponent implements OnInit {
 
   getCategories(): void {
     this.categoryService.getCategories()
-      .subscribe(categories => {
-        this.existCategories = categories;
+      .subscribe(categoriesOdata => {
+        this.existCategories = (categoriesOdata as any).value;
       });
   }
 
