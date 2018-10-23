@@ -10,6 +10,6 @@ export class ContainsFilter implements Filter {
     }
     
     public toString(): string {
-        return `contains(tolower(${this.filterField}),'${this.filterValue}')`;
+        return `contains(tolower(${this.filterField}),'${this.filterValue.toLowerCase()}')`;
     }
 }
