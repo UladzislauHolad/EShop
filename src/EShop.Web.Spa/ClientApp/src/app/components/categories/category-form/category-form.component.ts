@@ -1,9 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { CategoryService } from '../../../services/category.service';
-import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { Category } from '../../../models/category';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-form',
@@ -29,8 +27,7 @@ export class CategoryFormComponent implements OnInit {
 
   constructor(
     private categoryService: CategoryService,
-    private formBuilder: FormBuilder,
-    private router: Router
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
@@ -70,9 +67,5 @@ export class CategoryFormComponent implements OnInit {
 
   onSubmit(category: Category){
     this.submitForm.emit(category);
-  }
-
-  goBack(){
-    this.router.navigate(['categories'])
   }
 }

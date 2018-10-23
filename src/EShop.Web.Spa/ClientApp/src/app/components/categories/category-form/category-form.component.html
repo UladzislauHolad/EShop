@@ -1,36 +1,21 @@
-<form *ngIf="myForm" [formGroup]="myForm" class="ui form" (ngSubmit)="onSubmit(myForm.value)">
-  <div class="field" [class.error]="!name.valid && name.dirty">
-    <label for="name">Category name:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Category name" [formControl]="myForm.controls['name']">
-    </div>
-    <div *ngIf="!name.valid && name.dirty" class="ui mini negative message">
-        <div *ngIf="name.errors?.required">
-          Name is required
-        </div>
-        <div *ngIf="name.errors?.minlength">
-          Name must be at least 2 characters long
-        </div>
-        <div *ngIf="name.errors?.maxlength">
-          Name must be less than 51 characters long
-        </div>
-      </div>
-  </div>
-  <div class="field" [class.error]="!parentId.valid && parentId.dirty">
-    <label for="parentId">Parent:</label>
-    <ng-select [items]="existCategories"
-      bindValue="categoryId"
-      bindLabel="name"
-      labelForId="parentId"
-      formControlName="parentId"
-      notFoundText="No catetegories"
-      markFirst="true">
-    </ng-select>
-    <div *ngIf="!parentId.valid && parentId.dirty" class="ui mini negative message">
-      Parent is required
-    </div>
-  </div>
-  <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
-  <button class="ui button" (click)="goBack()" type="button">Back</button>  
-  <div *ngIf="!myForm.valid && myForm.dirty" class="ui negative message">Form is Invalid</div>
+<form class="form" *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="onSubmit(myForm.value)">
+    <mat-form-field class="input-full-width">
+        <mat-label>Category name</mat-label>
+        <input matInput [formControl]="name" maxlength="50" placeholder="Provide category name" required>
+        <mat-hint align="end">{{name.value.length}} / 50</mat-hint>
+        <mat-error *ngIf="name.errors?.required">This field is required</mat-error>
+        <mat-error *ngIf="name.errors?.minlength">Minimum 2 characters</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-full-width">
+        <mat-select matInput placeholder="Parent category" [formControl]="parentId" required>
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let category of existCategories" [value]="category.categoryId">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="parentId.hasError('required')">Please choose parent category</mat-error>
+      </mat-form-field>
+        <button type="submit" mat-flat-button [disabled]="!myForm.valid" color="primary">Submit</button>
+        <a mat-flat-button color="basic" routerLink="/categories">Back</a>
 </form>
