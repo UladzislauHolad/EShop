@@ -48,6 +48,9 @@ namespace EShop.Services.Services
                         existedProductOrder.OrderCount += productOrderDTO.OrderCount;
                         product.Count -= productOrderDTO.OrderCount;
 
+                        if (product.Count < 0)
+                            throw new InvalidOperationException("OrderCount is not valid");
+
                         _productRepository.Save();
                         _productOrderRepository.Update(existedProductOrder);
                     }
@@ -57,6 +60,9 @@ namespace EShop.Services.Services
                         productOrderDTO.Description = product.Description;
                         productOrderDTO.Price = product.Price;
                         product.Count -= productOrderDTO.OrderCount;
+
+                        if (product.Count < 0)
+                            throw new InvalidOperationException("OrderCount is not valid");
 
                         _productRepository.Save();
                         _productOrderRepository.Create(_mapper.Map<ProductOrder>(productOrderDTO));
