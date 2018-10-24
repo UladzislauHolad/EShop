@@ -77,7 +77,7 @@ namespace EShop.Api.Controllers
         /// <param name="orderId"></param>
         /// <param name="productOrderCreateModel"></param>
         /// <returns></returns>
-        /// <response code="201">new instance of ProductOrderViewModel in ProductOrders collection of OrderViewModel was created</response>
+        /// <response code="201">New instance of ProductOrderViewModel in ProductOrders collection of OrderViewModel was created</response>
         /// <response code="400">OrderId or ProductOrderCreateViewModel is not valid</response>
         [HttpPost("{orderId}/products")]
         [ProducesResponseType(201)]
