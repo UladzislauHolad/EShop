@@ -13,7 +13,9 @@ namespace EShop.Api.MappingProfiles
         public ProductOrdersProfile()
         {
             CreateMap<ProductOrderViewModel, ProductOrderDTO>();
-            CreateMap<ProductOrderViewModel, ProductOrderDTO>().ReverseMap();
+            CreateMap<ProductOrderDTO, ProductOrderViewModel>()
+                .ForMember(dest => dest.MaxCount,
+                    opt => opt.MapFrom(src => src.OrderCount + src.Product.Count));
 
             CreateMap<CreateProductOrderViewModel, ProductOrderDTO>();
             CreateMap<CreateProductOrderViewModel, ProductOrderDTO>().ReverseMap();
