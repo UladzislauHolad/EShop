@@ -4,6 +4,7 @@ import { ProductOrder } from '../../../../../models/productOrder';
 import { Product } from '../../../../../models/product';
 import { ProductService } from '../../../../../services/product.service';
 import { ProductOrderService } from '../../../../../services/product-order.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-product-order',
@@ -33,7 +34,11 @@ export class CreateProductOrderComponent implements OnInit {
   }
   
   getProducts() {
-    this.productService.getProducts().subscribe(
+    this.productService.getProducts()
+    .pipe(
+      map(productsOdata => (productsOdata as any).value)
+    )
+    .subscribe(
       products => {
         this.products = products,
         this.product = products[0]

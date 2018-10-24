@@ -1,9 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ProductOrder } from '../../../../../models/productOrder';
-import { ProductService } from '../../../../../services/product.service';
-import { ProductOrderService } from '../../../../../services/product-order.service';
 import { Product } from '../../../../../models/product';
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -33,6 +30,6 @@ export class ProductOrderFormComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate([`orders/${this.orderId}`]);
+    this.router.navigate([`/orders/${this.orderId}`]);
   }
 }
