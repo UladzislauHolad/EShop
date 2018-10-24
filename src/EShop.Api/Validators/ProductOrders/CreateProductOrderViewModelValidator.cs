@@ -11,7 +11,6 @@ namespace EShop.Api.Validators.ProductOrders
     {
         public CreateProductOrderViewModelValidator()
         {
-            RuleFor(cpo => cpo.ProductOrderId).NotEmpty();
             RuleFor(cpo => cpo.OrderId).NotEmpty();
             RuleFor(cpo => cpo.OrderCount).NotEmpty();
             RuleFor(cpo => cpo.ProductId).NotEmpty();
