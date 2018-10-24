@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Order } from '../../../models/order';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { PaymentService } from '../../../services/payment.service';
 import { PaymentMethod } from '../../../models/paymentMethod';
 import { DeliveryService } from '../../../services/delivery.service';
@@ -63,7 +63,7 @@ export class OrderFormComponent implements OnInit {
   }
 
   onDeliveryChange() {
-    if (this.delivery.value !== null) {
+    if (this.delivery.value) {
       this.order.deliveryMethodId = this.delivery.value.deliveryMethodId;
       if (this.delivery.value.name === 'Pickup') {
         this.pickup.enable();
@@ -113,7 +113,9 @@ export class OrderFormComponent implements OnInit {
       'phone': [
         order.customer.phone,
         [
-          Validators.required
+          Validators.required,
+          Validators.pattern('[0-9]+'),
+          Validators.minLength(10)
         ]
       ],
       'address': [
@@ -162,16 +164,15 @@ export class OrderFormComponent implements OnInit {
     this.delivery = this.myForm.controls['delivery'];
     this.pickup = this.myForm.controls['pickup'];
 
-    if (this.existDeliveries === null || this.order.deliveryMethodId === null)
-      this.pickup.disable();
-    else {
-      this.pickup.disable();
-    }
+    this.pickup.disable();
   }
 
   getPayments() {
     this.paymentService.getPayments().subscribe(
-      payments => this.existPayments = payments,
+      payments => {
+        this.existPayments = payments;
+        this.payment.setValue(payments.find(d => d.paymentMethodId === this.order.paymentMethodId));
+      } 
     );
   }
 
@@ -180,13 +181,21 @@ export class OrderFormComponent implements OnInit {
       deliveries => {
         this.existDeliveries = deliveries;
         this.delivery.setValue(deliveries.find(d => d.deliveryMethodId === this.order.deliveryMethodId));
+        if(this.delivery.value) {
+          if(this.delivery.value.name === 'Pickup') {
+            this.pickup.enable();
+          }
+        }
       },
     );
   }
 
   getPickups() {
     this.pickupService.getPickups().subscribe(
-      pickups => this.existPickups = pickups,
+      pickups => {
+        this.existPickups = pickups;
+        this.pickup.setValue(pickups.find(d => d.pickupPointId === this.order.pickupPointId));
+      }
     );
   }
 
@@ -200,6 +209,17 @@ export class OrderFormComponent implements OnInit {
 
   customerChange(customer: Customer) {
     this.order.customer = Object.assign({}, customer)
+
+    this.firstName.setValue(customer.firstName);
+    this.lastName.setValue(customer.lastName);
+    this.patronymic.setValue(customer.patronymic);
+    this.phone.setValue(customer.phone);
+    this.address.setValue(customer.address);
+    console.dir(this.order);
+  }
+
+  firstNameChange(event) {
+    console.dir(event);
   }
 
   goBack() {

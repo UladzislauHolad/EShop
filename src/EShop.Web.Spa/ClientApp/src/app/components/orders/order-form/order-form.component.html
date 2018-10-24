@@ -1,152 +1,84 @@
 <mat-form-field>
-    <mat-select (selectionChange)="customerChange($event.value)" placeholder="Customer">
-      <mat-option *ngFor="let customer of existCustomers" [value]="customer">
-        {{customer.firstName}}
+  <mat-select (selectionChange)="customerChange($event.value)" placeholder="Customer">
+    <mat-option *ngFor="let customer of existCustomers" [value]="customer">
+      {{customer.firstName}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<form class="form" *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="input-full-width">
+    <mat-label>First name</mat-label>
+    <input matInput [formControl]="firstName" (change)="order.customer.firstName = $event.target.value" maxlength="20" placeholder="Provide fist name" required>
+    <mat-hint align="end">{{firstName.value.length}} / 20</mat-hint>
+    <mat-error *ngIf="firstName.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="firstName.errors?.minlength">Minimum 2 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="input-full-width">
+    <mat-label>Last name</mat-label>
+    <input matInput [formControl]="lastName" (change)="order.customer.lastName = $event.target.value" maxlength="20" placeholder="Provide last name" required>
+    <mat-hint align="end">{{lastName.value.length}} / 20</mat-hint>
+    <mat-error *ngIf="lastName.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="lastName.errors?.minlength">Minimum 2 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="input-full-width">
+    <mat-label>Patronymic</mat-label>
+    <input matInput [formControl]="patronymic" (change)="order.customer.patronymic = $event.target.value" maxlength="20" placeholder="Provide patronymic" required>
+    <mat-hint align="end">{{patronymic.value.length}} / 20</mat-hint>
+    <mat-error *ngIf="patronymic.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="patronymic.errors?.minlength">Minimum 2 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="input-full-width">
+    <mat-label>Phone</mat-label>
+    <input matInput [formControl]="phone" type="tel" (change)="order.customer.phone = $event.target.value" maxlength="10" placeholder="Provide phone" required>
+    <mat-hint align="end">Example: 80445512233</mat-hint>
+    <mat-error *ngIf="phone.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="phone.errors?.pattern">This incorrect phone number</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="input-full-width">
+    <mat-label>Address</mat-label>
+    <input matInput [formControl]="address" (change)="order.customer.address = $event.target.value" maxlength="20" placeholder="Provide address" required>
+    <mat-hint align="end">{{address.value.length}} / 50</mat-hint>
+    <mat-error *ngIf="address.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="address.errors?.minlength">Minimum 10 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="input-full-width">
+    <mat-label>Comment</mat-label>
+    <textarea matInput [formControl]="comment" (input)="order.comment = $event.target.value" maxlength="50" placeholder="Provide comment"></textarea>
+    <mat-hint align="end">{{comment.value.length}} / 50</mat-hint>
+    <mat-error *ngIf="comment.errors?.required">This field is required</mat-error>
+    <mat-error *ngIf="comment.errors?.minlength">Minimum 10 characters</mat-error>
+  </mat-form-field>
+
+  <mat-form-field class="select-width">
+    <mat-select [formControl]="payment" (selectionChange)="order.paymentMethodId = $event.value.paymentMethodId" placeholder="Provide payment method" required>
+      <mat-option *ngFor="let payment of existPayments" [value]="payment">
+        {{payment.name}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-<form *ngIf="myForm" [formGroup]="myForm" class="ui equal width form" (ngSubmit)="onSubmit()">
-  <div class="field" [class.error]="!firstName.valid && firstName.dirty">
-    <label for="firstName">First name:</label>
-    <div class="ui input">
-      <input type="text" placeholder="First name" [formControl]="firstName" [(ngModel)]="order.customer.firstName">
-    </div>
-    <div *ngIf="!firstName.valid && firstName.dirty" class="ui mini negative message">
-      <div *ngIf="firstName.errors.required">
-        First name is required
-      </div>
-      <div *ngIf="firstName.errors?.minlength">
-        Minimum 2 characters
-      </div>
-      <div *ngIf="firstName.errors?.maxlength">
-        Maximum 20 characters
-      </div>
-    </div>
-  </div>
 
-  <div class="field" [class.error]="!lastName.valid && lastName.dirty">
-    <label for="lastName">Last name:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Last name" [formControl]="lastName" [(ngModel)]="order.customer.lastName">
-    </div>
-    <div *ngIf="!lastName.valid && lastName.dirty" class="ui mini negative message">
-      <div *ngIf="lastName.errors.required">
-        Last name is required
-      </div>
-      <div *ngIf="lastName.errors?.minlength">
-        Minimum 2 characters
-      </div>
-      <div *ngIf="lastName.errors?.maxlength">
-        Maximum 20 characters
-      </div>
-    </div>
-  </div>
+  <mat-form-field class="select-width">
+    <mat-select [formControl]="delivery" (selectionChange)="onDeliveryChange()" placeholder="Provide delivery method" required>
+      <mat-option *ngFor="let delivery of existDeliveries" [value]="delivery">
+        {{delivery.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div class="field" [class.error]="!patronymic.valid && patronymic.dirty">
-    <label for="patronymic">Patronymic:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Patronymic" [formControl]="patronymic" [(ngModel)]="order.customer.patronymic">
-    </div>
-    <div *ngIf="!patronymic.valid && patronymic.dirty" class="ui mini negative message">
-      <div *ngIf="patronymic.errors.required">
-        Patronymic is required
-      </div>
-      <div *ngIf="patronymic.errors?.minlength">
-        Minimum 2 characters
-      </div>
-      <div *ngIf="patronymic.errors?.maxlength">
-        Maximum 20 characters
-      </div>
-    </div>
-  </div>
+  <mat-form-field class="select-width">
+    <mat-select [formControl]="pickup" (selectionChange)="order.pickupPointId = $event.value.pickupPointId" placeholder="Provide pickup point" required>
+      <mat-option *ngFor="let pickup of existPickups" [value]="pickup">
+        {{pickup.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div class="field" [class.error]="!phone.valid && phone.dirty">
-    <label for="phone">Phone:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Phone" [formControl]="phone" [(ngModel)]="order.customer.phone">
-    </div>
-    <div *ngIf="!phone.valid && phone.dirty" class="ui mini negative message">
-      <div *ngIf="phone.errors.required">
-        Phone is required
-      </div>
-    </div>
-  </div>
-
-  <div class="field" [class.error]="!address.valid && address.dirty">
-    <label for="address">Address:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Address" [formControl]="address" [(ngModel)]="order.customer.address">
-    </div>
-    <div *ngIf="!address.valid && address.dirty" class="ui mini negative message">
-      <div *ngIf="address.errors.required">
-        Address is required
-      </div>
-      <div *ngIf="address.errors?.minlength">
-        Minimum 10 characters
-      </div>
-      <div *ngIf="address.errors?.maxlength">
-        Maximum 50 characters
-      </div>
-    </div>
-  </div>
-
-  <div class="field" [class.error]="!comment.valid && comment.dirty">
-    <label for="comment">Comment:</label>
-    <div class="ui input">
-      <input type="text" placeholder="Comment" [formControl]="comment" (input)="order.comment = $event.target.value">
-    </div>
-    <div *ngIf="!comment.valid && comment.dirty" class="ui mini negative message">
-      <div *ngIf="comment.errors.required">
-        Comment is required
-      </div>
-      <div *ngIf="comment.errors?.minlength">
-        Minimum 10 characters
-      </div>
-      <div *ngIf="comment.errors?.maxlength">
-        Maximum 50 characters
-      </div>
-    </div>
-  </div>
-
-  <div class="fields">
-    <div class="field">
-      <label for="payment">Payment method:</label>
-      <ng-select [items]="existPayments" bindValue="paymentMethodId" bindLabel="name" labelForId="payment"
-        formControlName="payment" notFoundText="No payment methods" markFirst="true" (change)="order.paymentMethodId = $event?.paymentMethodId">
-      </ng-select>
-      <div *ngIf="!payment.valid && delivery.dirty" class="ui mini negative message">
-        <div *ngIf="payment.errors.required">
-          Payment method is required
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="delivery">Delivery method:</label>
-      <ng-select [items]="existDeliveries" bindLabel="name" labelForId="delivery" formControlName="delivery"
-        notFoundText="No delivery methods" markFirst="true" (change)="onDeliveryChange()">
-      </ng-select>
-      <div *ngIf="!delivery.valid && delivery.dirty" class="ui mini negative message">
-        <div *ngIf="delivery.errors.required">
-          Delivery method is required
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="pickup">Pickup point:</label>
-      <ng-select [items]="existPickups" bindValue="pickupPointId" bindLabel="name" labelForId="pickup" formControlName="pickup"
-        notFoundText="No pickup methods" markFirst="true" (change)="order.pickupPointId = $event.pickupPointId">
-      </ng-select>
-      <div *ngIf="!pickup.valid && pickup.dirty && pickup.enabled" class="ui mini negative message">
-        <div *ngIf="pickup.errors?.required">
-          Pickup point is required
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
-  <button class="ui button" (click)="goBack()" type="button">Back</button>
-  <div *ngIf="!myForm.valid && myForm.dirty" class="ui negative message">Form is Invalid</div>
+  <button type="submit" mat-flat-button [disabled]="!myForm.valid" color="primary">Submit</button>
+  <a mat-flat-button color="basic" routerLink="/orders">Back</a>
 </form>
