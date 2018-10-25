@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { SideNavEventService } from '../sidenav/sidenav-event.service';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-grid',
@@ -20,6 +21,12 @@ export class ProductGridComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.productService.getProducts().pipe(
+      map(odataProducts => {
+        return (odataProducts as any).value;
+      })
+    ).subscribe(products => this.products = products)
+    
     this.subscription = new Subscription();
     this.subscription.add(this.sidenavEventService.onChoose$.subscribe(
       id => this.getProductsByCategoryId(id)
