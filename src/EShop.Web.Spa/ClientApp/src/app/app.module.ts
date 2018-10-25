@@ -54,6 +54,7 @@ import { CallbackComponent } from './components/callback/callback.component';
 import { ConfigService } from './services/config.service';
 import { CreateUserComponent } from './components/users/create-user/create-user.component';
 import { CategoryChipsComponent } from './components/products/product-form/category-chips/category-chips.component';
+import { ChangePasswordFormComponent } from './components/user-profile/change-password-form/change-password-form.component';
 import { EqualValidator } from './helpers/validators/equal-validator';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
