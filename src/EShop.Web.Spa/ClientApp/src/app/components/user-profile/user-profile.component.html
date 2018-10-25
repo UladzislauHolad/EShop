@@ -1,36 +1,7 @@
 <div *ngIf="profile" class="ui container">
   <h1 class="ui header">Profile</h1>
   <div class="ui divider"></div>
-  <!-- <table class="ui celled striped table">
-    <thead>
-      <tr>
-        <th colspan="3">
-          <i class="icon info circle"></i> Info
-        </th>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="collapsing">
-          First name
-        </td>
-        <td>{{profile.given_name}}</td>
-      </tr>
-      <tr>
-        <td>
-          Last name
-        </td>
-        <td>{{profile.family_name}}</td>
-      </tr>
-      <tr>
-        <td>
-          Username
-        </td>
-        <td>
-          {{profile.preferred_username}}
-        </td>
-      </tr>
-    </tbody>
-  </table> -->
+
   <div>
   <mat-list>
     <mat-list-item>First name: {{profile.given_name}}</mat-list-item>
@@ -39,6 +10,9 @@
     <mat-divider></mat-divider>
     <mat-list-item>Username: {{profile.preferred_username}}</mat-list-item>
   </mat-list>
+
+  <a mat-raised-button routerLink color="warn" routerLink="password">Change Password</a>
+
 </div>
 </div>
 
