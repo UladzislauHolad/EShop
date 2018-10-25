@@ -111,7 +111,6 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     BrowserAnimationsModule,
     NgxChartsModule,
     HttpClientModule,
-    AppRoutingModule,
     NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
@@ -137,7 +136,8 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     MatSelectModule,
     MatListModule,
     AuthModule.forRoot(),
-    ODataModule
+    ODataModule,
+    AppRoutingModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
