@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserTableInfo } from '../models/user-table-info';
 import { User } from '../models/user';
+import { ChangePasswordModel } from '../models/change-password.-model';
 
 const usersUrl = 'http://localhost:5000/users'
 
@@ -25,5 +26,9 @@ export class UserService {
 
   createUser(user: User): Observable<any> {
     return this.http.post(`${usersUrl}`, user)
+  }
+
+  changePassword(name: string, changePasswordModel: ChangePasswordModel) {
+    return this.http.post(`${usersUrl}/${name}/password`, changePasswordModel);
   }
 }
