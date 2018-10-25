@@ -54,6 +54,7 @@ import { CallbackComponent } from './components/callback/callback.component';
 import { ConfigService } from './services/config.service';
 import { CreateUserComponent } from './components/users/create-user/create-user.component';
 import { CategoryChipsComponent } from './components/products/product-form/category-chips/category-chips.component';
+import { EqualValidator } from './helpers/validators/equal-validator';
 
 export function loadConfig(oidcConfigService: OidcConfigService) {
   return () => oidcConfigService.load(`${window.location.origin}/api/config/configuration`);
@@ -100,7 +101,9 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     AutoLoginComponent,
     CallbackComponent,
     CreateUserComponent,
-    CategoryChipsComponent
+    CategoryChipsComponent,
+    ChangePasswordFormComponent,
+    EqualValidator
   ],
   imports: [
     BrowserModule,
