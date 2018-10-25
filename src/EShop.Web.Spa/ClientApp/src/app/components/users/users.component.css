@@ -1,0 +1,12 @@
+table {
+    width: 100%;
+}
+
+.actions {
+    float: right; 
+    display: inline-flex;
+}
+
+.hoverable:hover { 
+    color: rgb(89, 93, 88);
+}

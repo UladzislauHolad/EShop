@@ -1,25 +1,29 @@
 <div class="ui container">
-  <div class="ui buttons">
-    <a class="ui positive button" routerLink="new">Create new</a>
-  </div>
-  <table class="ui celled stripped table">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Email</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let u of users">
-        <td>{{u.userName}}</td>
-        <td>{{u.email}}</td>
-        <td class="center aligned two wide">
-          <div class="ui small basic icon buttons">
-            <button class="ui button" (click)="delete(u.userName)"><i class="trash icon"></i></button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <a mat-raised-button routerLink color="primary" routerLink="new">Add user</a>
+
+<table mat-table [dataSource]="users" class="mat-elevation-z8">
+  <ng-container matColumnDef="userName">
+    <th mat-header-cell *matHeaderCellDef>Username</th>
+    <td mat-cell *matCellDef="let user"> {{user.userName}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let user">
+      <div class="actions">
+        <button class="hoverable" mat-icon-button matTooltip="Delete" (click)="delete(user.userName)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
 </div>

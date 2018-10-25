@@ -10,6 +10,7 @@ import { UserTableInfo } from '../../models/user-table-info';
 export class UsersComponent implements OnInit {
 
   users: UserTableInfo[];
+  displayedColumns: string[] = ['userName', 'email', 'actions'];
 
   constructor(
     private userService: UserService
