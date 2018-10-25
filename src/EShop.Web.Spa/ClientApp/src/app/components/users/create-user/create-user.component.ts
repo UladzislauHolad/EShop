@@ -21,6 +21,7 @@ export class CreateUserComponent implements OnInit {
     email: '',
     password: ''
   };
+  hide = true;
 
   constructor(
     private formBuilder: FormBuilder,

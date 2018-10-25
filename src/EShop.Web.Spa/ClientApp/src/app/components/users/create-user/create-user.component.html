@@ -1,63 +1,42 @@
 <div class="ui container">
-  <form *ngIf="myForm" [formGroup]="myForm" class="ui attached segment form" (ngSubmit)="onSubmit(myForm.value)">
-    <div class="field" [class.error]="!userName.valid && userName.dirty">
-      <label for="userName">Username:</label>
-      <div class="ui input">
-        <input type="text" placeholder="Username" [formControl]="myForm.controls['userName']">
+  <h3 class="ui header">Create user</h3>
+
+  <form class="form" *ngIf="myForm" [formGroup]="myForm" (ngSubmit)="onSubmit(myForm.value)">
+    <div *ngIf="errors" class="ui bottom attached warning message">
+      <div class="header">
+        <i class="icon exclamation"></i>
+        Errors:
       </div>
-      <div *ngIf="!userName.valid && userName.dirty" class="ui mini negative message">
-        <div *ngIf="userName.errors.required">
-          Username is required
-        </div>
-        <div *ngIf="userName.errors.minlength">
-          Username must be at least 3 characters long
-        </div>
-        <div *ngIf="userName.errors.maxlength">
-          Username must be less than 21 characters long
-        </div>
-      </div>
+      <ul>
+        <li *ngFor="let e of errors">{{e}}</li>
+      </ul>
     </div>
-  
-    <div class="field" [class.error]="!email.valid && email.dirty">
-      <label for="email">Email:</label>
-      <div class="ui input">
-        <input type="email" placeholder="email" [formControl]="myForm.controls['email']">
-      </div>
-      <div *ngIf="!email.valid && email.dirty" class="ui mini negative message">
-        <div *ngIf="email.errors.required">
-          Email is required
-        </div>
-        <div *ngIf="email.errors.email">
-          Wrong email format
-        </div>
-      </div>
-    </div>
-  
-    <div class="field" [class.error]="!password.valid && password.dirty">
-      <label for="password">Password:</label>
-      <div class="ui input">
-        <input type="password" placeholder="password" [formControl]="myForm.controls['password']">
-      </div>
-      <div *ngIf="!password.valid && password.dirty" class="ui mini negative message">
-        <div *ngIf="password.errors.required">
-          Password is required
-        </div>
-        <div *ngIf="password.errors.minlength">
-          Password must be at least 8 characters long
-        </div>
-      </div>
-    </div>
-  
-    <button type="submit" class="ui positive button" [disabled]="!myForm.valid || processing">Submit</button>
-    <button class="ui button" (click)="goBack()" type="button">Cancel</button>
+    
+    <mat-form-field class="input-full-width">
+      <mat-label>Username</mat-label>
+      <input matInput [formControl]="userName" maxlength="20" placeholder="Provide Username" required>
+      <mat-hint align="end">{{userName.value.length}} / 20</mat-hint>
+      <mat-error *ngIf="userName.errors?.required">This field is required</mat-error>
+      <mat-error *ngIf="userName.errors?.minlength">Minimum 3 characters</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-full-width">
+      <mat-label>Email</mat-label>
+      <input matInput [formControl]="email" placeholder="Provide email" required>
+      <mat-error *ngIf="email.errors?.required">This field is required</mat-error>
+      <mat-error *ngIf="email.errors?.email">Wrong email format</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="input-full-width">
+      <mat-label>Password</mat-label>
+      <input matInput [formControl]="password" placeholder="Provide password" [type]="hide ? 'password' : 'text'"
+        required>
+      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-error *ngIf="password.errors?.required">This field is required</mat-error>
+      <mat-error *ngIf="password.errors?.minlength">Password must be at least 8 characters long</mat-error>
+    </mat-form-field>
+
+    <button type="submit" mat-flat-button [disabled]="!myForm.valid" color="primary">Submit</button>
+    <a mat-flat-button color="basic" routerLink="/users">Back</a>
   </form>
-  <div *ngIf="errors" class="ui bottom attached warning message">
-    <div class="header">
-      <i class="icon exclamation"></i>
-      Errors:
-    </div>
-    <ul>
-      <li *ngFor="let e of errors">{{e}}</li>
-    </ul>
-  </div>
 </div>
