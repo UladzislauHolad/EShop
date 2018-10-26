@@ -1,5 +1,6 @@
 ﻿using Arch.IS4Host.Models;
 using AutoMapper;
+using Eshop.Auth.Infrastructure;
 using IdentityModel;
 using IdentityServer4.Quickstart.UI;
 using Microsoft.AspNetCore.Authorization;
@@ -75,6 +76,31 @@ namespace Eshop.Auth.Quickstart.Users
             }
 
             return StatusCode(StatusCodes.Status422UnprocessableEntity,result.Errors.Select(e => e.Description).ToList());
+        }
+
+        [HttpPost("users/{name}/password")]
+        public async Task<IActionResult> ChangePassword([FromRoute]string name, [FromBody]ChangePasswordViewModel model)
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    return StatusCode(StatusCodes.Status422UnprocessableEntity, ModelState.ToErrorsStringArray());
+            //}
+            var user = await _userManager.FindByNameAsync(name);
+            if (user != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    return StatusCode(StatusCodes.Status202Accepted);
+                }
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, result.Errors.Select(e => e.Description).ToList());
+            }
+            return StatusCode(StatusCodes.Status404NotFound);//?
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }
