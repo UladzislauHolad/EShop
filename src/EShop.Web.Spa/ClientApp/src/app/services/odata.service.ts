@@ -3,6 +3,7 @@ import { IPagingService } from './IPagingService';
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Filter } from '../helpers/filters/filter';
+import { IFilter } from '../helpers/filters/ifilter';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class OdataService<T> {
   constructor(private pagingService: IPagingService<T>) { }
 
   getPaggedData(
-    filters: Filter[],
+    filters: IFilter[],
     pageIndex: number = 0,
     pageSize: number = 5,
     sortField: string = '',
@@ -31,13 +32,13 @@ export class OdataService<T> {
     return this.pagingService.getPaggedData(params);
   }
 
-  setFilter(params: HttpParams, filters: Filter[]) : HttpParams {
+  setFilter(params: HttpParams, filters: IFilter[]) : HttpParams {
     if(filters.length > 0) {
-      let filter = filters.reduce((acc, cur, index) => {
-        return index > 0 ? `${acc} and ${cur.toString()}` : `${cur.toString()}`;
-      }, '');
+      let filter = filters.reduce((acc, cur, index):string => {
+        return index > 0 ? `${acc.toString()} and ${cur.toString()}` : cur.toString();
+      });
       
-      params = params.set('$filter', filter);
+      params = params.set('$filter', filter.toString());
     }
     
     return params;
