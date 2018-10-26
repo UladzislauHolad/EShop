@@ -1,13 +1,15 @@
-.nav-container {
-    height: 85vh;
+.container {
+    display: flex;
+    flex-direction: row;
+    padding-left: 10%;
+    padding-right:  10%;
 }
 
-.mat-drawer {
-    padding: 10px;
-    width: 20vw;
+.product-container {
+    display: flex;
+    flex: 3;
 }
 
-.mat-drawer-content {
-    padding: 10px;
-    width: 80vw;
+.tree-container {
+    flex: 1;
 }
