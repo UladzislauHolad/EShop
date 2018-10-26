@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace EShop.Api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Produces("application/json")]
     public class ProductsController : ControllerBase
     {
@@ -37,7 +37,7 @@ namespace EShop.Api.Controllers
         [EnableQuery]
         public IActionResult Get()
         {
-            return Ok(_mapper.Map<IEnumerable<ProductTableViewModel>>(_service.GetProducts()).AsQueryable());
+            return Ok(_mapper.Map<IEnumerable<ProductViewModel>>(_service.GetProducts()).AsQueryable());
         }
 
         /// <summary>
@@ -162,26 +162,26 @@ namespace EShop.Api.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Get list of Products by category id
-        /// </summary>
-        /// <remarks>
-        /// 
-        /// Sample request:
-        /// 
-        ///     Get api/categories/1/products
-        ///     
-        /// </remarks>
-        /// <param name="id"></param>
-        /// <returns>Product</returns>
-        /// <response code="200">Returns list of Products by category id</response>
-        [HttpGet("/api/categories/{id}/products")]
-        [ProducesResponseType(200)]
-        public IEnumerable<ProductTableViewModel> GetProductOfCategory([FromRoute]int id)
-        {
-            var products = _mapper.Map<IEnumerable<ProductTableViewModel>>(_service.GetProductsByCategoryId(id));
+        ///// <summary>
+        ///// Get list of Products by category id
+        ///// </summary>
+        ///// <remarks>
+        ///// 
+        ///// Sample request:
+        ///// 
+        /////     Get api/categories/1/products
+        /////     
+        ///// </remarks>
+        ///// <param name="id"></param>
+        ///// <returns>Product</returns>
+        ///// <response code="200">Returns list of Products by category id</response>
+        //[HttpGet("/api/categories/{id}/products")]
+        //[ProducesResponseType(200)]
+        //public IEnumerable<ProductTableViewModel> GetProductOfCategory([FromRoute]int id)
+        //{
+        //    var products = _mapper.Map<IEnumerable<ProductTableViewModel>>(_service.GetProductsByCategoryId(id));
 
-            return products;
-        }
+        //    return products;
+        //}
     }
 }
