@@ -6,6 +6,4 @@ export abstract class  Filter {
         this.filterField = filterField;
         this.filterValue = filterValue;
     }
-
-    abstract toString(): string;
 }
