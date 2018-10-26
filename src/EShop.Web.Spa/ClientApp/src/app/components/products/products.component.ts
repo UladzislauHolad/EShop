@@ -7,6 +7,7 @@ import { fromEvent, merge } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { Filter } from 'src/app/helpers/filters/filter';
 import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
+import { IFilter } from 'src/app/helpers/filters/ifilter';
 
 @Component({
   selector: 'app-products',
@@ -18,7 +19,7 @@ export class ProductsComponent implements OnInit {
   columnsToDisplay = ['name', 'count', 'price', 'description', 'actions'];
   dataSource: OdataDataSource<Product>;
   total: number;
-  filters = new Array<Filter>();
+  filters = new Array<IFilter>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

@@ -5,6 +5,7 @@ import { OdataService } from "src/app/services/odata.service";
 import { IPagingService } from "src/app/services/IPagingService";
 import { TableData } from "src/app/models/table-data";
 import { Filter } from "src/app/helpers/filters/filter";
+import { IFilter } from "src/app/helpers/filters/ifilter";
 
 export class OdataDataSource<T> implements DataSource<T> {
 
@@ -15,6 +16,7 @@ export class OdataDataSource<T> implements DataSource<T> {
 
     public loading$ = this.loadingSubject.asObservable();
     public total$ = this.totalSubject.asObservable();
+    public data$ = this.dataSubject.asObservable();
 
     constructor(private pagingService: IPagingService<T[]>) {
         this.odataService = new OdataService<T[]>(this.pagingService);
@@ -31,7 +33,7 @@ export class OdataDataSource<T> implements DataSource<T> {
     }
 
     loadData(
-        filters: Filter[],
+        filters: IFilter[],
         pageIndex: number,
         pageSize: number, 
         sortField: string, 

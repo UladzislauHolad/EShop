@@ -3,13 +3,11 @@ import { Category } from '../../models/category';
 import { CategoryService } from '../../services/category.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { OdataDataSource } from './odata-data-source';
-import { TableData } from 'src/app/models/table-data';
-import { DataSource } from '@angular/cdk/table';
 import { tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { merge } from 'rxjs/internal/observable/merge';
 import { fromEvent } from 'rxjs';
-import { Filter } from 'src/app/helpers/filters/filter';
 import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
+import { IFilter } from 'src/app/helpers/filters/ifilter';
 
 @Component({
   selector: 'app-categories',
@@ -20,7 +18,7 @@ export class CategoriesComponent implements OnInit {
   columnsToDisplay = ['name', 'actions'];
   dataSource: OdataDataSource<Category>;
   total: number;
-  filters = new Array<Filter>();
+  filters = new Array<IFilter>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

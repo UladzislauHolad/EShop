@@ -12,6 +12,7 @@ import { ContainsFilter } from 'src/app/helpers/filters/contains-filter';
 import { GreaterThanFilter } from 'src/app/helpers/filters/greater-than-filter';
 import { LessThanFilter } from 'src/app/helpers/filters/less-than-filter';
 import { EventEmitter } from 'protractor';
+import { IFilter } from 'src/app/helpers/filters/ifilter';
 
 @Component({
   selector: 'app-orders',
@@ -24,7 +25,7 @@ export class OrdersComponent implements OnInit {
   columnsToDisplay = ['orderId', 'status', 'date', 'actions'];
   dataSource: OdataDataSource<Order>;
   total: number;
-  filters = new Array<Filter>();
+  filters = new Array<IFilter>();
   maxStartDate: Date;
   minEndDate: Date;
 
