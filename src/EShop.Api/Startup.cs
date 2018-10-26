@@ -160,7 +160,7 @@ namespace EShop.Api
         {
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<CategoryViewModel>("Categories").EntityType.Name = "Category";
-            builder.EntitySet<ProductTableViewModel>("Products").EntityType.Name = "Product";
+            builder.EntitySet<ProductViewModel>("Products").EntityType.Name = "Product";
             builder.EntitySet<OrderTableViewModel>("Orders").EntityType.Name = "Order";
             builder.EnableLowerCamelCase();
             return builder.GetEdmModel();
