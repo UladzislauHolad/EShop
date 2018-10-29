@@ -17,7 +17,8 @@ export class OdataService<T> {
     pageIndex: number = 0,
     pageSize: number = 5,
     sortField: string = '',
-    sortDirection: string = ''): Observable<T> {
+    sortDirection: string = '',
+    expand?: string): Observable<T> {
     
     console.dir(filters);
 
@@ -28,6 +29,10 @@ export class OdataService<T> {
       .set('$count', 'true');
 
       params = this.setFilter(params, filters);
+      
+      if(expand) {
+        params = params.set('$expand', expand);
+      }
 
     return this.pagingService.getPaggedData(params);
   }

@@ -10,6 +10,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { MatTreeModule, MatIconModule, MatProgressBarModule, MatButtonModule, MatSidenavModule, MatGridListModule, MatTableModule, MatPaginator, MatPaginatorModule, MatTableDataSource, MatSortModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTooltipModule, MatDatepickerModule, MatNativeDateModule, MatSelectModule, MatChipsModule, MatAutocompleteModule, MatListModule } from '@angular/material';
 import { AuthModule, OidcSecurityService, OpenIDImplicitFlowConfiguration, AuthWellKnownEndpoints, OidcConfigService } from 'angular-auth-oidc-client';
 import { ODataModule } from 'odata-v4-ng';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
 import { ProductsComponent } from './components/products/products.component';
@@ -137,6 +138,7 @@ export function loadConfig(oidcConfigService: OidcConfigService) {
     MatListModule,
     AuthModule.forRoot(),
     ODataModule,
+    InfiniteScrollModule,
     AppRoutingModule
   ],
   providers: [

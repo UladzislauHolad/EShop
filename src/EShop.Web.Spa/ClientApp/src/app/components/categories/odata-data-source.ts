@@ -37,7 +37,8 @@ export class OdataDataSource<T> implements DataSource<T> {
         pageIndex: number,
         pageSize: number, 
         sortField: string, 
-        sortDirection: string) {
+        sortDirection: string,
+        expand?: string) {
 
         this.loadingSubject.next(true);
 
@@ -46,7 +47,8 @@ export class OdataDataSource<T> implements DataSource<T> {
             pageIndex,
             pageSize,
             sortField, 
-            sortDirection)
+            sortDirection,
+            expand)
             .pipe(
                 map(odata => {
                     let data = ( odata as any ).value;

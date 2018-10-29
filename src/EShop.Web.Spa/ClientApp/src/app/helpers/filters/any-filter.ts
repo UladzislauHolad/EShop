@@ -10,6 +10,6 @@ export class AnyFilter implements IFilter{
     }
 
     toString(): string {
-        return `${this.expandField}/any(it:it/${this.filter.toString()})&amp;$expand=${this.expandField}`;
+        return `${this.expandField}/any(it:it/${this.filter.toString()})`;
     }
 }
